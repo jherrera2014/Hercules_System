@@ -8,7 +8,7 @@ namespace Hercules.Models
     public partial class ModelCompany : DbContext
     {
         public ModelCompany()
-            : base("name=ModelCompany")
+            : base("name=DefaultConnection")
         {
         }
 
