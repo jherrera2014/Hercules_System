@@ -25,7 +25,7 @@ namespace Hercules.Controllers
                                         
                                         new GoogleMarker
                                             {
-                                                SiteName = "Limaches",
+                                                SiteName = "Limachess",
                                                 Latitude =-33.009901,
                                                 Longitude = -71.258046,
                                                 InfoWindow = "FW125001U"

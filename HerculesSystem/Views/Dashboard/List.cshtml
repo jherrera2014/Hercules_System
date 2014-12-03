@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Hercules.Models.DataGridDashboard>
+﻿@using Hercules.Models
 
 @{
     ViewBag.Title = "List";
@@ -11,7 +11,20 @@
     <div class="demo-section k-header">
             <h4>Filter</h4>
             <p>
-                <input id="categories" style="width: 270px" />
+             @(Html.Kendo().DropDownList()
+                .Name("ZoneDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
+                .DataTextField("ZoneName") //Specifies which property of the Product to be used by the dropdownlist as a text.
+                .DataValueField("ID") //Specifies which property of the Product to be used by the dropdownlist as a value.
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("GetZone", "Dashboard"); //Set the Action and Controller name
+                    })
+                    .ServerFiltering(true); //If true the DataSource will not filter the data on the client.
+                })
+                .SelectedIndex(0) //Select first item.
+             )
             </p>
             <p>
                 <input id="products" disabled="disabled" style="width: 270px" />
@@ -28,7 +41,7 @@
 
     <div id="grid" class="grid">
 
-        @(Html.Kendo().Grid(Model)
+        @(Html.Kendo().Grid<Hercules.Models.DataGridDashboard>()
             .Name("Dashboars")
             
             .Columns(c =>
@@ -40,7 +53,7 @@
             })
             .DataSource(d => d
             .Ajax()
-            .Read(r => r.Action("Get", "ModelCompany"))
+                            .Read(r => r.Action("GetAlarm", "Dashboard"))
             .ServerOperation(false)
 
             )
