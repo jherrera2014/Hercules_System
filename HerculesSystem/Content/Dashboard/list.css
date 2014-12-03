@@ -1,0 +1,52 @@
+/* NUGET: BEGIN LICENSE TEXT
+ *
+ * Microsoft grants you the right to use these script files for the sole
+ * purpose of either: (i) interacting through your browser with the Microsoft
+ * website or online service, subject to the applicable licensing or use
+ * terms; or (ii) using the files as included with a Microsoft product subject
+ * to that product's license terms. Microsoft reserves all other rights to the
+ * files not expressly granted by Microsoft, whether by implication, estoppel
+ * or otherwise. The notices and licenses below are for informational purposes only.
+ *
+ * NUGET: END LICENSE TEXT */
+/*!
+ * Bootstrap v3.0.0
+ *
+ * Copyright 2013 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world by @mdo and @fat.
+ */
+
+/*! normalize.css v2.1.0 | MIT License | git.io/normalize */
+
+.demo-section {
+        width: 300px;
+      
+    }
+
+.demo-section p {
+    margin-top: 1em;
+}
+
+.demo-section label {
+    display: inline-block;
+    width: 100px;
+    padding-right: 5px;
+    text-align: right;
+}
+
+.demo-section .k-button {
+    margin: 1em 0 0 105px;
+}
+
+.k-readonly {
+    color: yellow;
+}
+
+.grid{
+    width:700px;
+    padding:0px 0px 0px 0px;
+   
+}

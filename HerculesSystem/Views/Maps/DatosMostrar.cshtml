@@ -1,0 +1,32 @@
+﻿
+
+
+
+
+@(Html.Kendo().Grid(Model)
+    .Name("Grid")
+    
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.id).Groupable(false);
+        columns.Bound(p => p.FacultyName);
+        columns.Bound(p => p.Subject);
+        columns.Bound(p => p.University);
+        columns.Bound(p => p.ContactNo);
+    })
+
+        .Groupable()
+        .Sortable()
+        .Pageable()
+          .Scrollable()
+        .Filterable()
+         .ColumnMenu()
+         .DataSource(dataSource => dataSource
+            .Ajax()
+          .PageSize(4)
+            .Read(read => read
+            .Action("Faculty_Read", "Faculty")
+             )
+
+        )
+)

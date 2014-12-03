@@ -5,10 +5,16 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace HerculesSystem
+namespace Hercules
 {
     public class RouteConfig
     {
+
+
+      
+
+
+
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
@@ -16,8 +22,50 @@ namespace HerculesSystem
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "Login", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                   name: "Graficos",
+                   url: "{HighchartService}/{index}/{id}",
+                   defaults: new {  action = "Index", id = UrlParameter.Optional }
+
+               );
+            routes.MapRoute(
+                      name: "Datos1",
+                      url: "{Grafico}/{index}/{id}",
+                      defaults: new { action = "Index", id = UrlParameter.Optional }
+                  );
+
+            routes.MapRoute(
+                     name: "Dashboard",
+                     url: "{Dashboard}/{index}/{id}",
+                     defaults: new { action = "List", id = UrlParameter.Optional }
+                 );
+        
+
+            routes.MapRoute(
+                          name: "Mapa",
+                          url: "{Maps}/{GetMarkersAsync}/{id}",
+                          defaults: new { action = "GetMarkersAsync", id = UrlParameter.Optional }
+                      );
+        
+        
+        
+        
+        
+        
         }
+
+       
+    
+    
+    
     }
+
+
+
+
+
+
 }

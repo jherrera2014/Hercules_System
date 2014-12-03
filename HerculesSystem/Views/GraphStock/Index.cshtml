@@ -1,0 +1,425 @@
+﻿
+<script src="~/Scripts/jquery-2.0.0.js"></script>
+<script src="~/Scripts/Highcharts-4.0.1/js/highcharts.js" type="text/javascript"></script>
+<script src="http://code.highcharts.com/stock/highstock.js"></script>
+<script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
+<script src="http://code.highcharts.com/modules/data.js"></script>
+<script src="https://rawgithub.com/RolandBanguiran/highstock-zoom-out-selection/master/zoomout-selection.js"></script>
+
+<html>
+<head>
+    <title>Get Movie</title>
+</head>
+<body>
+
+    <div>
+        <button id="button">C1pressure visibility</button>
+    </div>
+    <div>
+        <button id="button1">C2flow visibility</button>
+    </div>
+    <div>
+        <button id="button2">C3pressure visibility</button>
+    </div>
+
+    <div>
+        Di: <span id="director"></span>
+    </div>
+    <script type="text/javascript">
+
+        var Math2 = {
+            min: function (values) {
+                return this.calculate(values, Math.min);
+            },
+            max: function (values) {
+                return this.calculate(values, Math.max);
+            },
+            calculate: function (values, operation) {
+                if (values.length == 0) {
+                    return NaN;
+                } else if (values.length == 1) {
+                    var val = values.pop();
+                    if (typeof val == "number") {
+                        return val;
+                    } else {
+                        return NaN;
+                    }
+                } else {
+                    var val = values.pop();
+                    return operation(val, this.calculate(values, operation))
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+        $(document).ready(function () {
+
+
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "http://localhost:2261/HighchartService/Index",
+                data: "{}",
+                dataType: "json",
+                async: true,
+                processData: false,
+                cache: false,
+                success: function (Result) {
+                    Result = Result;
+
+
+                    var data = [];
+                    var data1 = [];
+                    var data2 = [];
+                    var dat = [];
+                    var dat1 = [];
+                    var dat2 = [];
+
+
+
+                    for (var i in Result) {
+                        var serie = new Array(Result[i].datetime, Result[i].c1pressure);
+                        var serie1 = new Array(Result[i].datetime, Result[i].c2flow);
+                        var serie2 = new Array(Result[i].datetime, Result[i].c3pressure);
+                        data.push(serie);
+                        data1.push(serie1);
+                        data2.push(serie2);
+                        dat.push(Result[i].c1pressure);
+                        dat1.push(Result[i].c2flow);
+                        dat2.push(Result[i].c3pressure);
+
+
+                    }
+
+                    var maximo1 = Math2.min(dat);
+                    var maximo2 = Math2.min(dat1);
+                    var maximo3 = Math2.min(dat2);
+
+
+
+                    DreawChart(data, data1, data2, maximo1, maximo2, maximo3);
+
+
+
+
+
+                },
+                error: function (Result) {
+                    alert(Result.fail);
+                }
+            });
+        });
+        function DreawChart(series, series1, series2,maximo1,maximo2,maximo3) {
+
+            $(function () {
+                $('#container').highcharts({
+                    chart: {
+                        height: 750,
+                        width: 1150,
+                        spacingBottom: 15,
+                        spacingTop: 10,
+                        spacingLeft: -20,
+                        spacingRight: 10,
+                        backgroundColor: '#ffffff',
+                        zoomType: 'x',
+                        type:'line'
+
+                    },
+                    rangeSelector: {
+                        buttons: [{
+                            type: 'hour',
+                            count: 1,
+                            text: '1h'
+                        }, {
+                            type: 'day',
+                            count: 1,
+                            text: '1D'
+                        }, {
+                            type: 'all',
+                            count: 1,
+                            text: 'All'
+                        }],
+                        selected: 4,
+                        inputEnabled: false
+                    },
+
+
+                    title: {
+                        text: 'Aguas de Antofagasta',
+                         //center
+                    },
+                    subtitle: {
+                        text: 'Antofagasta',
+                        x: -20
+                    },
+                    xAxis: {
+                        gridLineWidth: 1,
+                        ordinal: true,
+
+                        type: 'datetime',
+                        labels: {
+                            step: 1,
+                            rotation: 45
+
+
+                        },
+
+                        dateTimeLabelFormats:
+                         {
+                             day: '%e. %b',
+                             month: '%b \'%y',
+                             year: '%Y',
+                             hour: '%H:%M',
+                             minute: '%H:%M',
+
+                         },
+                        tickInterval: 3,
+
+
+
+                        categories: [series.datetime]
+
+
+
+
+
+
+                    },
+                    yAxis: {
+                        offset: 20,
+                        minorTickInterval: 'auto',
+                        lineColor: '#000',
+                        lineWidth: 1,
+                        tickWidth: 1,
+                        tickColor: '#000',
+                        labels: {
+                            color: '#525151',
+                            font: '12px Helvetica',
+                            fontWeight: 'bold',
+                            format: '{value}(m)',
+                            fontSize: '15px',
+                            style: {
+                                color: '#F00',
+                                font: '10px Trebuchet MS, Verdana, sans-serif'
+                            }
+
+
+
+                        },
+                        min: 0,
+                        title: {
+
+
+
+
+                            text: 'Pressure',
+                            x: 14,
+                            y: -2,
+                            style:{
+                                color: 'red',
+
+                            }
+
+                        },
+
+                        gridLineWidth: 1,
+
+
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                            ,series: {
+                                cursor: 'pointer',
+                                point: {
+                                    events: {
+                                        click: function (e) {
+                                            hs.htmlExpand(null, {
+                                                pageOrigin: {
+                                                    x: e.pageX || e.clientX,
+                                                    y: e.pageY || e.clientY
+                                                },
+                                                headingText: this.series.name,
+                                                maincontentText: Highcharts.dateFormat('%A, %b %e, %Y', this.x) + ':<br/> ' +
+                                                    this.y + ' visits',
+                                                width: 200
+                                            });
+                                        }
+                                    }
+                                },
+
+
+
+                                marker: {
+                                    lineWidth: 1
+                                },
+
+                            }
+
+                        }
+
+
+
+                        ]
+
+
+                    }
+                    ,
+                    tooltip: {
+                        valueSuffix: '°C',
+                        shared: true,
+
+
+
+                        crosshairs: true
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'right',
+                        verticalAlign: 'middle',
+                        borderWidth: 0,
+
+
+                floating: false,
+                borderWidth: 1,
+                backgroundColor: '#FFFFFF',
+                shadow: true,
+                labelFormatter: function () {
+                    return '<div class="' + this.name + '-arrow"></div><span style="font-family: \'Advent Pro\', sans-serif; font-size:12px">' + this.name + '</span><br/><span style="font-size:10px; color:#ababaa">   Maximo: ' + this.options.total + '</span>';
+                }
+
+
+
+
+
+                    },
+                    scrollbar: {
+
+                            enabled: true
+                        ,
+
+                    },
+
+
+
+                    series: [{
+                        name: 'c1pressure',
+                        total: maximo1,
+                        data: series
+
+
+
+
+
+                    },
+                       { name: 'c2flow',
+                       total: maximo2,
+                       data: series1,
+
+
+
+
+
+
+                       },
+                       {
+                           name: 'c3pressure',
+                           total: maximo3,
+                           data: series2,
+
+
+
+
+
+
+                       }
+
+
+
+                    ],
+
+                    exporting: {
+                    buttons: {
+                            customButton: {
+                                x: -62,
+                                onclick: function () {
+
+                                    var data1update = [];
+
+                                    var numdat = 10;
+
+                                    options.series = [{ name: 'A', data: [series[0], series[1], series[2], series[3], series[4]] }];
+
+
+
+                                    var chart = new Highcharts.Chart(options);
+                                },
+                                symbol: 'circle'
+                            }
+                    }
+                }
+
+
+
+
+
+
+                });
+                $('#button').click(function () {
+                    var chart = $('#container').highcharts(),
+                        series = chart.series[0];
+                    if (series.visible) {
+                        series.hide();
+                    } else {
+                        series.show();
+                    }
+                });
+
+                $('#button1').click(function () {
+                    var chart = $('#container').highcharts(),
+                        series = chart.series[1];
+                    if (series.visible) {
+                        series.hide();
+                    } else {
+                        series.show();
+                    }
+                });
+
+                $('#button2').click(function () {
+                    var chart = $('#container').highcharts(),
+                        series = chart.series[2];
+                    if (series.visible) {
+                        series.hide();
+                    } else {
+                        series.show();
+                    }
+                });
+
+
+
+
+            });
+        }
+
+    </script>
+
+
+
+    <div id="container" style="width: 520px; height: 400px; ">
+
+
+
+    </div>
+
+</body>
+</html>
+
+

@@ -1,8 +1,8 @@
 ﻿using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(HerculesSystem.Startup))]
-namespace HerculesSystem
+[assembly: OwinStartupAttribute(typeof(Hercules.Startup))]
+namespace Hercules
 {
     public partial class Startup
     {

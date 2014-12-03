@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace HerculesSystem
+namespace Hercules
 {
     public class FilterConfig
     {

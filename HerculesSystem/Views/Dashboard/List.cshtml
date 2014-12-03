@@ -1,0 +1,123 @@
+﻿@model IEnumerable<Hercules.Models.DataGridDashboard>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<link href="@Url.Content("~/Content/Dashboard/List.css")" rel="stylesheet" type="text/css" />
+
+<h2>Dashboard</h2>
+<div>
+    <div class="demo-section k-header">
+            <h4>Filter</h4>
+            <p>
+                <input id="categories" style="width: 270px" />
+            </p>
+            <p>
+                <input id="products" disabled="disabled" style="width: 270px" />
+            </p>
+            <p>
+                <input id="orders" disabled="disabled" style="width: 270px" />
+            </p>
+            <p>
+                <input id="orders" disabled="disabled" style="width: 270px" />
+            </p>
+
+            <button class="k-button k-primary" id="get">Search</button>
+        </div>
+
+    <div id="grid" class="grid">
+
+        @(Html.Kendo().Grid(Model)
+            .Name("Dashboars")
+            
+            .Columns(c =>
+            {
+                c.Bound(p => p.LoggerSmSNumber).Title("Logger");
+                c.Bound(p => p.AlarmText).Title("Alarm");
+                c.Bound(p => p.MessageID).Title("Message");
+                c.Command(command => command.Custom("View").Click("showDetails")).Title("Detail");
+            })
+            .DataSource(d => d
+            .Ajax()
+            .Read(r => r.Action("Get", "ModelCompany"))
+            .ServerOperation(false)
+
+            )
+            .Sortable()
+            .Filterable()
+        )
+
+    </div>
+
+    <script type="text/javascript">
+        var detailsTemplate = kendo.template($("#template").html());
+
+        function showDetails(e) {
+            e.preventDefault();
+
+            //var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            //var wnd = $("#Details").data("kendoWindow");
+
+            //wnd.content(detailsTemplate(dataItem));
+            //wnd.center().open();
+            window.location.href = "Detail";
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            var categories = $("#categories").kendoDropDownList({
+                optionLabel: "Select category...",
+                dataTextField: "CategoryName",
+                dataValueField: "CategoryID",
+                dataSource: {
+                    type: "odata",
+                    serverFiltering: true,
+                    transport: {
+                        read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Categories"
+                    }
+                }
+            }).data("kendoDropDownList");
+
+            var products = $("#products").kendoDropDownList({
+                autoBind: false,
+                cascadeFrom: "categories",
+                optionLabel: "Select product...",
+                dataTextField: "ProductName",
+                dataValueField: "ProductID",
+                dataSource: {
+                    type: "odata",
+                    serverFiltering: true,
+                    transport: {
+                        read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Products"
+                    }
+                }
+            }).data("kendoDropDownList");
+
+            var orders = $("#orders").kendoDropDownList({
+                autoBind: false,
+                cascadeFrom: "products",
+                optionLabel: "Select order...",
+                dataTextField: "Order.ShipCity",
+                dataValueField: "OrderID",
+                dataSource: {
+                    type: "odata",
+                    serverFiltering: true,
+                    transport: {
+                        read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Order_Details?$expand=Order"
+                    }
+                }
+            }).data("kendoDropDownList");
+
+            $("#get").click(function () {
+                var categoryInfo = "\nCategory: { id: " + categories.value() + ", name: " + categories.text() + " }",
+                    productInfo = "\nProduct: { id: " + products.value() + ", name: " + products.text() + " }",
+                    orderInfo = "\nOrder: { id: " + orders.value() + ", name: " + orders.text() + " }";
+
+                alert("Order details:\n" + categoryInfo + productInfo + orderInfo);
+            });
+        });
+    </script>
+</div>
+
+
