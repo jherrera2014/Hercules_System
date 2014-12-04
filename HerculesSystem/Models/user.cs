@@ -26,10 +26,11 @@ namespace Hercules.Models
 
         [StringLength(200)]
 
-        [Required(ErrorMessage = "Please provide password", AllowEmptyStrings = false)]
+        [Required(ErrorMessage = "Please provide Password", AllowEmptyStrings = false)]
         [DataType(System.ComponentModel.DataAnnotations.DataType.Password)]
         public string Password { get; set; }
 
+        [Required(ErrorMessage = "Please provide Company", AllowEmptyStrings = false)]
         [StringLength(50)]
         public string Email { get; set; }
 

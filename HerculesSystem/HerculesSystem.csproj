@@ -587,9 +587,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Hercules.csproj" />
-    <Content Include="Hercules.csproj.user" />
-    <Content Include="Hercules_Report.htm" />
     <Content Include="Kendo.Mvc.dll" />
     <Content Include="obj\Debug\Hercules.csproj.FileListAbsolute.txt" />
     <Content Include="obj\Debug\Hercules.dll" />
@@ -838,6 +835,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\kendo.modernizr.custom.js" />
     <Content Include="Scripts\kendo\2014.3.1119\angular.min.js" />
     <Content Include="Scripts\kendo\2014.3.1119\cultures\kendo.culture.af-ZA.min.js" />
     <Content Include="Scripts\kendo\2014.3.1119\cultures\kendo.culture.af.min.js" />
@@ -1500,6 +1498,7 @@
     <Content Include="Scripts\kendo\2014.3.1119\kendo.view.min.js.map" />
     <Content Include="Scripts\kendo\2014.3.1119\kendo.web.min.js.map" />
     <Content Include="Scripts\kendo\2014.3.1119\kendo.window.min.js.map" />
+    <Content Include="Views\Home\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

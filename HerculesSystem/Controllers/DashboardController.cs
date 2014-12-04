@@ -87,13 +87,6 @@ namespace Hercules.Controllers
         public JsonResult GetZone()
         {
 
-            //var zoneslog= new ZoneLogger();
-            
-            //var zones = zoneslog.zone.Select(pro => new ZoneLogger{
-            //    ZoneName = pro.ZoneName,
-            //    ZoneID = pro.GetType
-            //})
-
             ZoneLogger zone = new ZoneLogger();
 
             return Json(zone.zone, JsonRequestBehavior.AllowGet);
