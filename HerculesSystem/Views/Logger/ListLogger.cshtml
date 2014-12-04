@@ -6,14 +6,12 @@
 
 <h2>ListLogger</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+
 
 <div id="grid" class="grid">
 
     @(Html.Kendo().Grid<HerculesSystem.Models.logger>()
-            .Name("loggers")
+            .Name("GridLoggers")
 
             .Columns(c =>
             {
@@ -24,13 +22,17 @@
             })
             .DataSource(d => d
             .Ajax()
-                            .Read(r => r.Action("GetLogger", "Logger"))
+                    .Read(r => r.Action("GetLogger", "Logger"))
             .ServerOperation(false)
 
             )
             .Sortable()
             .Filterable()
     )
+
+    <script type="text/javascript">
+        var detailsTemplate = kendo.template($("#template").html());
+    </script>
 
 </div>
 

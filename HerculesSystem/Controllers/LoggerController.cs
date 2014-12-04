@@ -18,7 +18,11 @@ namespace HerculesSystem.Controllers
         public JsonResult GetLogger()
         {
             ZoneLogger zone = new ZoneLogger();
-            return Json(zone.logger, JsonRequestBehavior.AllowGet);
+            var logger = zone.logger.AsQueryable();
+
+
+            return Json(logger.Select(o => new { LoggerID = o.ID, LoggerName = o.LoggerSMSNumber }), JsonRequestBehavior.AllowGet);
+
         }
     }
 }
