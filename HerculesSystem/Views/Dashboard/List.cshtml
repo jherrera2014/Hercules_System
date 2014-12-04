@@ -16,13 +16,13 @@
                     .DataTextField("ZoneName") //Specifies which property of the Product to be used by the dropdownlist as a text.
                     .DataValueField("ID") //Specifies which property of the Product to be used by the dropdownlist as a value.
                     .HtmlAttributes(new { style = "width:300px" })
+                    .OptionLabel("Zone")
                     .DataSource(source =>
                     {
                         source.Read(read =>
                         {
                             read.Action("GetZone", "Dashboard"); //Set the Action and Controller name
-                        })
-                        .ServerFiltering(true); //If true the DataSource will not filter the data on the client.
+                        }) ; //If true the DataSource will not filter the data on the client.
                     })
                     
                  )
@@ -33,11 +33,13 @@
                 .DataTextField("SiteName") //Specifies which property of the Product to be used by the dropdownlist as a text.
                 .DataValueField("SiteID") //Specifies which property of the Product to be used by the dropdownlist as a value.
                 .HtmlAttributes(new { style = "width:300px" })
+                .OptionLabel("Sites")
                 .DataSource(source =>
                 {
                     source.Read(read =>
                     {
-                        read.Action("GetSites", "Dashboard"); //Set the Action and Controller name
+                        read.Action("GetSites", "Dashboard") //Set the Action and Controller name
+                        .Data("filterSites");
                     })
                     .ServerFiltering(true); //If true the DataSource will not filter the data on the client.
                 })
@@ -51,13 +53,15 @@
                @(Html.Kendo().DropDownList()
                     .Name("LoggerDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
                     .DataTextField("LoggerName") //Specifies which property of the Product to be used by the dropdownlist as a text.
-                    .DataValueField("ID") //Specifies which property of the Product to be used by the dropdownlist as a value.
+                    .DataValueField("LoggerID") //Specifies which property of the Product to be used by the dropdownlist as a value.
                     .HtmlAttributes(new { style = "width:300px" })
+                    .OptionLabel("Logger")
                     .DataSource(source =>
                     {
                         source.Read(read =>
                         {
-                            read.Action("GetLogger", "Dashboard"); //Set the Action and Controller name
+                            read.Action("GetLogger", "Dashboard")//Set the Action and Controller name
+                           .Data("filterLogger");
                         })
                         .ServerFiltering(true); //If true the DataSource will not filter the data on the client.
                     })
@@ -67,7 +71,7 @@
                 )
             </p>
 
-            <button class="k-button k-primary" id="get">Search</button>
+         <input type="button" class="k-button k-primary" value="Filter" onclick="location.href='@Url.Action("FilterButton", "Dashboard")'" />
         </div>
 
     <div id="grid" class="grid">
@@ -99,67 +103,24 @@
 
         function showDetails(e) {
             e.preventDefault();
-
-            //var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-            //var wnd = $("#Details").data("kendoWindow");
-
-            //wnd.content(detailsTemplate(dataItem));
-            //wnd.center().open();
             window.location.href = "Detail";
         }
-    </script>
-    <script>
+
+        function filterSites() {
+            return {
+                ZoneDropDownList: $("#ZoneDropDownList").val()
+            };
+        }
+        function filterLogger() {
+            return {
+                SiteDropDownList: $("#SiteDropDownList").val()
+            };
+        }
+
         $(document).ready(function () {
-            var categories = $("#categories").kendoDropDownList({
-                optionLabel: "Select category...",
-                dataTextField: "CategoryName",
-                dataValueField: "CategoryID",
-                dataSource: {
-                    type: "odata",
-                    serverFiltering: true,
-                    transport: {
-                        read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Categories"
-                    }
-                }
-            }).data("kendoDropDownList");
-
-            var products = $("#products").kendoDropDownList({
-                autoBind: false,
-                cascadeFrom: "categories",
-                optionLabel: "Select product...",
-                dataTextField: "ProductName",
-                dataValueField: "ProductID",
-                dataSource: {
-                    type: "odata",
-                    serverFiltering: true,
-                    transport: {
-                        read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Products"
-                    }
-                }
-            }).data("kendoDropDownList");
-
-            var orders = $("#orders").kendoDropDownList({
-                autoBind: false,
-                cascadeFrom: "products",
-                optionLabel: "Select order...",
-                dataTextField: "Order.ShipCity",
-                dataValueField: "OrderID",
-                dataSource: {
-                    type: "odata",
-                    serverFiltering: true,
-                    transport: {
-                        read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Order_Details?$expand=Order"
-                    }
-                }
-            }).data("kendoDropDownList");
-
-            $("#get").click(function () {
-                var categoryInfo = "\nCategory: { id: " + categories.value() + ", name: " + categories.text() + " }",
-                    productInfo = "\nProduct: { id: " + products.value() + ", name: " + products.text() + " }",
-                    orderInfo = "\nOrder: { id: " + orders.value() + ", name: " + orders.text() + " }";
-
-                alert("Order details:\n" + categoryInfo + productInfo + orderInfo);
-            });
+            var zones = $("#ZoneDropDownList").data("kendoDropDownList"),
+                sites = $("#SiteDropDownList").data("kendoDropDownList"),
+                logger = $("#LoggerDropDownList").data("kendoDropDownList");
         });
     </script>
 </div>

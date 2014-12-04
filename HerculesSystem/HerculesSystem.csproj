@@ -190,8 +190,10 @@
     <Compile Include="Controllers\GridDashboardController.cs" />
     <Compile Include="Controllers\HighchartServiceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoggerController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MapsController.cs" />
+    <Compile Include="Controllers\ZoneSitesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -201,6 +203,7 @@
     <Compile Include="Models\DataGridDashboard.cs" />
     <Compile Include="Models\GoogleMarker.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\logger.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Model1.cs" />
     <Compile Include="Models\Model2.cs" />
@@ -1500,6 +1503,8 @@
     <Content Include="Scripts\kendo\2014.3.1119\kendo.web.min.js.map" />
     <Content Include="Scripts\kendo\2014.3.1119\kendo.window.min.js.map" />
     <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\ZoneSites\List.cshtml" />
+    <Content Include="Views\Logger\ListLogger.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
