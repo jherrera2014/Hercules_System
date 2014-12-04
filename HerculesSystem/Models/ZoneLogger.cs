@@ -19,15 +19,13 @@ namespace HerculesSystem.Models
             modelBuilder.Entity<zone>()
                 .Property(e => e.ZoneName)
                 .IsUnicode(false);
-        }
 
-        public virtual DbSet<sites> zone { get; set; }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
             modelBuilder.Entity<sites>()
-                .Property(e => e.Address)
-                .IsUnicode(false);
+              .Property(e => e.Address)
+              .IsUnicode(false);
         }
+
+        public virtual DbSet<sites> sites { get; set; }
+
     }
 }
