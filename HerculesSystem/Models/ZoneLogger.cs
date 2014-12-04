@@ -14,6 +14,10 @@ namespace HerculesSystem.Models
 
         public virtual DbSet<zone> zone { get; set; }
 
+        public virtual DbSet<sites> sites { get; set; }
+
+        public virtual DbSet<logger> logger { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<zone>()
@@ -23,9 +27,12 @@ namespace HerculesSystem.Models
             modelBuilder.Entity<sites>()
               .Property(e => e.Address)
               .IsUnicode(false);
+
+            modelBuilder.Entity<logger>()
+             .Property(e => e.LoggerSMSNumber)
+             .IsUnicode(false);
         }
 
-        public virtual DbSet<sites> sites { get; set; }
 
     }
 }

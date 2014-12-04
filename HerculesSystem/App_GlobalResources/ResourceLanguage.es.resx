@@ -120,6 +120,9 @@
   <data name="Company" xml:space="preserve">
     <value>Empresa</value>
   </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filtrar</value>
+  </data>
   <data name="Login" xml:space="preserve">
     <value>Ingresar</value>
   </data>

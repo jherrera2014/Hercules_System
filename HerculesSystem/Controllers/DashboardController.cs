@@ -95,23 +95,34 @@ namespace Hercules.Controllers
             var sites = zone.sites.AsQueryable();
             if (ZoneDropDownList != null)
             {
-                sites = sites.Where(p => p.ID == ZoneDropDownList);
+                sites = sites.Where(p => p.ZoneID == ZoneDropDownList);
+
+                return Json(sites.Select(p => new { SiteName = p.Address, SiteID = p.ID }), JsonRequestBehavior.AllowGet);
             }
+            else
+                return Json(null);
             
-            return Json(sites.Select(p => new { SiteName = p.Address, SiteID = p.ID }), JsonRequestBehavior.AllowGet);
-
+          
         }
-        //public JsonResult GetLogger(int? SiteDropDownList)
-        //{
-        //    ZoneLogger zone = new ZoneLogger();
-        //    var orders = zone.Order_Details.AsQueryable();
+        public JsonResult GetLogger(int? SiteDropDownList)
+        {
+            ZoneLogger zone = new ZoneLogger();
+            var logger = zone.logger.AsQueryable();
 
-        //    if (SiteDropDownList != null)
-        //    {
-        //        orders = orders.Where(o => o.ProductID == SiteDropDownList);
-        //    }
+            if (SiteDropDownList != null)
+            {
+                logger = logger.Where(o => o.SitiesID == SiteDropDownList);
+                return Json(logger.Select(o => new { LoggerID = o.ID, LoggerName = o.LoggerSMSNumber }), JsonRequestBehavior.AllowGet);
 
-        //    return Json(orders.Select(o => new { OrderID = o.OrderID, ShipCity = o.Order.ShipCity }), JsonRequestBehavior.AllowGet);
-        //}
+            }
+            else
+                return Json(null);
+
+            }
+
+        public void FilterButton(Object sender, EventArgs e)
+        {
+            string id = "";
+        }
     }
 }
