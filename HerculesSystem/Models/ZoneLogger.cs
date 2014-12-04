@@ -8,7 +8,7 @@ namespace HerculesSystem.Models
     public partial class ZoneLogger : DbContext
     {
         public ZoneLogger()
-            : base("name=ZoneLogger")
+            : base("name=DefaultConnection")
         {
         }
 
@@ -18,6 +18,15 @@ namespace HerculesSystem.Models
         {
             modelBuilder.Entity<zone>()
                 .Property(e => e.ZoneName)
+                .IsUnicode(false);
+        }
+
+        public virtual DbSet<sites> zone { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<sites>()
+                .Property(e => e.Address)
                 .IsUnicode(false);
         }
     }

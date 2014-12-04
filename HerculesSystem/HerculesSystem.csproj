@@ -206,6 +206,7 @@
     <Compile Include="Models\Model2.cs" />
     <Compile Include="Models\ModelCompany.cs" />
     <Compile Include="Models\Prueba.cs" />
+    <Compile Include="Models\sites.cs" />
     <Compile Include="Models\user.cs" />
     <Compile Include="Models\zone.cs" />
     <Compile Include="Models\ZoneLogger.cs" />

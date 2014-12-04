@@ -11,29 +11,60 @@
     <div class="demo-section k-header">
             <h4>Filter</h4>
             <p>
-             @(Html.Kendo().DropDownList()
-                .Name("ZoneDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
-                .DataTextField("ZoneName") //Specifies which property of the Product to be used by the dropdownlist as a text.
+                 @(Html.Kendo().DropDownList()
+                    .Name("ZoneDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
+                    .DataTextField("ZoneName") //Specifies which property of the Product to be used by the dropdownlist as a text.
+                    .DataValueField("ID") //Specifies which property of the Product to be used by the dropdownlist as a value.
+                    .HtmlAttributes(new { style = "width:300px" })
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetZone", "Dashboard"); //Set the Action and Controller name
+                        })
+                        .ServerFiltering(true); //If true the DataSource will not filter the data on the client.
+                    })
+                    
+                 )
+            </p>
+            <p>
+                @(Html.Kendo().DropDownList()
+                .Name("SiteDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
+                .DataTextField("SiteName") //Specifies which property of the Product to be used by the dropdownlist as a text.
                 .DataValueField("ID") //Specifies which property of the Product to be used by the dropdownlist as a value.
+                .HtmlAttributes(new { style = "width:300px" })
                 .DataSource(source =>
                 {
                     source.Read(read =>
                     {
-                        read.Action("GetZone", "Dashboard"); //Set the Action and Controller name
+                        read.Action("GetSite", "Dashboard"); //Set the Action and Controller name
                     })
                     .ServerFiltering(true); //If true the DataSource will not filter the data on the client.
                 })
-                .SelectedIndex(0) //Select first item.
-             )
+                
+                .Enable(false)
+                .AutoBind(false)
+                .CascadeFrom("ZoneDropDownList")
+                )
             </p>
             <p>
-                <input id="products" disabled="disabled" style="width: 270px" />
-            </p>
-            <p>
-                <input id="orders" disabled="disabled" style="width: 270px" />
-            </p>
-            <p>
-                <input id="orders" disabled="disabled" style="width: 270px" />
+               @(Html.Kendo().DropDownList()
+                    .Name("LoggerDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
+                    .DataTextField("LoggerName") //Specifies which property of the Product to be used by the dropdownlist as a text.
+                    .DataValueField("ID") //Specifies which property of the Product to be used by the dropdownlist as a value.
+                    .HtmlAttributes(new { style = "width:300px" })
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetLogger", "Dashboard"); //Set the Action and Controller name
+                        })
+                        .ServerFiltering(true); //If true the DataSource will not filter the data on the client.
+                    })
+                    .Enable(false)
+                    .AutoBind(false)
+                    .CascadeFrom("SiteDropDownList")
+                )
             </p>
 
             <button class="k-button k-primary" id="get">Search</button>

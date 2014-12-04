@@ -84,12 +84,32 @@ namespace Hercules.Controllers
             return Json(dato);
         }
 
-        public JsonResult GetZone()
-        {
+        //public JsonResult GetZone()
+        //{
+        //    ZoneLogger zone = new ZoneLogger();
+        //    return Json(zone., JsonRequestBehavior.AllowGet);
+        //}
+        //public JsonResult GetSites(int? ZoneDropDownList)
+        //{
+        //    ZoneLogger zone = new ZoneLogger();
 
-            ZoneLogger zone = new ZoneLogger();
+        //    if (ZoneDropDownList != null)
+        //    {
+        //        products = products.Where(p => p.CategoryID == ZoneDropDownList);
+        //    }
+        //    return Json(zone.zone, JsonRequestBehavior.AllowGet);
+        //}
+        //public JsonResult GetLogger(int? SiteDropDownList)
+        //{
+        //    var northwind = new SampleEntities();
+        //    var orders = northwind.Order_Details.AsQueryable();
 
-            return Json(zone.zone, JsonRequestBehavior.AllowGet);
-        }
+        //    if (SiteDropDownList != null)
+        //    {
+        //        orders = orders.Where(o => o.ProductID == SiteDropDownList);
+        //    }
+
+        //    return Json(orders.Select(o => new { OrderID = o.OrderID, ShipCity = o.Order.ShipCity }), JsonRequestBehavior.AllowGet);
+        //}
     }
 }
