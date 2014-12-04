@@ -66,12 +66,19 @@ namespace Hercules.Controllers
              Debug.WriteLine("llego" + Session["datodia"]);
 
              DataSet ds = new DataSet();
-             SqlConnection con1 = new SqlConnection("Data Source=WIN-GFHR94L2K20\\SQLEXPRESS;Initial Catalog =hercules;Integrated Security=YES; ");
+
+             SqlConnection con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+             
+             
+             
+            
+      
+             
              {
                  using (SqlCommand cmd1 = new SqlCommand())
                  {
                      
-                     cmd1.CommandText = @"SELECT top 1000 datetime,c1pressure ,c2flow , c3pressure
+                     cmd1.CommandText = @"SELECT top 20 RecordDateTime,C1Leak ,C2Noise , C3Spreand
                FROM   datagraph   ";
 
 
@@ -98,20 +105,20 @@ namespace Hercules.Controllers
                          foreach (DataRow dr in ds.Tables["DatosGraph"].Rows)
                          {
 
-                             Debug.WriteLine(dr["datetime"].ToString().Substring(6, 4));
-                             Debug.WriteLine(dr["datetime"].ToString().Substring(3, 2));
-                             Debug.WriteLine(dr["datetime"].ToString().Substring(0, 2));
-                             Debug.WriteLine(dr["datetime"].ToString().Substring(11, 2));
-                             Debug.WriteLine(dr["datetime"].ToString().Substring(14, 2));
+                             Debug.WriteLine(dr["RecordDateTime"].ToString().Substring(6, 4));
+                             Debug.WriteLine(dr["RecordDateTime"].ToString().Substring(3, 2));
+                             Debug.WriteLine(dr["RecordDateTime"].ToString().Substring(0, 2));
+                             Debug.WriteLine(dr["RecordDateTime"].ToString().Substring(11, 2));
+                             Debug.WriteLine(dr["RecordDateTime"].ToString().Substring(14, 2));
                              
                              
                              datosplot.Add(new DataDnk
                              {
 
-                                 datetime = ToJsonTicks(new DateTime(Int32.Parse(dr["datetime"].ToString().Substring(6, 4)), Int32.Parse(dr["datetime"].ToString().Substring(3, 2)), Int32.Parse(dr["datetime"].ToString().Substring(0, 2)), Int32.Parse(dr["datetime"].ToString().Substring(11, 2)), Int32.Parse(dr["datetime"].ToString().Substring(14, 2)), 0)),
-                                 c1pressure = Convert.ToDouble(dr["c1pressure"], System.Globalization.CultureInfo.InvariantCulture),
-                                 c2flow = Convert.ToDouble(dr["c2flow"], System.Globalization.CultureInfo.InvariantCulture),
-                                  c3pressure = Convert.ToDouble(dr["c3pressure"], System.Globalization.CultureInfo.InvariantCulture)
+                                 datetime = ToJsonTicks(new DateTime(Int32.Parse(dr["RecordDateTime"].ToString().Substring(6, 4)), Int32.Parse(dr["RecordDateTime"].ToString().Substring(3, 2)), Int32.Parse(dr["RecordDateTime"].ToString().Substring(0, 2)), Int32.Parse(dr["RecordDateTime"].ToString().Substring(11, 2)), Int32.Parse(dr["RecordDateTime"].ToString().Substring(14, 2)), 0)),
+                                 c1pressure = Convert.ToDouble(dr["C1Leak"], System.Globalization.CultureInfo.InvariantCulture),
+                                 c2flow = Convert.ToDouble(dr["C2Noise"], System.Globalization.CultureInfo.InvariantCulture),
+                                 c3pressure = Convert.ToDouble(dr["C3Spreand"], System.Globalization.CultureInfo.InvariantCulture)
                               
                             
                              

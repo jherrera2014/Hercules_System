@@ -144,7 +144,7 @@
 
                 contentType: "application/json; charset=utf-8",
 
-                url: "http://localhost:2261/HighchartService/Index",
+                url: "http://localhost:17647/HighchartService/Index",
 
                 data: "{}",
 
@@ -158,27 +158,7 @@
 
                 success: function (Result) {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     Result = Result;
-
-
-
-
 
                     var data = [];
 
@@ -202,32 +182,6 @@
 
                     for (var i in Result) {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         var serie1 = new Array(Result[i].datetime, Result[i].c2flow);
 
                         var serie2 = new Array(Result[i].datetime, Result[i].c3pressure);
@@ -246,14 +200,6 @@
 
                         fech.push(Result[i].datetime);
 
-
-
-
-
-
-
-
-
                     }
 
 
@@ -264,23 +210,7 @@
 
                     var maximo3 = Math2.min(dat2);
 
-
-
-
-
-
-
                     DreawChart(data, data1, data2, maximo1, maximo2, maximo3, fech);
-
-
-
-
-
-
-
-
-
-
 
                 },
 
@@ -296,8 +226,6 @@
 
         function DreawChart(series, series1, series2, maximo1, maximo2, maximo3, fech) {
 
-
-
             $(function () {
 
                 Highcharts.setOptions({
@@ -306,21 +234,9 @@
 
                         useUTC: false,
 
-
-
-
-
                     }
 
                 });
-
-
-
-
-
-
-
-
 
                 $('#container').highcharts('StockChart', {
 
@@ -342,7 +258,7 @@
 
                         zoomType: 'x',
 
-                                                     },
+                    },
 
                     legend: {
 
@@ -362,93 +278,96 @@
 
                         y: 100,
 
-                        shadow: true
+                        shadow: true,
+
+                        labelFormatter: function () {
+
+                            return '<div class="' + this.name + '-arrow"></div><span style="font-family: \'Advent Pro\', sans-serif; font-size:12px">' + this.name + '</span><br/><span style="font-size:10px; color:#ababaa">   Maximo: ' + this.options.total + '</span>';
+
+                        }
 
                     },
 
-                     rangeSelector: {
+                    rangeSelector: {
 
-                         buttons: [{
+                        buttons: [{
 
-                             type: 'minute',
+                            type: 'minute',
 
-                             count: 10,
+                            count: 10,
 
-                             text: '1h'
+                            text: '1h'
 
-                         }, {
+                        }, {
 
-                             type: 'minute',
+                            type: 'minute',
 
-                             count: 1,
+                            count: 1,
 
-                             text: '12h'
+                            text: '12h'
 
-                         }, {
+                        }, {
 
-                             type: 'day',
+                            type: 'day',
 
-                             count: 1,
+                            count: 1,
 
-                             text: '1d'
+                            text: '1d'
 
-                         }, {
+                        }, {
 
-                             type: 'week',
+                            type: 'week',
 
-                             count: 1,
+                            count: 1,
 
-                             text: '1w'
+                            text: '1w'
 
-                         }, {
+                        }, {
 
-                             type: 'month',
+                            type: 'month',
 
-                             count: 1,
+                            count: 1,
 
-                             text: '1m'
+                            text: '1m'
 
-                         }, {
+                        }, {
 
-                             type: 'month',
+                            type: 'month',
 
-                             count: 6,
+                            count: 6,
 
-                             text: '6m'
+                            text: '6m'
 
-                         }, {
+                        }, {
 
-                             type: 'year',
+                            type: 'year',
 
-                             count: 1,
+                            count: 1,
 
-                             text: '1Y'
+                            text: '1Y'
 
-                         }, {
+                        }, {
 
-                             type: 'all',
+                            type: 'all',
 
-                             text: 'All'
+                            text: 'All'
 
-                         }],
+                        }],
 
 
-                     },
+                    },
 
-                     selected: 0,
-                     enabled: true,
-                     inputEnabled: true,
-                     inputDateFormat: '%e %b %Y',
+                    selected: 0,
+                    enabled: true,
+                    inputEnabled: true,
+                    inputDateFormat: '%e %b %Y',
 
-                      title: {
+                    title: {
 
                         text: 'Aguas de Antofagasta',
 
                         //center
-
-
-
-                         },
+                    },
 
 
                     navigator: {
@@ -481,7 +400,7 @@
 
                             }
 
-                            
+
 
                         },
 
@@ -491,7 +410,7 @@
 
                         ordinal: false,
 
-           
+
                         labels: {
 
                             step: 1,
@@ -506,20 +425,20 @@
 
                         }
 
-                        
+
 
                     },
                     tickInterval: 3,
 
-                    events:{
+                    events: {
 
-                        setExtremes: function(e) {
+                        setExtremes: function (e) {
 
-                     
+
                         }
 
 
-                        },
+                    },
 
                     yAxis: [{ // Primary yAxis
 
@@ -673,7 +592,7 @@
                         },
 
                         scrollbar: {
-                            enabled: true ,
+                            enabled: true,
                         },
 
 
@@ -716,6 +635,7 @@
                     { // Secondary yAxis
 
                         gridLineWidth: 0,
+                        offset: 30,
                         opposite: true,
                         title: {
 
@@ -744,10 +664,6 @@
                             }
 
                         }
-
-
-
-
 
                     },
 
@@ -810,11 +726,11 @@
 
                     {
 
-                        name: 'C2flow',
+                        name: 'C3pressure',
                         total: maximo2,
 
 
-                        data: series1,
+                        data: series2,
 
                         yAxis: 0,
 
@@ -826,195 +742,159 @@
 
                      {
 
-                         name: 'C3pressure',
+                         name: 'C2flow',
                          total: maximo3,
 
 
-                         data: series2,
+                         data: series1,
 
                          yAxis: 1,
 
                      },
-
-
-                 
                     {
 
-                    type: 'flags',
+                        type: 'flags',
 
-                data: [{
+                        data: [{
 
-                    x: Date.UTC(2014, 9, 23,17,55),
+                            x: Date.UTC(2014, 9, 23, 17, 55),
 
-                    title: 'A',
+                            title: 'A',
 
-                    text: 'Shape: "squarepin"'
+                            text: 'Shape: "squarepin"',
+                            y: 120,
+                        }, {
 
-                }, {
+                            x: Date.UTC(2014, 9, 23, 18, 29),
 
-                    x: Date.UTC(2014, 9, 23,18,29),
+                            title: 'A',
 
-                    title: 'A',
+                            text: 'Shape: "squarepin"'
 
-                    text: 'Shape: "squarepin"'
+                        }],
 
-                }],
+                        onSeries: 'series',
 
-                onSeries: 'series',
+                        shape: 'squarepin',
 
-                shape: 'squarepin',
+                        width: 16
 
-                width: 16
+                    }
 
-            }
+                    ],
 
+                    exporting: {
 
+                        buttons: {
 
+                            customButton: {
 
+                                x: -62,
 
-            ],
-
-
-
-            exporting: {
-
-                buttons: {
-
-                        customButton: {
-
-                            x: -62,
-
-                            onclick: function () {
+                                onclick: function () {
 
 
 
-                                var data1update = [];
-
-                                     
-
-                                var numdat = 10;
+                                    var data1update = [];
 
 
 
-                                options.series = [{ name: 'A', data: [series[0], series[1], series[2], series[3], series[4]] }];
+                                    var numdat = 10;
 
 
 
+                                    options.series = [{ name: 'A', data: [series[0], series[1], series[2], series[3], series[4]] }];
 
 
+                                    var chart = new Highcharts.Chart(options);
 
+                                },
 
-                                var chart = new Highcharts.Chart(options);
+                                symbol: 'circle'
 
-                            },
-
-                            symbol: 'circle'
+                            }
 
                         }
 
-                }
+                    }
 
-            }
 
 
 
 
+                });
 
-        });
 
-        
 
-        $('#button').click(function () {
+                $('#button').click(function () {
 
-            var chart = $('#container').highcharts(),
+                    var chart = $('#container').highcharts(),
 
-                series = chart.series[0];
+                        series = chart.series[0];
 
-            if (series.visible) {
+                    if (series.visible) {
 
-                series.hide();
+                        series.hide();
 
-            } else {
+                    } else {
 
-                series.show();
+                        series.show();
 
-            }
+                    }
 
-        });
+                });
 
 
 
-        $('#button1').click(function () {
+                $('#button1').click(function () {
 
-            var chart = $('#container').highcharts(),
+                    var chart = $('#container').highcharts(),
 
-                series = chart.series[1];
+                        series = chart.series[1];
 
-            if (series.visible) {
+                    if (series.visible) {
 
-                series.hide();
+                        series.hide();
 
-            } else {
+                    } else {
 
-                series.show();
+                        series.show();
 
-            }
+                    }
 
-        });
+                });
 
 
 
-        $('#button2').click(function () {
+                $('#button2').click(function () {
 
-            var chart = $('#container').highcharts(),
+                    var chart = $('#container').highcharts(),
 
-                series = chart.series[2];
+                        series = chart.series[2];
 
-            if (series.visible) {
+                    if (series.visible) {
 
-                series.hide();
+                        series.hide();
 
-            } else {
+                    } else {
 
-                series.show();
+                        series.show();
 
-            }
+                    }
 
-        });
+                });
 
 
 
-        $('#button4').click(function () {
+                $('#button4').click(function () {
 
-            var chart = $('#container').highcharts();
+                    var chart = $('#container').highcharts();
 
-            Highcharts.charts[0].xAxis[0].setExtremes(Date.UTC(2014, 10, 23, 13, 15), Date.UTC(2014, 10, 23, 14, 30));
+                    Highcharts.charts[0].xAxis[0].setExtremes(Date.UTC(2014, 10, 23, 13, 15), Date.UTC(2014, 10, 23, 14, 30));
 
-        });
+                });
 
-
-
-
-
-
-
-
-
-
-
-        });
-
-
-
-
-
-
-
-
-
-
-
-
+            });
 
         }
 
@@ -1043,6 +923,4 @@
 </body>
 
 </html>
-
-
 
