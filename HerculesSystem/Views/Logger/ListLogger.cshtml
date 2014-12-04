@@ -11,28 +11,30 @@
 <div id="grid" class="grid">
 
     @(Html.Kendo().Grid<HerculesSystem.Models.logger>()
-            .Name("GridLoggers")
+            .Name("GridLogger")
 
             .Columns(c =>
             {
-                c.Bound(p => p.LoggerSMSNumber).Title("Logger Name");
-                c.Bound(p => p.SitiesID).Title("Sities ID");
-                c.Bound(p => p.ID).Title("ID");
-                c.Command(command => command.Custom("View").Click("showDetails")).Title("Detail");
+                c.Bound(p => p.LoggerSMSNumber).Title("Logger");
+
             })
             .DataSource(d => d
             .Ajax()
-                    .Read(r => r.Action("GetLogger", "Logger"))
+            .Read(r => r.Action("GetLogger", "Logger"))
             .ServerOperation(false)
 
             )
             .Sortable()
             .Filterable()
     )
-
+    
     <script type="text/javascript">
-        var detailsTemplate = kendo.template($("#template").html());
+    var detailsTemplate = kendo.template($("#template").html());
+
+
     </script>
+
+
 
 </div>
 
