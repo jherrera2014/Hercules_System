@@ -1,7 +1,843 @@
-﻿
-@{
-    ViewBag.Title = "Index";
-}
+﻿<script src="~/Scripts/jquery-2.0.0.js"></script>
 
-<h2>Index</h2>
+
+
+<script src="http://code.highcharts.com/stock/highstock.js"></script>
+
+<script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
+
+<script src="~/Scripts/Highcharts-4.0.1/js/themes/grid-light.js"></script>
+
+
+
+<html>
+
+<head>
+
+    <title>Proyecto Hercules</title>
+
+</head>
+
+<body>
+    <table border="1">
+        <tr>
+            <td>
+                <div>
+
+                    <button id="button">C1pressure visibility</button>
+
+                </div>
+            </td>
+            <td>
+                <div>
+
+                    <button id="button1">C2flow visibility</button>
+
+                </div>
+            </td>
+            <td>
+                <div>
+
+                    <button id="button2">C3pressure visibility</button>
+
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+    <script type="text/javascript">
+
+
+
+            var Math2 = {
+
+                min: function (values) {
+
+                    return this.calculate(values, Math.min);
+
+                },
+
+                max: function (values) {
+
+                    return this.calculate(values, Math.max);
+
+                },
+
+                calculate: function (values, operation) {
+
+                    if (values.length == 0) {
+
+                        return NaN;
+
+                    } else if (values.length == 1) {
+
+                        var val = values.pop();
+
+                        if (typeof val == "number") {
+
+                            return val;
+
+                        } else {
+
+                            return NaN;
+
+                        }
+
+                    } else {
+
+                        var val = values.pop();
+
+                        return operation(val, this.calculate(values, operation))
+
+                    }
+
+                }
+
+            }
+
+
+
+            $(document).ready(function () {
+
+                $.ajax({
+
+                    type: "POST",
+
+                    contentType: "application/json; charset=utf-8",
+
+                    url: "http://localhost:17647/HighchartService/Index",
+
+                    data: "{}",
+
+                    dataType: "json",
+
+                    async: true,
+
+                    processData: false,
+
+                    cache: false,
+
+                    success: function (Result) {
+
+                        Result = Result;
+
+                        var data = [];
+
+                        var data1 = [];
+
+                        var data2 = [];
+
+                        var dat = [];
+
+                        var dat1 = [];
+
+                        var dat2 = [];
+
+                        var fech = [];
+
+                        var seriesOneData = [];
+
+
+
+
+
+                        for (var i in Result) {
+
+                            var serie1 = new Array(Result[i].datetime, Result[i].c2flow);
+
+                            var serie2 = new Array(Result[i].datetime, Result[i].c3pressure);
+
+                            data.push([Result[i].datetime, Result[i].c1pressure]);
+
+                            data1.push([Result[i].datetime, Result[i].c2flow]);
+
+                            data2.push([Result[i].datetime, Result[i].c3pressure]);
+
+                            dat.push(Result[i].c1pressure);
+
+                            dat1.push(Result[i].c2flow);
+
+                            dat2.push(Result[i].c3pressure);
+
+                            fech.push(Result[i].datetime);
+
+                        }
+
+
+
+                        var maximo1 = Math2.min(dat);
+
+                        var maximo2 = Math2.min(dat1);
+
+                        var maximo3 = Math2.min(dat2);
+
+                        DreawChart(data, data1, data2, maximo1, maximo2, maximo3, fech);
+
+                    },
+
+                    error: function (Result) {
+
+                        alert(Result.fail);
+
+                    }
+
+                });
+
+            });
+
+            function DreawChart(series, series1, series2, maximo1, maximo2, maximo3, fech) {
+
+                $(function () {
+
+                    Highcharts.setOptions({
+
+                        global: {
+
+                            useUTC: false,
+
+                        }
+
+                    });
+
+                    $('#container').highcharts('StockChart', {
+
+                        chart: {
+
+                            height: 750,
+
+                            width: 1300,
+
+                            spacingBottom: 8,
+
+                            spacingTop: 1,
+
+                            spacingLeft: 1,
+
+                            spacingRight: 1,
+
+                            backgroundColor: '#ffffff',
+
+                            zoomType: 'x',
+
+                        },
+
+                        legend: {
+
+                            enabled: true,
+
+                            align: 'right',
+
+                            backgroundColor: '#FFFFFF',
+
+                            borderColor: 'black',
+
+                            borderWidth: 2,
+
+                            layout: 'vertical',
+
+                            verticalAlign: 'top',
+
+                            y: 100,
+
+                            shadow: true,
+
+                            labelFormatter: function () {
+
+                                return '<div class="' + this.name + '-arrow"></div><span style="font-family: \'Advent Pro\', sans-serif; font-size:12px">' + this.name + '</span><br/><span style="font-size:10px; color:#ababaa">   Maximo: ' + this.options.total + '</span>';
+
+                            }
+
+                        },
+
+                        rangeSelector: {
+
+                            buttons: [{
+
+                                type: 'minute',
+
+                                count: 10,
+
+                                text: '1h'
+
+                            }, {
+
+                                type: 'minute',
+
+                                count: 1,
+
+                                text: '12h'
+
+                            }, {
+
+                                type: 'day',
+
+                                count: 1,
+
+                                text: '1d'
+
+                            }, {
+
+                                type: 'week',
+
+                                count: 1,
+
+                                text: '1w'
+
+                            }, {
+
+                                type: 'month',
+
+                                count: 1,
+
+                                text: '1m'
+
+                            }, {
+
+                                type: 'month',
+
+                                count: 6,
+
+                                text: '6m'
+
+                            }, {
+
+                                type: 'year',
+
+                                count: 1,
+
+                                text: '1Y'
+
+                            }, {
+
+                                type: 'all',
+
+                                text: 'All'
+
+                            }],
+
+
+                        },
+
+                        selected: 0,
+                        enabled: true,
+                        inputEnabled: true,
+                        inputDateFormat: '%e %b %Y',
+
+                        title: {
+
+                            text: 'Aguas de Antofagasta',
+
+                            //center
+                        },
+
+
+                        navigator: {
+
+
+
+                            xAxis: {
+
+
+
+                                dateTimeLabelFormats: {
+
+
+
+                                    day: '%Y',
+
+
+
+                                    week: '%Y',
+
+
+
+                                    month: '%Y',
+
+
+
+                                    year: '%Y'
+
+
+
+                                }
+
+
+
+                            },
+
+                            gridLineWidth: 2,
+
+                            type: 'datetime',
+
+                            ordinal: false,
+
+
+                            labels: {
+
+                                step: 1,
+
+                                rotation: 45,
+
+                                formatter: function () {
+
+                                    return Highcharts.dateFormat('%a %d %b %H:%M', this.value);
+
+                                }
+
+                            }
+
+
+
+                        },
+                        tickInterval: 3,
+
+                        events: {
+
+                            setExtremes: function (e) {
+
+
+                            }
+
+
+                        },
+
+                        yAxis: [{ // Primary yAxis
+
+                            offset: 30,
+
+                            minorTickInterval: 'auto',
+
+                            lineColor: '#000',
+
+                            lineWidth: 1,
+
+                            tickWidth: 1,
+
+                            tickColor: '#000',
+
+                            title: {
+
+                                text: 'Pressure',
+
+                                tickInterval: 4,
+
+                                style: {
+
+                                    color: '#4572A7'
+
+                                },
+
+                                tickInterval: 4,
+
+
+                            },
+                            gridLineWidth: 0,
+
+
+
+
+
+                            plotLines: [{
+
+                                value: 120.6738,
+
+                                color: 'red',
+
+                                dashStyle: 'shortdash',
+
+                                width: 2,
+
+                                label: {
+
+                                    text: 'PC'
+
+                                }
+
+
+                            },
+
+
+                            {
+
+                                value: 15.7419,
+
+                                color: 'orange',
+
+                                dashStyle: 'shortdash',
+
+                                width: 2,
+
+                                label: {
+
+                                    text: 'PC'
+
+                                }
+
+
+
+                                , series: {
+
+                                    cursor: 'pointer',
+
+                                    point: {
+
+                                        events: {
+
+                                            click: function (e) {
+
+                                                hs.htmlExpand(null, {
+
+                                                    pageOrigin: {
+
+                                                        x: e.pageX || e.clientX,
+
+                                                        y: e.pageY || e.clientY
+
+                                                    },
+
+                                                    headingText: this.series.name,
+
+                                                    maincontentText: Highcharts.dateFormat('%A, %b %e, %Y', this.x) + ':<br/> ' +
+
+                                                        this.y + ' visits',
+
+                                                    width: 200
+
+                                                });
+
+                                            }
+
+                                        }
+
+                                    },
+
+
+                                    marker: {
+
+                                        lineWidth: 1
+
+                                    },
+
+
+
+                                }
+
+
+                            }],
+                            legend: {
+
+                                enabled: true,
+
+                                layout: 'vertical',
+
+                                align: 'right',
+
+                                verticalAlign: 'middle',
+
+                                borderWidth: 0,
+
+                                floating: false,
+
+                                borderWidth: 1,
+
+                                backgroundColor: '#FFFFFF',
+
+                                shadow: true,
+
+                                labelFormatter: function () {
+
+                                    return '<div class="' + this.name + '-arrow"></div><span style="font-family: \'Advent Pro\', sans-serif; font-size:12px">' + this.name + '</span><br/><span style="font-size:10px; color:#ababaa">   Maximo: ' + this.options.total + '</span>';
+
+                                }
+
+                            },
+
+                            scrollbar: {
+                                enabled: true,
+                            },
+
+
+
+                            labels: {
+
+                                align: 'right',
+
+                                color: '#525151',
+
+                                font: '10px Helvetica',
+
+                                fontWeight: 'bold',
+
+                                format: '{value}(m)',
+
+                                fontSize: '10px',
+
+                                formatter: function () {
+
+                                    return this.value + 'm';
+
+                                },
+
+                                style: {
+
+                                    color: '#89A54E'
+
+                                }
+
+                            },
+
+                            opposite: false
+
+
+
+                        },
+
+
+                        { // Secondary yAxis
+
+                            gridLineWidth: 0,
+                            offset: 25,
+                            opposite: true,
+                            title: {
+
+                                text: 'Flow(l)',
+
+                                style: {
+
+                                    color: '#4572A7'
+
+                                }
+
+                            },
+
+                            labels: {
+
+                                formatter: function () {
+
+                                    return this.value + ' ';
+
+                                },
+
+                                style: {
+
+                                    color: '#4572A7'
+
+                                }
+
+                            }
+
+                        },
+
+                        { // Tertiary yAxis
+
+                            gridLineWidth: 0,
+
+                            labels: {
+
+                                formatter: function () {
+
+                                    return this.value + ' mb';
+
+                                },
+
+                                style: {
+
+                                    color: '#AA4643'
+
+                                }
+
+                            },
+
+                            opposite: true,
+
+
+                        }
+
+
+                        ],
+
+
+
+                        series: [{
+
+
+
+                            name: 'C1pressure',
+
+
+
+                            data: series,
+
+                            yAxis: 1,
+                            total: maximo1,
+
+                            tooltip: {
+
+
+
+                                valueDecimals: 2
+
+
+
+                            },
+
+
+
+                        },
+
+                        {
+
+                            name: 'C3pressure',
+                            total: maximo2,
+
+
+                            data: series2,
+
+                            yAxis: 0,
+
+
+                        },
+
+                         {
+
+                             name: 'C2flow',
+                             total: maximo3,
+
+
+                             data: series1,
+
+                             yAxis: 1,
+
+                         },
+                        {
+
+                            type: 'flags',
+
+                            data: [{
+
+                                x: Date.UTC(2014, 9, 23, 17, 55),
+
+                                title: 'A',
+
+                                text: ': "squarepin"',
+                                y: 3000,
+                            }, {
+
+                                x: Date.UTC(2014, 9, 23, 18, 29),
+
+                                title: 'A',
+
+                                text: 'Shape: "squarepin"'
+
+                            }],
+
+                            onSeries: 'series',
+
+                            shape: 'squarepin',
+
+                            width: 16
+
+                        }
+
+                        ],
+
+
+
+                    });
+
+
+
+                    $('#button').click(function () {
+
+                        var chart = $('#container').highcharts(),
+
+                            series = chart.series[0];
+
+                        if (series.visible) {
+
+                            series.hide();
+
+                        } else {
+
+                            series.show();
+
+                        }
+
+                    });
+
+
+
+                    $('#button1').click(function () {
+
+                        var chart = $('#container').highcharts(),
+
+                            series = chart.series[1];
+
+                        if (series.visible) {
+
+                            series.hide();
+
+                        } else {
+
+                            series.show();
+
+                        }
+
+                    });
+
+
+
+                    $('#button2').click(function () {
+
+                        var chart = $('#container').highcharts(),
+
+                            series = chart.series[2];
+
+                        if (series.visible) {
+
+                            series.hide();
+
+                        } else {
+
+                            series.show();
+
+                        }
+
+                    });
+
+
+
+                    $('#button4').click(function () {
+
+                        var chart = $('#container').highcharts();
+
+                        Highcharts.charts[0].xAxis[0].setExtremes(Date.UTC(2014, 10, 23, 13, 15), Date.UTC(2014, 10, 23, 14, 30));
+
+                    });
+
+                });
+
+            }
+
+
+
+    </script>
+
+
+    <div id="container" style="width: 640px; height: 400px; ">
+
+
+
+
+
+
+
+    </div>
+
+
+
+</body>
+
+</html>
 
