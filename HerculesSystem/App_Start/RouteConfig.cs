@@ -49,10 +49,10 @@ namespace Hercules
                           url: "{Maps}/{GetMarkersAsync}/{id}",
                           defaults: new { action = "GetMarkersAsync", id = UrlParameter.Optional }
                       );
-        
-        
-        
-        
+
+            
+
+           
         
         
         }

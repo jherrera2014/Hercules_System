@@ -15,15 +15,15 @@
 
             .Columns(c =>
             {
-                c.Bound(p => p.LoggerSMSNumber).Title("Logger Name");
-                c.Bound(p => p.SitiesID).Title("Sities ID");
-                c.Bound(p => p.ID).Title("ID");
+                c.Bound(p => p.ID).Title("Logger Name");
+                c.Bound(p => p.LoggerSMSNumber).Title("Sities ID");
+                c.Bound(p => p.SitiesID).Title("ID");
                 c.Command(command => command.Custom("View").Click("showDetails")).Title("Detail");
             })
             .DataSource(d => d
             .Ajax()
                     .Read(r => r.Action("GetLogger", "Logger"))
-            .ServerOperation(false)
+        .ServerOperation(false)
 
             )
             .Sortable()
