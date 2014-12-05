@@ -132,27 +132,6 @@ namespace Hercules.Controllers
 
 
         List<DataGridDashboard> datosplot;
-       
-        public List<DataGridDashboard> DatAnalysis()
-        {
-            datosplot = new List<DataGridDashboard>();
-            AdminBd bd = new AdminBd();
-            DataTable dt = new DataTable();
-            ArrayList list = new ArrayList();
-            bd.list_alert_logger(ref dt, list);
-
-            foreach (DataRow dr in dt.Rows)
-            {
-                datosplot.Add(new DataGridDashboard
-                {
-                    LoggerSmSNumber = dr[0].ToString(),
-                    AlarmText = dr[1].ToString(),
-                    MessageID = dr[2].ToString()
-                 
-                });
-            }
-            return datosplot;
-        }
 
         public JsonResult GetAlarm()
         {

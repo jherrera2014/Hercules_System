@@ -1,4 +1,5 @@
 ﻿using HerculesSystem.Models;
+using Kendo.Mvc.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,14 @@ namespace HerculesSystem.Controllers
         
         public ActionResult ListLogger()
         {
+            var noth = new ZoneLogger();
+            
+            
+            return View(noth.logger);
+        }
+
+        public ActionResult Index()
+        {
             return View();
         }
 
@@ -28,14 +37,16 @@ namespace HerculesSystem.Controllers
         
         
         
-        public JsonResult GetLogger()
-        {
-            ZoneLogger zone = new ZoneLogger();
-            var logger = zone.logger.AsQueryable();
+        //public JsonResult GetLogger()
+        //{
+        //    ZoneLogger zone = new ZoneLogger();
+        //    var logger = zone.logger.AsQueryable();
             
 
-            return Json(logger.Select(o => new { LoggerID = o.ID, LoggerName = o.LoggerSMSNumber , SitiesID  = o.SitiesID }), JsonRequestBehavior.AllowGet);
+        //    return Json(logger.Select(o => new { LoggerID = o.ID, LoggerName = o.LoggerSMSNumber , SitiesID  = o.SitiesID }), JsonRequestBehavior.AllowGet);
 
-        }
+        //}
+      
     }
+  
 }
