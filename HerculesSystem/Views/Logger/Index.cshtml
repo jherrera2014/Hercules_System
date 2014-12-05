@@ -428,7 +428,6 @@
 
                                 },
 
-                                tickInterval: 4,
 
 
                             },
@@ -440,7 +439,7 @@
 
                             plotLines: [{
 
-                                value: 120.6738,
+                                value: 3.6738,
 
                                 color: 'red',
 
@@ -515,7 +514,7 @@
 
                                     marker: {
 
-                                        lineWidth: 1
+                                        lineWidth: 3
 
                                     },
 
@@ -597,8 +596,9 @@
                         { // Secondary yAxis
 
                             gridLineWidth: 0,
-                            offset: 25,
+                            offset: 48,
                             opposite: true,
+
                             title: {
 
                                 text: 'Flow(l)',
@@ -610,7 +610,9 @@
                                 }
 
                             },
-
+                            marker: {
+                                enabled: false
+                            },
                             labels: {
 
                                 formatter: function () {
@@ -718,9 +720,9 @@
 
                                 x: Date.UTC(2014, 9, 23, 17, 55),
 
-                                title: 'A',
+                                title: 'PC',
 
-                                text: ': "squarepin"',
+                                text: 'PC: "Punto Critico"',
                                 y: 3000,
                             }, {
 
