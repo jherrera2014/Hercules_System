@@ -1508,6 +1508,7 @@
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\ZoneSites\List.cshtml" />
     <Content Include="Views\Logger\ListLogger.cshtml" />
+    <Content Include="Views\Logger\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

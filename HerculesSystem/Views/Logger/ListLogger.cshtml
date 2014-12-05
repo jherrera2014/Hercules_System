@@ -1,4 +1,4 @@
-﻿@using HerculesSystem.Models
+﻿@model IEnumerable<HerculesSystem.Models.logger>
 
 @{
     ViewBag.Title = "ListLogger";
@@ -10,31 +10,37 @@
 
 <div id="grid" class="grid">
 
-    @(Html.Kendo().Grid<HerculesSystem.Models.logger>()
-            .Name("GridLogger")
+    @(Html.Kendo().Grid(Model)
+            .Name("GridLoggers")
 
             .Columns(c =>
             {
-                c.Bound(p => p.LoggerSMSNumber).Title("Logger");
-
+                c.Bound(p => p.ID).Title("Logger Name");
+                c.Bound(p => p.LoggerSMSNumber).Title("Sities ID");
+                c.Bound(p => p.SitiesID).Title("ID");
+                c.Command(command => command.Custom("View").Click("showDetails")).Title("Detail").Width("100px"); 
             })
-            .DataSource(d => d
-            .Ajax()
-            .Read(r => r.Action("GetLogger", "Logger"))
-            .ServerOperation(false)
-
+                     .Pageable()
+                .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(10)
+                .ServerOperation(false)    )
+           
+      
             )
-            .Sortable()
-            .Filterable()
-    )
-    
+           
+
     <script type="text/javascript">
-    var detailsTemplate = kendo.template($("#template").html());
+        var detailsTemplate = kendo.template($("#template").html());
 
+      
+     
 
+        function showDetails(e) {
+            e.preventDefault();
+            window.location.href = "Detail";
+        }
     </script>
-
-
 
 </div>
 
