@@ -101,17 +101,7 @@ namespace Hercules.Controllers
 
             return googleMarkers;
         }
-     
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
         
         public ActionResult Index()
         {
@@ -199,6 +189,8 @@ namespace Hercules.Controllers
         public void FilterButton(Object sender, EventArgs e)
         {
             string id = "";
+
+           
         }
     }
 }
