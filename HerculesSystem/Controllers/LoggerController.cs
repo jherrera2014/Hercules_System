@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Kendo.Mvc.Extensions;
 
 namespace HerculesSystem.Controllers
 {
@@ -12,41 +13,67 @@ namespace HerculesSystem.Controllers
     {
         // GET: Logger
 
+        
        
- 
-        
-        
         public ActionResult ListLogger()
         {
-            var noth = new ZoneLogger();
-            
-            
-            return View(noth.logger);
+            //int? zone, int? site, int? logger
+
+            return View();
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string ID)
         {
             return View();
         }
 
+        public ActionResult DetailButton(string ID)
+        {
 
-        
-        
-        
-        
-        
-        
-        
-        //public JsonResult GetLogger()
-        //{
-        //    ZoneLogger zone = new ZoneLogger();
-        //    var logger = zone.logger.AsQueryable();
+            return RedirectToAction("Index", new { id = ID });
+        }
+
+        public ActionResult FilterButton(int? zone, int?logger)
+        {
+
+            return RedirectToAction("ListLogger", new { zone = zone,logger = logger });
+        }
+
+          private IEnumerable<dynamic> GetData()
+        {
+            DataClasses1DataContext db = new DataClasses1DataContext();
             
+            var result = from a in db.loggers
+                         join b in db.sites
+                             on new { emp = a.ID } equals new { emp = b.LoggerID }
 
-        //    return Json(logger.Select(o => new { LoggerID = o.ID, LoggerName = o.LoggerSMSNumber , SitiesID  = o.SitiesID }), JsonRequestBehavior.AllowGet);
+                         select new
+                            {
+                                ID = a.ID,
+                                LoggerSMSNumber = a.LoggerSMSNumber,
+                                BatteryLevel = a.BatteryLevel,
+                                LastCallIn = a.LastCallIn,
+                                LoggerSerialNumber = a.LoggerSerialNumber,
+                                LoggerType = a.LoggerType,
+                                SignalLevel = a.SignalLevel,
+                                Adress = b.Address
+                            };
 
-        //}
-      
+            return result;
+        }
+
+          public ActionResult Read([DataSourceRequest] DataSourceRequest request)
+          {
+              return GetView(request);
+          }
+
+          private JsonResult GetView(DataSourceRequest request)
+          {
+              return Json(GetData().ToDataSourceResult(request));
+          }
+
+        
+       
     }
   
 }

@@ -1,5 +1,6 @@
 ﻿using Hercules.App_Code;
 using Hercules.Models;
+using HerculesSystem;
 using HerculesSystem.Models;
 using Kendo.Mvc.UI;
 using System;
@@ -170,15 +171,28 @@ namespace Hercules.Controllers
             
           
         }
-        public JsonResult GetLogger(int? SiteDropDownList)
+        public JsonResult GetLogger(int? ZoneDropDownList)
         {
             ZoneLogger zone = new ZoneLogger();
             var logger = zone.logger.AsQueryable();
 
-            if (SiteDropDownList != null)
+            DataClasses1DataContext db = new DataClasses1DataContext();
+
+            var jointable = from a in db.loggers
+                         join b in db.sites
+                             on new { emp = a.ID } equals new { emp = b.LoggerID }
+
+                         select new
+                         {
+                             ID = a.ID,
+                             IDZone = b.ZoneID,
+                             LoggerName = b.Address
+                         };
+
+            if (ZoneDropDownList != null)
             {
-                logger = logger.Where(o => o.SitiesID == SiteDropDownList);
-                return Json(logger.Select(o => new { LoggerID = o.ID, LoggerName = o.LoggerSMSNumber }), JsonRequestBehavior.AllowGet);
+                jointable = jointable.Where(o => o.IDZone == ZoneDropDownList);
+                return Json(jointable.Select(o => new { LoggerID = o.ID, LoggerName = o.LoggerName }), JsonRequestBehavior.AllowGet);
 
             }
             else
@@ -188,7 +202,7 @@ namespace Hercules.Controllers
 
         public void FilterButton(Object sender, EventArgs e)
         {
-            string id = "";
+            string value_zone= "";
 
            
         }
