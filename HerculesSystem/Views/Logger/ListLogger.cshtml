@@ -1,48 +1,141 @@
-﻿@model IEnumerable<HerculesSystem.Models.logger>
+﻿@model IEnumerable<dynamic>
 
 @{
-    ViewBag.Title = "ListLogger";
+    ViewBag.Title = "List Logger";
 }
 
-<h2>ListLogger</h2>
+<h2>List Logger</h2>
+
+<div class="demo-section k-header">
+    <h4>Filter</h4>
+    <p>
+        @(Html.Kendo().DropDownList()
+                    .Name("ZoneDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
+                    .DataTextField("ZoneName") //Specifies which property of the Product to be used by the dropdownlist as a text.
+                    .DataValueField("ID") //Specifies which property of the Product to be used by the dropdownlist as a value.
+                    .HtmlAttributes(new { style = "width:300px" })
+                    .OptionLabel("Zone")
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetZone", "Dashboard"); //Set the Action and Controller name
+                        }); //If true the DataSource will not filter the data on the client.
+                    })
+
+        )
+    </p>
+   
+    <p>
+        @(Html.Kendo().DropDownList()
+                    .Name("LoggerDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
+                    .DataTextField("LoggerName") //Specifies which property of the Product to be used by the dropdownlist as a text.
+                    .DataValueField("LoggerID") //Specifies which property of the Product to be used by the dropdownlist as a value.
+                    .HtmlAttributes(new { style = "width:300px" })
+                    .OptionLabel("Logger")
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetLogger", "Dashboard")//Set the Action and Controller name
+                           .Data("filterLogger");
+                        })
+                        .ServerFiltering(true); //If true the DataSource will not filter the data on the client.
+                    })
+                    .Enable(false)
+                    .AutoBind(false)
+                    .CascadeFrom("ZoneDropDownList")
+        )
+    </p>
+   
+    <button class="k-button k-primary" onclick="FilterGrid()" >Filter</button>
+</div>
 
 
 
-<div id="grid" class="grid">
+<div id="grid" class="grid">  
 
-    @(Html.Kendo().Grid(Model)
-            .Name("GridLoggers")
-
-            .Columns(c =>
+    @(Html.Kendo().Grid(Model).Name("GridLoggers")
+      .DataSource(ds => ds.Ajax()
+            .Model(c =>
             {
-                c.Bound(p => p.ID).Title("Logger Name");
-                c.Bound(p => p.LoggerSMSNumber).Title("Sities ID");
-                c.Bound(p => p.SitiesID).Title("ID");
-                c.Command(command => command.Custom("View").Click("showDetails")).Title("Detail").Width("100px"); 
+                c.Id("ID");
+                c.Field("LoggerSMSNumber",typeof(int));
+                c.Field("BatteryLevel", typeof(int));
+                c.Field("LastCallIn", typeof(DateTime));
+                c.Field("LoggerSerialNumber", typeof(int));
+                c.Field("LoggerType", typeof(string));
+                c.Field("SignalLevel", typeof(int));
+                c.Field("Adress", typeof(string));
+                //c.Field(command => command.Custom("View").Click("ViewDetail")).Title("Detail").Width("100px");
             })
-                     .Pageable()
-                .DataSource(dataSource => dataSource
-                .Ajax()
-                .PageSize(10)
-                .ServerOperation(false)    )
-           
-      
+            .Read(r => r.Action("Read", "Logger"))
+            .Create(u => u.Action("Create", "Home"))
+            
             )
+            
+            .Columns(columns =>
+                {
+                    columns.Bound("Adress").Title("Adress");
+                    columns.Bound("LoggerSMSNumber").Title("SMS");
+                    columns.Bound("BatteryLevel").Title("Battery Level");
+                    columns.Bound("LastCallIn").Title("Last Call in");
+                    columns.Bound("LoggerSerialNumber").Title("Serial Number");
+                    columns.Bound("LoggerType").Title("Type");
+                    columns.Bound("SignalLevel").Title("Signal Level");
+                    
+                    columns.Command(command =>
+                    {
+                        command.Custom("View").Click("ViewDetail");
+                    });
+                })
+                        .Editable(editable => editable.TemplateName("ProductItem").Mode(GridEditMode.PopUp))
+                        .Sortable()
+                        .Filterable()
+                        .Pageable()
+                        
+      )
            
-
-    <script type="text/javascript">
-        var detailsTemplate = kendo.template($("#template").html());
-
-      
-     
-
-        function showDetails(e) {
-            e.preventDefault();
-            window.location.href = "Index";
-        }
-    </script>
 
 </div>
+
+<script type="text/javascript">
+
+    var detailsTemplate = kendo.template($("#template").html());
+
+    function ViewDetail(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var stockReceiptId = dataItem.ID;
+        window.location.href = "@Url.Action("DetailButton", "Logger")?ID=" + stockReceiptId;
+
+    }
+
+    function FilterGrid() {
+        var Zone = $("#ZoneDropDownList").val();
+        var Site = $("#SiteDropDownList").val();
+        var Logger = $("#LoggerDropDownList").val();
+         window.location.href = "@Url.Action("FilterButton", "Logger")?zone=" + Zone +"&site="+Site+"&logger="+Logger;
+    }
+
+    
+        function filterLogger() {
+            return {
+                ZoneDropDownList: $("#ZoneDropDownList").val()
+            };
+        }
+
+        $(document).ready(function () {
+            var zones = $("#ZoneDropDownList").data("kendoDropDownList"),
+                
+                logger = $("#LoggerDropDownList").data("kendoDropDownList");
+        });
+
+</script>
+
+
+
+
 
 
 

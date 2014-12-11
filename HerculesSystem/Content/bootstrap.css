@@ -4196,6 +4196,8 @@ textarea.input-group-sm > .input-group-btn > .btn {
   padding: 15px 15px;
   font-size: 18px;
   line-height: 20px;
+  background: url(../images/hercules_logo.png);
+  background-size:100px;
 }
 
 .navbar-brand:hover,
