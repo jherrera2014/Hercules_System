@@ -1,5 +1,4 @@
-﻿<script src="~/Scripts/jquery-2.0.0.js"></script>
-
+﻿
 
 
 <script src="http://code.highcharts.com/stock/highstock.js"></script>
@@ -7,6 +6,7 @@
 <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
 
 <script src="~/Scripts/Highcharts-4.0.1/js/themes/grid-light.js"></script>
+
 
 
 
@@ -24,27 +24,34 @@
             <td>
                 <div>
 
-                    <button id="button">C1pressure visibility</button>
+                    <button id="button" type="button" class="myButton">C1pressure visibility</button>
+
+</div>
+            </td>
+            <td>
+                <div>
+                <div>
+                <div>
+                    <button id="button1" type="button" class="myButton">C2flow visibility</button>
 
                 </div>
             </td>
             <td>
                 <div>
 
-                    <button id="button1">C2flow visibility</button>
-
-                </div>
-            </td>
-            <td>
-                <div>
-
-                    <button id="button2">C3pressure visibility</button>
+                    <button id="button2" type="button" class="myButton">C3pressure visibility</button>
 
                 </div>
             </td>
         </tr>
     </table> 
-
+    
+    <div id="grid" style="width: 640px; height: 200px;position: relative; top:20px; ">
+        <script>
+            $(function () {
+                $(".myButton").kendoButton();
+            });
+        </script>
 
         <script type="text/javascript">
 
@@ -154,23 +161,63 @@
 
                             data2.push([Result[i].datetime, Result[i].c3pressure]);
 
-                            dat.push(Result[i].c1pressure);
+                            dat.push(parseFloat(Result[i].c1pressure));
 
-                            dat1.push(Result[i].c2flow);
+                            dat1.push(parseFloat(Result[i].c2flow));
 
-                            dat2.push(Result[i].c3pressure);
+                            dat2.push(parseFloat(Result[i].c3pressure));
 
                             fech.push(Result[i].datetime);
 
                         }
+                    
+
+
+                        var maximo1 = Math2.max(dat);
+
+                        var maximo2 = Math2.max(dat1);
+
+                        var maximo3 = Math2.max(dat2);
+
+                        var minimo1 = Math2.min(dat);
+
+                        var minimo2 = Math2.min(dat1);
+
+                        var minimo3 = Math.max.apply(Math, dat1);
+                       
+                  
+
+
+                   
+           $("#grid").kendoGrid({
+               width: 150,
+               width: 150,
+               columns: [
+                   { field: "Operacion" },
+                   { field: "Maximo", groupable: false },
+                 { field: "Minimo" }, /* group by this column to see the footer template */
+                 {
+                     field: "age",
+                     groupable: false,
+                     aggregates: ["count", "min", "max"],
+                     groupFooterTemplate: "age total: #: count #, min: #: min #, max: #: max #"
+                 }
+               ],
+               groupable: true,
+               dataSource: {
+                   data: [
+                     { Operacion: "C1pressure", Maximo: maximo1, Minimo: minimo1, age: maximo3 },
+                     { Operacion: "C2flow", Maximo: maximo2, Minimo: minimo2, age: 33 },
+                      { Operacion: "C3pressure", Maximo: maximo3, Minimo:minimo3, age: 33 },
+                   ]
+               }
+           });
+                   
 
 
 
-                        var maximo1 = Math2.min(dat);
 
-                        var maximo2 = Math2.min(dat1);
 
-                        var maximo3 = Math2.min(dat2);
 
                         DreawChart(data, data1, data2, maximo1, maximo2, maximo3, fech);
 
@@ -182,11 +229,16 @@
 
                     }
 
+
+
+
                 });
 
             });
 
             function DreawChart(series, series1, series2, maximo1, maximo2, maximo3, fech) {
+
+
 
                 $(function () {
 
@@ -204,11 +256,11 @@
 
                         chart: {
 
-                            height: 750,
+                            height: 450,
 
-                            width: 1300,
+                            width: 1400,
 
-                            spacingBottom: 8,
+                            spacingBottom: 40,
 
                             spacingTop: 1,
 
@@ -597,8 +649,11 @@
                         { // Secondary yAxis
 
                             gridLineWidth: 0,
-                            offset: 25,
+                            offset: 35,
                             opposite: true,
+                            min: -5000,
+                            max: 35000,
+                            minorTickInterval: 'auto',
                             title: {
 
                                 text: 'Flow(l)',
@@ -742,7 +797,7 @@
 
                         ],
 
-               
+
 
                     });
 
@@ -818,26 +873,52 @@
 
                 });
 
+
+
+
+
             }
+
 
 
 
         </script>
 
-
-        <div id="container" style="width: 640px; height: 400px; ">
-
+    
 
 
 
 
 
+       
+
+    </div>
+
+
+        <div id="container" style="width: 640px; height: 300px;position: relative; bottom:0px; ">
 
         </div>
 
-
-
+    
+    
+    
+    
+   
+  
 </body>
+
+
+    
+
+
+
+
+
+
+
+
+
+
 
 </html>
 

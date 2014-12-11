@@ -104,13 +104,34 @@ namespace Hercules.Controllers
                        
                          foreach (DataRow dr in ds.Tables["DatosGraph"].Rows)
                          {
+                             Debug.WriteLine((dr["RecordDateTime"].ToString()));
+                             Debug.WriteLine((dr["RecordDateTime"].ToString()).Split(':')[0]);
+                             Debug.WriteLine((dr["RecordDateTime"].ToString().Trim()).Substring(6, 4));
+                             Debug.WriteLine((dr["RecordDateTime"].ToString().Trim()).Substring(3,2));
+                             Debug.WriteLine((dr["RecordDateTime"].ToString().Trim()).Substring(0,2));
+                             Debug.WriteLine((dr["RecordDateTime"].ToString()).Substring(11,2));
+                             Debug.WriteLine((dr["RecordDateTime"].ToString()).Substring(14, 2));
+                             string firstCharacter = (dr["RecordDateTime"].ToString().Split(':')[0].Substring(11, 2));
+                             Debug.WriteLine(firstCharacter);
+                             Debug.WriteLine(Convert.ToDouble(dr["C2Noise"], System.Globalization.CultureInfo.InvariantCulture));
+                             if (firstCharacter.Length==1)
+                             {
+                                 datosplot.Add(new DataDnk
+                                 {
 
-                             Debug.WriteLine(dr["RecordDateTime"].ToString().Substring(6, 4));
-                             Debug.WriteLine(dr["RecordDateTime"].ToString().Substring(3, 2));
-                             Debug.WriteLine(dr["RecordDateTime"].ToString().Substring(0, 2));
-                             Debug.WriteLine(dr["RecordDateTime"].ToString().Substring(11, 2));
-                             Debug.WriteLine(dr["RecordDateTime"].ToString().Substring(14, 2));
+                                     datetime = ToJsonTicks(new DateTime(Int32.Parse(dr["RecordDateTime"].ToString().Substring(6, 4)), Int32.Parse(dr["RecordDateTime"].ToString().Substring(3, 2)), Int32.Parse(dr["RecordDateTime"].ToString().Substring(0, 2)), Int32.Parse("0" + dr["RecordDateTime"].ToString().Substring(11, 1)), Int32.Parse(dr["RecordDateTime"].ToString().Split(':')[1]), 0)),
+                                  
+                                     c1pressure = Convert.ToDouble(dr["C1Leak"], System.Globalization.CultureInfo.InvariantCulture),
+                                     c2flow = Convert.ToDouble(dr["C2Noise"], System.Globalization.CultureInfo.InvariantCulture),
+                                     c3pressure = Convert.ToDouble(dr["C3Spreand"], System.Globalization.CultureInfo.InvariantCulture)
+                                     
+
+                                 });
                              
+                             
+                             
+                             }
+                             else{
                              
                              datosplot.Add(new DataDnk
                              {
@@ -123,8 +144,8 @@ namespace Hercules.Controllers
                             
                              
                              });
-                            
 
+                             }
                          }
                      }
                  }
