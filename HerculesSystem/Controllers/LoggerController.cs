@@ -17,7 +17,7 @@ namespace HerculesSystem.Controllers
        
         public ActionResult ListLogger()
         {
-            //int? zone, int? site, int? logger
+            
 
             return View();
         }
@@ -42,7 +42,7 @@ namespace HerculesSystem.Controllers
           private IEnumerable<dynamic> GetData()
         {
             DataClasses1DataContext db = new DataClasses1DataContext();
-            
+            var zone = new ZoneLogger();
             var result = from a in db.loggers
                          join b in db.sites
                              on new { emp = a.ID } equals new { emp = b.LoggerID }
@@ -59,7 +59,7 @@ namespace HerculesSystem.Controllers
                                 Adress = b.Address
                             };
 
-            return result;
+            return result ;
         }
 
           public ActionResult Read([DataSourceRequest] DataSourceRequest request)
