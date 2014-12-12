@@ -186,7 +186,7 @@
 
                             dat1.push(parseFloat(Result[i].c2flow));
 
-                            dat2.push(parseFloat(Result[i].c3pressure));
+                            dat2.push(Number.parseFloat(Result[i].c3pressure));
 
                             fech.push(Result[i].datetime);
 
@@ -220,7 +220,7 @@
                             width: 150,
                             width: 150,
                             columns: [
-                                { field: "Operacion" },
+                                { field: "Operaciones" },
                                 { field: "Maximo", groupable: false },
                               { field: "Minimo" }, /* group by this column to see the footer template */
                               {
