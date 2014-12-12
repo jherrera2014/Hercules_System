@@ -78,7 +78,7 @@ namespace Hercules.Controllers
                  using (SqlCommand cmd1 = new SqlCommand())
                  {
                      
-                     cmd1.CommandText = @"SELECT top 20 RecordDateTime,C1Leak ,C2Noise , C3Spreand
+                     cmd1.CommandText = @"SELECT top 100 RecordDateTime,C1Leak ,C2Noise , C3Spreand
                FROM   datagraph   ";
 
 

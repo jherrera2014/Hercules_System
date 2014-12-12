@@ -56,6 +56,20 @@
         <script type="text/javascript">
 
 
+            function mean(elem) {
+                var meanTotal = 0;
+                for (var i = 0; i < elem.length; i++) {
+                    // the array fields are strings so ato type(convert~) to numbers
+                    meanTotal += elem[i] * 1;
+                }
+              
+                meanTotal = meanTotal / elem.length;
+                return meanTotal;
+            }
+
+
+
+
 
             var Math2 = {
 
@@ -69,6 +83,13 @@
 
                     return this.calculate(values, Math.max);
 
+                },
+                average: function(values) {
+                    var cnt, tot, i;
+                    cnt = values.length;
+                    tot = i = 0;
+                    while (i < cnt) tot+= values[i++];
+                    return tot / cnt;
                 },
 
                 calculate: function (values, operation) {
@@ -179,47 +200,54 @@
 
                         var maximo3 = Math2.max(dat2);
 
-                        var minimo1 = Math2.min(dat);
+                        var minimo1 = Math.min(dat);
 
-                        var minimo2 = Math2.min(dat1);
+                        var minimo2 = Math.min(dat1);
 
-                        var minimo3 = Math.max.apply(Math, dat1);
+                        var minimo3 = Math.min(dat2);
                        
                   
 
 
+                        var prom1 = mean(dat);
+
+                        var prom2 = mean(dat1);
+
+                        var prom3 = mean(dat2);
+                  
+                       
+                        $("#grid").kendoGrid({
+                            width: 150,
+                            width: 150,
+                            columns: [
+                                { field: "Operacion" },
+                                { field: "Maximo", groupable: false },
+                              { field: "Minimo" }, /* group by this column to see the footer template */
+                              {
+                                  field: "Promedio",
+                                  groupable: false,
+                                  aggregates: ["count", "min", "max"],
+                                  groupFooterTemplate: "age total: #: count #, min: #: min #, max: #: max #"
+                              }
+                            ],
+                            groupable: true,
+                            dataSource: {
+                                data: [
+                                  { Operacion: "C1pressure", Maximo: maximo1, Minimo: minimo1, Promedio: prom1 },
+                                  { Operacion: "C2flow", Maximo: maximo2, Minimo: minimo2, Promedio: prom2 },
+                                   { Operacion: "C3pressure", Maximo: maximo3, Minimo: minimo3, Promedio: prom3 },
+                                ]
+                            }
+                        });
                    
-           $("#grid").kendoGrid({
-               width: 150,
-               width: 150,
-               columns: [
-                   { field: "Operacion" },
-                   { field: "Maximo", groupable: false },
-                 { field: "Minimo" }, /* group by this column to see the footer template */
-                 {
-                     field: "age",
-                     groupable: false,
-                     aggregates: ["count", "min", "max"],
-                     groupFooterTemplate: "age total: #: count #, min: #: min #, max: #: max #"
-                 }
-               ],
-               groupable: true,
-               dataSource: {
-                   data: [
-                     { Operacion: "C1pressure", Maximo: maximo1, Minimo: minimo1, age: maximo3 },
-                     { Operacion: "C2flow", Maximo: maximo2, Minimo: minimo2, age: 33 },
-                      { Operacion: "C3pressure", Maximo: maximo3, Minimo:minimo3, age: 33 },
-                   ]
-               }
-           });
-                   
+                        
 
 
 
 
 
 
-                        DreawChart(data, data1, data2, maximo1, maximo2, maximo3, fech);
+           DreawChart(data, data1, data2, maximo1, maximo2, maximo3, minimo1, minimo2, minimo3, fech);
 
                     },
 
@@ -258,9 +286,9 @@
 
                             height: 450,
 
-                            width: 1400,
+                            width: 1100,
 
-                            spacingBottom: 40,
+                            spacingBottom: 10,
 
                             spacingTop: 1,
 
@@ -797,7 +825,28 @@
 
                         ],
 
+                        exporting: {
 
+                            buttons: {
+
+                                customButton: {
+
+                                    x: -62,
+
+                                    onclick: function () {
+                                      
+
+                                      
+
+                                    },
+
+                                    symbol: 'circle'
+
+                                }
+
+                            }
+
+                        }
 
                     });
 
@@ -895,9 +944,9 @@
     </div>
 
 
-        <div id="container" style="width: 640px; height: 300px;position: relative; bottom:0px; ">
+    <div id="container" align="left" style="width: 540px; height: 300px;position: relative; bottom:-50px; ">
 
-        </div>
+    </div>
 
     
     
