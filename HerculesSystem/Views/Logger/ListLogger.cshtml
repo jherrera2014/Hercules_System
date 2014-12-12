@@ -113,9 +113,9 @@
 
     function FilterGrid() {
         var Zone = $("#ZoneDropDownList").val();
-        var Site = $("#SiteDropDownList").val();
+      
         var Logger = $("#LoggerDropDownList").val();
-         window.location.href = "@Url.Action("FilterButton", "Logger")?zone=" + Zone +"&site="+Site+"&logger="+Logger;
+         window.location.href = "@Url.Action("FilterButton", "Logger")?zone=" + Zone +"&logger="+Logger;
     }
 
     
