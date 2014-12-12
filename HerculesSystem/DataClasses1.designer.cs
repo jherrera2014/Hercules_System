@@ -39,6 +39,12 @@ namespace HerculesSystem
     partial void Insertzone(zone instance);
     partial void Updatezone(zone instance);
     partial void Deletezone(zone instance);
+    partial void Insertalarms(alarms instance);
+    partial void Updatealarms(alarms instance);
+    partial void Deletealarms(alarms instance);
+    partial void InsertalarmTypes(alarmTypes instance);
+    partial void UpdatealarmTypes(alarmTypes instance);
+    partial void DeletealarmTypes(alarmTypes instance);
     #endregion
 		
 		public DataClasses1DataContext() : 
@@ -92,6 +98,22 @@ namespace HerculesSystem
 			get
 			{
 				return this.GetTable<zone>();
+			}
+		}
+		
+		public System.Data.Linq.Table<alarms> alarms
+		{
+			get
+			{
+				return this.GetTable<alarms>();
+			}
+		}
+		
+		public System.Data.Linq.Table<alarmTypes> alarmTypes
+		{
+			get
+			{
+				return this.GetTable<alarmTypes>();
 			}
 		}
 	}
@@ -1305,6 +1327,343 @@ namespace HerculesSystem
 		{
 			this.SendPropertyChanging();
 			entity.zone = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.alarms")]
+	public partial class alarms : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private int _MessageID;
+		
+		private string _LoggerSMSNumber;
+		
+		private string _AlarmText;
+		
+		private EntityRef<alarmTypes> _alarmTypes;
+		
+    #region Definiciones de métodos de extensibilidad
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnMessageIDChanging(int value);
+    partial void OnMessageIDChanged();
+    partial void OnLoggerSMSNumberChanging(string value);
+    partial void OnLoggerSMSNumberChanged();
+    partial void OnAlarmTextChanging(string value);
+    partial void OnAlarmTextChanged();
+    #endregion
+		
+		public alarms()
+		{
+			this._alarmTypes = default(EntityRef<alarmTypes>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MessageID", DbType="Int NOT NULL")]
+		public int MessageID
+		{
+			get
+			{
+				return this._MessageID;
+			}
+			set
+			{
+				if ((this._MessageID != value))
+				{
+					if (this._alarmTypes.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnMessageIDChanging(value);
+					this.SendPropertyChanging();
+					this._MessageID = value;
+					this.SendPropertyChanged("MessageID");
+					this.OnMessageIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LoggerSMSNumber", DbType="VarChar(20)")]
+		public string LoggerSMSNumber
+		{
+			get
+			{
+				return this._LoggerSMSNumber;
+			}
+			set
+			{
+				if ((this._LoggerSMSNumber != value))
+				{
+					this.OnLoggerSMSNumberChanging(value);
+					this.SendPropertyChanging();
+					this._LoggerSMSNumber = value;
+					this.SendPropertyChanged("LoggerSMSNumber");
+					this.OnLoggerSMSNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AlarmText", DbType="VarChar(40)")]
+		public string AlarmText
+		{
+			get
+			{
+				return this._AlarmText;
+			}
+			set
+			{
+				if ((this._AlarmText != value))
+				{
+					this.OnAlarmTextChanging(value);
+					this.SendPropertyChanging();
+					this._AlarmText = value;
+					this.SendPropertyChanged("AlarmText");
+					this.OnAlarmTextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="alarmTypes_alarms", Storage="_alarmTypes", ThisKey="MessageID", OtherKey="AlarmTypeId", IsForeignKey=true)]
+		public alarmTypes alarmTypes
+		{
+			get
+			{
+				return this._alarmTypes.Entity;
+			}
+			set
+			{
+				alarmTypes previousValue = this._alarmTypes.Entity;
+				if (((previousValue != value) 
+							|| (this._alarmTypes.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._alarmTypes.Entity = null;
+						previousValue.alarms.Remove(this);
+					}
+					this._alarmTypes.Entity = value;
+					if ((value != null))
+					{
+						value.alarms.Add(this);
+						this._MessageID = value.AlarmTypeId;
+					}
+					else
+					{
+						this._MessageID = default(int);
+					}
+					this.SendPropertyChanged("alarmTypes");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.alarmTypes")]
+	public partial class alarmTypes : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _AlarmTypeId;
+		
+		private string _AlarmType;
+		
+		private System.Nullable<int> _AlarmTypeCode;
+		
+		private System.Nullable<int> _Channel;
+		
+		private EntitySet<alarms> _alarms;
+		
+    #region Definiciones de métodos de extensibilidad
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnAlarmTypeIdChanging(int value);
+    partial void OnAlarmTypeIdChanged();
+    partial void OnAlarmTypeChanging(string value);
+    partial void OnAlarmTypeChanged();
+    partial void OnAlarmTypeCodeChanging(System.Nullable<int> value);
+    partial void OnAlarmTypeCodeChanged();
+    partial void OnChannelChanging(System.Nullable<int> value);
+    partial void OnChannelChanged();
+    #endregion
+		
+		public alarmTypes()
+		{
+			this._alarms = new EntitySet<alarms>(new Action<alarms>(this.attach_alarms), new Action<alarms>(this.detach_alarms));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AlarmTypeId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int AlarmTypeId
+		{
+			get
+			{
+				return this._AlarmTypeId;
+			}
+			set
+			{
+				if ((this._AlarmTypeId != value))
+				{
+					this.OnAlarmTypeIdChanging(value);
+					this.SendPropertyChanging();
+					this._AlarmTypeId = value;
+					this.SendPropertyChanged("AlarmTypeId");
+					this.OnAlarmTypeIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AlarmType", DbType="VarChar(150)")]
+		public string AlarmType
+		{
+			get
+			{
+				return this._AlarmType;
+			}
+			set
+			{
+				if ((this._AlarmType != value))
+				{
+					this.OnAlarmTypeChanging(value);
+					this.SendPropertyChanging();
+					this._AlarmType = value;
+					this.SendPropertyChanged("AlarmType");
+					this.OnAlarmTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AlarmTypeCode", DbType="Int")]
+		public System.Nullable<int> AlarmTypeCode
+		{
+			get
+			{
+				return this._AlarmTypeCode;
+			}
+			set
+			{
+				if ((this._AlarmTypeCode != value))
+				{
+					this.OnAlarmTypeCodeChanging(value);
+					this.SendPropertyChanging();
+					this._AlarmTypeCode = value;
+					this.SendPropertyChanged("AlarmTypeCode");
+					this.OnAlarmTypeCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Channel", DbType="Int")]
+		public System.Nullable<int> Channel
+		{
+			get
+			{
+				return this._Channel;
+			}
+			set
+			{
+				if ((this._Channel != value))
+				{
+					this.OnChannelChanging(value);
+					this.SendPropertyChanging();
+					this._Channel = value;
+					this.SendPropertyChanged("Channel");
+					this.OnChannelChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="alarmTypes_alarms", Storage="_alarms", ThisKey="AlarmTypeId", OtherKey="MessageID")]
+		public EntitySet<alarms> alarms
+		{
+			get
+			{
+				return this._alarms;
+			}
+			set
+			{
+				this._alarms.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_alarms(alarms entity)
+		{
+			this.SendPropertyChanging();
+			entity.alarmTypes = this;
+		}
+		
+		private void detach_alarms(alarms entity)
+		{
+			this.SendPropertyChanging();
+			entity.alarmTypes = null;
 		}
 	}
 }

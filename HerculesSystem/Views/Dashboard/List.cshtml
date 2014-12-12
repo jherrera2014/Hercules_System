@@ -1,4 +1,4 @@
-﻿@using Hercules.Models
+﻿@model IEnumerable<dynamic>
 
 @{
     ViewBag.Title = "List";
@@ -29,45 +29,23 @@
             </p>
             <p>
                 @(Html.Kendo().DropDownList()
-                .Name("SiteDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
-                .DataTextField("SiteName") //Specifies which property of the Product to be used by the dropdownlist as a text.
-                .DataValueField("SiteID") //Specifies which property of the Product to be used by the dropdownlist as a value.
-                .HtmlAttributes(new { style = "width:300px" })
-                .OptionLabel("Sites")
-                .DataSource(source =>
-                {
-                    source.Read(read =>
-                    {
-                        read.Action("GetSites", "Dashboard") //Set the Action and Controller name
-                        .Data("filterSites");
-                    })
-                    .ServerFiltering(true); //If true the DataSource will not filter the data on the client.
-                })
-                
-                .Enable(false)
-                .AutoBind(false)
-                .CascadeFrom("ZoneDropDownList")
-                )
-            </p>
-            <p>
-               @(Html.Kendo().DropDownList()
-                    .Name("LoggerDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
-                    .DataTextField("LoggerName") //Specifies which property of the Product to be used by the dropdownlist as a text.
-                    .DataValueField("LoggerID") //Specifies which property of the Product to be used by the dropdownlist as a value.
-                    .HtmlAttributes(new { style = "width:300px" })
-                    .OptionLabel("Logger")
-                    .DataSource(source =>
-                    {
-                        source.Read(read =>
+                        .Name("LoggerDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
+                        .DataTextField("LoggerName") //Specifies which property of the Product to be used by the dropdownlist as a text.
+                        .DataValueField("LoggerID") //Specifies which property of the Product to be used by the dropdownlist as a value.
+                        .HtmlAttributes(new { style = "width:300px" })
+                        .OptionLabel("Logger")
+                        .DataSource(source =>
                         {
-                            read.Action("GetLogger", "Dashboard")//Set the Action and Controller name
-                           .Data("filterLogger");
+                            source.Read(read =>
+                            {
+                                read.Action("GetLogger", "Dashboard")//Set the Action and Controller name
+                               .Data("filterLogger");
+                            })
+                            .ServerFiltering(true); //If true the DataSource will not filter the data on the client.
                         })
-                        .ServerFiltering(true); //If true the DataSource will not filter the data on the client.
-                    })
-                    .Enable(false)
-                    .AutoBind(false)
-                    .CascadeFrom("SiteDropDownList")
+                        .Enable(false)
+                        .AutoBind(false)
+                        .CascadeFrom("ZoneDropDownList")
                 )
             </p>
 
@@ -76,52 +54,75 @@
 
     <div id="grid" class="grid">
 
-        @(Html.Kendo().Grid<Hercules.Models.DataGridDashboard>()
-            .Name("Dashboars")
-            
-            .Columns(c =>
-            {
-                c.Bound(p => p.LoggerSmSNumber).Title("Logger");
-                c.Bound(p => p.AlarmText).Title("Alarm");
-                c.Bound(p => p.MessageID).Title("Message");
-                c.Command(command => command.Custom("View").Click("showDetails")).Title("Detail");
-            })
-            .DataSource(d => d
-            .Ajax()
-                            .Read(r => r.Action("GetAlarm", "Dashboard"))
-            .ServerOperation(false)
+    @(Html.Kendo().Grid(Model).Name("Dashboars")
+          .DataSource(ds => ds.Ajax()
+                .Model(c =>
+                {
+                    c.Id("IDLogger");
+                    c.Field("IDAlarm", typeof(int));
+                    c.Field("LoggerName", typeof(string));
+                    c.Field("AlarmType", typeof(string));
+                    c.Field("LoggerSerialNumber", typeof(int));
+                    c.Field("LoggerType", typeof(string));
+                    c.Field("LoggerSMS", typeof(string));
+                })
+                .Read(r => r.Action("Read", "Dashboard"))
+                .Create(u => u.Action("Create", "Home"))
 
-            )
-            .Sortable()
-            .Filterable()
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound("IDAlarm").Title("ID Alarm");
+                    columns.Bound("LoggerName").Title("Logger Name");
+                    columns.Bound("AlarmType").Title("AlarmType");
+                    columns.Bound("LoggerSerialNumber").Title("Logger Serial Number");
+                    columns.Bound("LoggerType").Title("Logger Type");
+                    columns.Bound("LoggerSMS").Title("Logger SMS");
+                    columns.Command(command =>
+                    {
+                        command.Custom("View").Click("ViewDetail");
+                    });
+                })
+                .Editable(editable => editable.TemplateName("ProductItem").Mode(GridEditMode.PopUp))
+                .Sortable()
+                .Filterable()
+                .Pageable()             
         )
+    
+          
+  
 
     </div>
 
     <script type="text/javascript">
         var detailsTemplate = kendo.template($("#template").html());
 
-        function showDetails(e) {
-            e.preventDefault();
-            window.location.href = "Detail";
+        function FilterGrid() {
+            var Zone = $("#ZoneDropDownList").val();
+      
+            var Logger = $("#LoggerDropDownList").val();
+            window.location.href = "@Url.Action("FilterButton", "Logger")?zone=" + Zone +"&logger="+Logger;
         }
 
-        function filterSites() {
-            return {
-                ZoneDropDownList: $("#ZoneDropDownList").val()
-            };
-        }
+    
         function filterLogger() {
             return {
-                SiteDropDownList: $("#SiteDropDownList").val()
+                ZoneDropDownList: $("#ZoneDropDownList").val()
             };
         }
 
         $(document).ready(function () {
             var zones = $("#ZoneDropDownList").data("kendoDropDownList"),
-                sites = $("#SiteDropDownList").data("kendoDropDownList"),
                 logger = $("#LoggerDropDownList").data("kendoDropDownList");
         });
+
+        function ViewDetail(e) {
+            e.preventDefault();
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var stockReceiptId = dataItem.IDAlarm;
+            window.location.href = "@Url.Action("Detail", "Dashboard")?ID=" + stockReceiptId;
+
+        }
     </script>
 </div>
 

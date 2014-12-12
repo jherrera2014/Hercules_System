@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="DataClasses1">
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 9.625" name="DataClasses1">
   <DataContextMoniker Name="/DataClasses1DataContext" />
   <nestedChildShapes>
     <classShape Id="e7ebae9b-3383-4101-9f91-c6f3259e93cb" absoluteBounds="0.5, 0.5, 2, 5.0400211588541657">
@@ -20,7 +20,7 @@
         <elementListCompartment Id="b7b1a0b6-699c-4fd8-afb7-05ffeb80bdcd" absoluteBounds="4.5150000000000006, 6.085, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(5.1875 : 5.625); (5.1875 : 4.38621256510417)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.1875 : 5.625); (5.1875 : 4.38621256510417)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataClasses1DataContext/zone/zone_sites" />
       <nodes>
         <classShapeMoniker Id="95034a69-6d93-4bc0-8f62-d9dfeb1296bf" />
@@ -32,6 +32,25 @@
       <nodes>
         <classShapeMoniker Id="e7ebae9b-3383-4101-9f91-c6f3259e93cb" />
         <classShapeMoniker Id="3419a95f-b97d-4239-83a8-445e3cebb7a5" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="8e4a1371-785d-4934-9cc5-1e82d7d1903d" absoluteBounds="0.5, 6.25, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/DataClasses1DataContext/alarms" />
+      <nestedChildShapes>
+        <elementListCompartment Id="92b86ebc-2051-424c-a632-f88fe805cbe2" absoluteBounds="0.51500000000000012, 6.71, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="91b78ffe-d9ca-4b66-9103-05f5b60ba5fb" absoluteBounds="4, 7.75, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/DataClasses1DataContext/alarmTypes" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7f663d95-8045-4c6e-80d2-8c321036cdbc" absoluteBounds="4.015, 8.21, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(4 : 8.57859587760417); (1.5 : 8.57859587760417); (1.5 : 7.82859537760417)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DataClasses1DataContext/alarmTypes/alarmTypes_alarms" />
+      <nodes>
+        <classShapeMoniker Id="91b78ffe-d9ca-4b66-9103-05f5b60ba5fb" />
+        <classShapeMoniker Id="8e4a1371-785d-4934-9cc5-1e82d7d1903d" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>

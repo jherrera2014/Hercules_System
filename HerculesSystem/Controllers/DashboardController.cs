@@ -10,7 +10,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using Kendo.Mvc.Extensions;
 
 namespace Hercules.Controllers
 {
@@ -115,9 +115,9 @@ namespace Hercules.Controllers
            
         }
 
-        public ActionResult Detail()
+        public ActionResult Detail(string ID)
         {
-            return View();
+            return RedirectToAction("Index", new { id = ID });
 
         }
 
@@ -139,16 +139,70 @@ namespace Hercules.Controllers
                     LoggerSmSNumber = dr[0].ToString(),
                     AlarmText = dr[1].ToString(),
                     MessageID = dr[2].ToString()
-
                 });
-               
             }
             DataSourceResult dato = new DataSourceResult();
             dato.Data = datosplot;
             dato.Total = datosplot.Count();
 
+        
 
             return Json(dato);
+        }
+        public ActionResult Read([DataSourceRequest] DataSourceRequest request)
+        {
+            return GetView(request);
+        }
+
+        private JsonResult GetView(DataSourceRequest request)
+        {
+            return Json(GetData().ToDataSourceResult(request));
+        }
+        private IEnumerable<dynamic> GetData()
+        {
+            DataClasses1DataContext db = new DataClasses1DataContext();
+            //var zone = new ZoneLogger();
+            var result = from a in db.alarms
+                         join b in db.alarmTypes
+                             on new { emp = a.MessageID } equals new { emp = b.AlarmTypeId }
+                         join c in db.loggers
+                             on new { emp = a.LoggerSMSNumber } equals new { emp = c.LoggerSMSNumber}
+                         select new
+                         {
+                             IDAlarm = a.ID,
+                             IDLogger = c.ID,
+                             AlarmType = b.AlarmType,
+                             LoggerSerialNumber = c.LoggerSerialNumber,
+                             LoggerType = c.LoggerType,
+                             LoggerSMS = c.LoggerSMSNumber
+                         };
+
+            var loggerName = from a in db.loggers
+                            join b in db.sites
+                                on new { emp = a.ID } equals new { emp = b.LoggerID }
+
+                            select new
+                            {
+                                ID = a.ID,
+                                IDZone = b.ZoneID,
+                                LoggerName = b.Address
+                            };
+
+            var finaltable = from a in result
+                             join b in loggerName
+                             on new {emp = a.IDLogger} equals new {emp = b.ID}
+                             select new
+                             {
+                                 IDAlarm = a.IDAlarm,
+                                 IDLogger = a.IDLogger,
+                                 AlarmType = a.AlarmType,
+                                 LoggerSerialNumber = a.LoggerSerialNumber,
+                                 LoggerType = a.LoggerType,
+                                 LoggerSMS = a.LoggerSMS,
+                                 LoggerName = b.LoggerName
+                             };
+
+            return finaltable;
         }
 
         public JsonResult GetZone()
@@ -156,25 +210,11 @@ namespace Hercules.Controllers
             ZoneLogger zone = new ZoneLogger();
             return Json(zone.zone, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetSites(int? ZoneDropDownList)
-        {
-            ZoneLogger zone = new ZoneLogger();
-            var sites = zone.sites.AsQueryable();
-            if (ZoneDropDownList != null)
-            {
-                sites = sites.Where(p => p.ZoneID == ZoneDropDownList);
-
-                return Json(sites.Select(p => new { SiteName = p.Address, SiteID = p.ID }), JsonRequestBehavior.AllowGet);
-            }
-            else
-                return Json(null);
-            
-          
-        }
+       
         public JsonResult GetLogger(int? ZoneDropDownList)
         {
-            ZoneLogger zone = new ZoneLogger();
-            var logger = zone.logger.AsQueryable();
+            //ZoneLogger zone = new ZoneLogger();
+            //var logger = zone.logger.AsQueryable();
 
             DataClasses1DataContext db = new DataClasses1DataContext();
 

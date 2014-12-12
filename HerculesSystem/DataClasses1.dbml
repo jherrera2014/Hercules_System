@@ -56,4 +56,22 @@
       <Association Name="zone_sites" Member="sites" ThisKey="ID" OtherKey="ZoneID" Type="sites" />
     </Type>
   </Table>
+  <Table Name="dbo.alarms" Member="alarms">
+    <Type Name="alarms">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MessageID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LoggerSMSNumber" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="AlarmText" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
+      <Association Name="alarmTypes_alarms" Member="alarmTypes" ThisKey="MessageID" OtherKey="AlarmTypeId" Type="alarmTypes" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.alarmTypes" Member="alarmTypes">
+    <Type Name="alarmTypes">
+      <Column Name="AlarmTypeId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AlarmType" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="AlarmTypeCode" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Channel" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="alarmTypes_alarms" Member="alarms" ThisKey="AlarmTypeId" OtherKey="MessageID" Type="alarms" />
+    </Type>
+  </Table>
 </Database>
