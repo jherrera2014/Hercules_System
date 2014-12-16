@@ -1,6 +1,4 @@
-﻿<script src="~/Scripts/jquery-2.0.0.js"></script>
-
-
+﻿
 
 <script src="http://code.highcharts.com/stock/highstock.js"></script>
 
@@ -10,12 +8,13 @@
 
 
 
+
 <html>
 
 <head>
 
-    <title>Proyecto Hercules</title>
-
+    <title>Proyecto Hercules con loggers @ViewData["ID"]</title>
+    es una prueba @ViewData["ID"]
 </head>
 
 <body>
@@ -24,169 +23,254 @@
             <td>
                 <div>
 
-                    <button id="button">C1pressure visibility</button>
+                    <button id="button" type="button" class="myButton">C1pressure visibility</button>
 
                 </div>
             </td>
             <td>
                 <div>
+                    <div>
+                        <div>
+                            <button id="button1" type="button" class="myButton">C2flow visibility</button>
 
-                    <button id="button1">C2flow visibility</button>
-
-                </div>
+                        </div>
             </td>
             <td>
                 <div>
 
-                    <button id="button2">C3pressure visibility</button>
+                    <button id="button2" type="button" class="myButton">C3pressure visibility</button>
 
                 </div>
             </td>
         </tr>
     </table>
 
+    <div id="grid" style="width: 640px; height: 200px;position: relative; top:20px; ">
+        <script>
+            $(function () {
+                $(".myButton").kendoButton();
+            });
+        </script>
 
-    <script type="text/javascript">
+        <script type="text/javascript">
+
+
+    function mean(elem) {
+        var meanTotal = 0;
+        for (var i = 0; i < elem.length; i++) {
+            // the array fields are strings so ato type(convert~) to numbers
 
 
 
-            var Math2 = {
+            meanTotal += parseInt(elem[i]) * 1;
+        }
 
-                min: function (values) {
+        meanTotal = meanTotal / elem.length;
+        return meanTotal;
+    }
 
-                    return this.calculate(values, Math.min);
 
-                },
 
-                max: function (values) {
 
-                    return this.calculate(values, Math.max);
+    var Math2 = {
 
-                },
+        min: function (values) {
 
-                calculate: function (values, operation) {
+            return this.calculate(values, Math.min);
 
-                    if (values.length == 0) {
+        },
 
-                        return NaN;
+        max: function (values) {
 
-                    } else if (values.length == 1) {
+            return this.calculate(values, Math.max);
 
-                        var val = values.pop();
+        },
+        average: function (values) {
+            var cnt, tot, i;
+            cnt = values.length;
+            tot = i = 0;
+            while (i < cnt) tot += parseFloat(values[i++]);
+            return tot / cnt;
+        },
 
-                        if (typeof val == "number") {
+        calculate: function (values, operation) {
 
-                            return val;
+            if (values.length == 0) {
 
-                        } else {
+                return NaN;
 
-                            return NaN;
+            } else if (values.length == 1) {
 
-                        }
+                var val = values.pop();
 
-                    } else {
+                if (typeof val == "number") {
 
-                        var val = values.pop();
+                    return val;
 
-                        return operation(val, this.calculate(values, operation))
+                } else {
 
-                    }
+                    return NaN;
 
                 }
+
+            } else {
+
+                var val = values.pop();
+
+                return operation(val, this.calculate(values, operation))
+
+            }
+
+        }
+
+    }
+
+    var str = JSON.parse('@Html.Raw(Json.Encode(ViewData["ID"]))');
+
+ 
+
+
+    $(document).ready(function () {
+
+        $.ajax({
+
+            type: "POST",
+
+            contentType: "application/json; charset=utf-8",
+
+            url: "http://localhost:17647/HighchartService/Index",
+
+            data: {'param1':str},
+
+            dataType: "json",
+
+            async: true,
+
+            processData: false,
+
+            cache: false,
+
+            success: function (Result) {
+
+                Result = Result;
+
+                var data = [];
+
+                var data1 = [];
+
+                var data2 = [];
+
+                var dat = [];
+
+                var dat1 = [];
+
+                var dat2 = [];
+
+                var fech = [];
+                var loggertype = [];
+
+                var seriesOneData = [];
+
+           
+
+
+                for (var i in Result) {
+
+                    var serie1 = new Array(Result[i].datetime, Result[i].c2flow);
+
+                    var serie2 = new Array(Result[i].datetime, Result[i].c3pressure);
+
+                    data.push([Result[i].datetime, Result[i].c1pressure]);
+
+                    data1.push([Result[i].datetime, Result[i].c2flow]);
+
+                    data2.push([Result[i].datetime, Result[i].c3pressure]);
+
+                    dat.push(parseInt(Result[i].c1pressure));
+
+                    dat1.push(parseInt(Result[i].c2flow));
+
+                    dat2.push(parseInt(Result[i].c3pressure));
+
+                    fech.push(Result[i].datetime);
+
+
+
+                }
+
+                alert(dat1[35]);
+
+                var maximo1 = Math2.max(dat);
+
+                var maximo2 = Math2.max(dat1);
+
+                var maximo3 = Math2.max(dat2);
+
+                var minimo1 = Math.min(dat);
+
+                var minimo2 = Math.min(dat1);
+
+                var minimo3 = Math.min(dat2);
+
+
+
+
+                var prom1 = mean(dat);
+
+                var prom2 = mean(dat1);
+
+                var prom3 = mean(dat2);
+
+
+                $("#grid").kendoGrid({
+                    width: 150,
+                    width: 150,
+                    columns: [
+                        { field: "Operacion" },
+                        { field: "Maximo", groupable: false },
+                      { field: "Minimo" }, /* group by this column to see the footer template */
+                      {
+                          field: "Promedio",
+                          groupable: false,
+                          aggregates: ["count", "min", "max"],
+                          groupFooterTemplate: "age total: #: count #, min: #: min #, max: #: max #"
+                      }
+                    ],
+                    groupable: true,
+                    dataSource: {
+                        data: [
+                          { Operacion: "C1pressure", Maximo: maximo1, Minimo: minimo1, Promedio: prom1 },
+                          { Operacion: "C2flow", Maximo: maximo2, Minimo: minimo2, Promedio: prom2 },
+                           { Operacion: "C3pressure", Maximo: maximo3, Minimo: minimo3, Promedio: prom3 },
+                        ]
+                    }
+                });
+
+
+               
+
+
+
+                DreawChart(data, data1, data2, maximo1, maximo2, maximo3, minimo1, minimo2, minimo3, fech,str);
+
+            },
+
+            error: function (Result) {
+
+                alert(Result.fail);
 
             }
 
 
 
-            $(document).ready(function () {
 
-                $.ajax({
+        });
 
-                    type: "POST",
+    });
 
-                    contentType: "application/json; charset=utf-8",
-
-                    url: "http://localhost:17647/HighchartService/Index",
-
-                    data: "{}",
-
-                    dataType: "json",
-
-                    async: true,
-
-                    processData: false,
-
-                    cache: false,
-
-                    success: function (Result) {
-
-                        Result = Result;
-
-                        var data = [];
-
-                        var data1 = [];
-
-                        var data2 = [];
-
-                        var dat = [];
-
-                        var dat1 = [];
-
-                        var dat2 = [];
-
-                        var fech = [];
-
-                        var seriesOneData = [];
+            function DreawChart(series, series1, series2, maximo1, maximo2, maximo3, minimo1, minimo2, minimo3, fech, str) {
 
 
-
-
-
-                        for (var i in Result) {
-
-                            var serie1 = new Array(Result[i].datetime, Result[i].c2flow);
-
-                            var serie2 = new Array(Result[i].datetime, Result[i].c3pressure);
-
-                            data.push([Result[i].datetime, Result[i].c1pressure]);
-
-                            data1.push([Result[i].datetime, Result[i].c2flow]);
-
-                            data2.push([Result[i].datetime, Result[i].c3pressure]);
-
-                            dat.push(Result[i].c1pressure);
-
-                            dat1.push(Result[i].c2flow);
-
-                            dat2.push(Result[i].c3pressure);
-
-                            fech.push(Result[i].datetime);
-
-                        }
-
-
-
-                        var maximo1 = Math2.min(dat);
-
-                        var maximo2 = Math2.min(dat1);
-
-                        var maximo3 = Math2.min(dat2);
-
-                        DreawChart(data, data1, data2, maximo1, maximo2, maximo3, fech);
-
-                    },
-
-                    error: function (Result) {
-
-                        alert(Result.fail);
-
-                    }
-
-                });
-
-            });
-
-            function DreawChart(series, series1, series2, maximo1, maximo2, maximo3, fech) {
 
                 $(function () {
 
@@ -204,11 +288,11 @@
 
                         chart: {
 
-                            height: 750,
+                            height: 450,
 
-                            width: 1300,
+                            width: 1100,
 
-                            spacingBottom: 8,
+                            spacingBottom: 10,
 
                             spacingTop: 1,
 
@@ -326,7 +410,7 @@
 
                         title: {
 
-                            text: 'Aguas de Antofagasta',
+                            text: 'Aguas de Antofagasta' + str,
 
                             //center
                         },
@@ -428,6 +512,7 @@
 
                                 },
 
+                                tickInterval: 4,
 
 
                             },
@@ -439,7 +524,7 @@
 
                             plotLines: [{
 
-                                value: 3.6738,
+                                value: 120.6738,
 
                                 color: 'red',
 
@@ -514,7 +599,7 @@
 
                                     marker: {
 
-                                        lineWidth: 3
+                                        lineWidth: 1
 
                                     },
 
@@ -596,9 +681,11 @@
                         { // Secondary yAxis
 
                             gridLineWidth: 0,
-                            offset: 48,
+                            offset: 35,
                             opposite: true,
-
+                            min: -5000,
+                            max: 35000,
+                            minorTickInterval: 'auto',
                             title: {
 
                                 text: 'Flow(l)',
@@ -610,9 +697,7 @@
                                 }
 
                             },
-                            marker: {
-                                enabled: false
-                            },
+
                             labels: {
 
                                 formatter: function () {
@@ -720,9 +805,9 @@
 
                                 x: Date.UTC(2014, 9, 23, 17, 55),
 
-                                title: 'PC',
+                                title: 'A',
 
-                                text: 'PC: "Punto Critico"',
+                                text: ': "squarepin"',
                                 y: 3000,
                             }, {
 
@@ -744,7 +829,28 @@
 
                         ],
 
+                        exporting: {
 
+                            buttons: {
+
+                                customButton: {
+
+                                    x: -62,
+
+                                    onclick: function () {
+
+
+
+
+                                    },
+
+                                    symbol: 'circle'
+
+                                }
+
+                            }
+
+                        }
 
                     });
 
@@ -820,14 +926,18 @@
 
                 });
 
+
+
+
+
             }
 
 
 
-    </script>
+
+        </script>
 
 
-    <div id="container" style="width: 640px; height: 400px; ">
 
 
 
@@ -838,8 +948,30 @@
     </div>
 
 
+    <div id="container" align="left" style="width: 540px; height: 300px;position: relative; bottom:-50px; ">
+
+    </div>
+
+
+
+
+
+
 
 </body>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </html>
 
