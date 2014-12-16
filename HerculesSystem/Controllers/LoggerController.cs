@@ -33,11 +33,14 @@ namespace HerculesSystem.Controllers
             return RedirectToAction("Index", new { id = ID });
         }
 
-        public ActionResult FilterButton(int? zone, int?logger)
+        public ActionResult FilterButton([DataSourceRequest] DataSourceRequest request, int? zone, int?logger)
         {
 
-            return RedirectToAction("ListLogger", new { zone = zone,logger = logger });
+            //return RedirectToAction("ListLogger", new { zone = zone,logger = logger });
+            return GetView(request);
         }
+
+
 
           private IEnumerable<dynamic> GetData()
         {
@@ -72,7 +75,15 @@ namespace HerculesSystem.Controllers
               return Json(GetData().ToDataSourceResult(request));
           }
 
-        
+          [HttpPost]
+          public ActionResult RefreshSelfUpdatingPartial()
+          {
+
+              // Setting the Models Content
+              // ...
+
+              return PartialView("_SelfUpdatingPartial");
+          }
        
     }
   
