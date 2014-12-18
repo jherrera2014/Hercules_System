@@ -30,8 +30,8 @@
 	<script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+    <div class="navbar navbar-inverse navbar-fixed-top" >
+        <div class="container" >
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
@@ -48,15 +48,15 @@
 
             @if (User.Identity.IsAuthenticated)
             {
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Dashboard", "List", "Dashboard")</li>
-                    <li>@Html.ActionLink("Zone and Sites", "List", "ZoneSites")</li>
-                    <li>@Html.ActionLink("Logger", "ListLogger", "Logger")</li>
-                    <li>@Html.ActionLink("PR-013", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Dashboard", "List", "Dashboard")</li>
+                        <li>@Html.ActionLink("Zone and Sites", "List", "ZoneSites")</li>
+                        <li>@Html.ActionLink("Logger", "ListLogger", "Logger")</li>
+                        <li>@Html.ActionLink("PR-013", "Contact", "Home")</li>
+                    </ul>
+                    @Html.Partial("_LoginPartial")
+                </div>
             }
         </div>
     </div>

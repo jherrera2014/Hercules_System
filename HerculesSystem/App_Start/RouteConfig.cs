@@ -50,11 +50,19 @@ namespace Hercules
                           defaults: new { action = "GetMarkersAsync", id = UrlParameter.Optional }
                       );
 
-            
-
+            routes.MapRoute(
+                         name: "logger",
+                         url: "{Logger}/{Index}/{id}",
+                         defaults: new { action = "Index", id = UrlParameter.Optional }
+                     );
+            routes.MapRoute(
+                         name: "databot",
+                         url: "{Logger}/{ DetailButton}/{id}",
+                         defaults: new { action = " DetailButton", id = UrlParameter.Optional }
+                     );
            
         
-        
+     
         }
 
        

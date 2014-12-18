@@ -24,12 +24,17 @@ namespace HerculesSystem.Controllers
 
         public ActionResult Index(string ID)
         {
+            ViewData["id"] = ID;
+            Session["id"] = ViewData["id"];
+            
             return View();
         }
 
         public ActionResult DetailButton(string ID)
         {
-
+            ViewData["id"] = ID;
+            
+            
             return RedirectToAction("Index", new { id = ID });
         }
 
@@ -59,7 +64,8 @@ namespace HerculesSystem.Controllers
                                 LoggerSerialNumber = a.LoggerSerialNumber,
                                 LoggerType = a.LoggerType,
                                 SignalLevel = a.SignalLevel,
-                                Adress = b.Address
+                                Adress = b.Address,
+                                LoggerID = a.ID
                             };
 
             return result ;

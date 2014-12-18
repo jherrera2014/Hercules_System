@@ -40,15 +40,19 @@ namespace Hercules.Controllers
 
             public double c3pressure { get; set; }
 
+           
 
         }
 
 
         public virtual int AJAXRequest(int param1)
 	{
-        Debug.WriteLine(param1);
 
-        capdata = param1;
+        string data = Request["param1"];
+        Debug.WriteLine("llego" + data);
+            
+            capdata = param1;
+        Debug.WriteLine("llego por fin" + param1);
         Session["datodia"] = param1;
         return (param1);
 	}
@@ -58,12 +62,13 @@ namespace Hercules.Controllers
             return (value.ToUniversalTime().Ticks - ((new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).Ticks)) / 10000;
         }
 
-
-
-         public List<DataDnk> DatAnalysis()
+     
+       
+  
+         public List<DataDnk> DatAnalysis(int data)
          {
              datosplot = new List<DataDnk>();
-             Debug.WriteLine("llego" + Session["datodia"]);
+             var dat = data;
 
              DataSet ds = new DataSet();
 
@@ -77,10 +82,11 @@ namespace Hercules.Controllers
              {
                  using (SqlCommand cmd1 = new SqlCommand())
                  {
-                     
-                     cmd1.CommandText = @"SELECT top 100 RecordDateTime,C1Leak ,C2Noise , C3Spreand
-               FROM   datagraph   ";
 
+                     cmd1.CommandText = @"SELECT  RecordDateTime,C1Leak ,C2Noise , C3Spreand  From datagraph dat Inner Join loggers lg on lg.Id =@ID Where dat.IDLogger = lg.LoggerSMSNumber and dat.RecordDateTime
+   BETWEEN CONVERT(datetime,('2014-10-04' + ' ' + '23:45:00')) AND CONVERT(datetime,('2014-11-04' + ' ' + '23:45:00'))  ";
+                     cmd1.Parameters.Add("@ID", SqlDbType.Int);
+                     cmd1.Parameters["@ID"].Value = data;
 
                     
                     
@@ -122,7 +128,7 @@ namespace Hercules.Controllers
                                  c1pressure = Convert.ToDouble(dr["C1Leak"], System.Globalization.CultureInfo.InvariantCulture),
                                  c2flow = Convert.ToDouble(dr["C2Noise"], System.Globalization.CultureInfo.InvariantCulture),
                                  c3pressure = Convert.ToDouble(dr["C3Spreand"], System.Globalization.CultureInfo.InvariantCulture)
-
+                                  
 
 
                              });
@@ -151,28 +157,25 @@ namespace Hercules.Controllers
          }
 
 
-        public JsonResult GetData()
-         {
-             Dictionary<int, double> data = new Dictionary<int, double>();
-
-             data.Add(1, 2.5400F);
-             data.Add(2, 3.5400F);
-             data.Add(3, 4.5400F);
-             data.Add(4, 3.5400F);
-             data.Add(5, 2.5400F);
-             data.Add(6, 1.5400F);
-             return Json(DatAnalysis(), JsonRequestBehavior.AllowGet);
-         }
+      
    
         public ActionResult Index()
         {
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(DatAnalysis());
+            string data1 =Convert.ToString(Session["id"]);
+            string data = Request["param1"];
+            int datval = Convert.ToInt16(data1);
+            
+            
+            Debug.WriteLine("llego" + data1);
+            string prueba = "p1";
+            
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(DatAnalysis(datval));
             JavaScriptSerializer serializer = new JavaScriptSerializer();
 
 
 
 
-            return Json(DatAnalysis(), JsonRequestBehavior.AllowGet);
+            return Json(DatAnalysis(datval), JsonRequestBehavior.AllowGet);
         }
    
      }

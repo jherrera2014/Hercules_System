@@ -14,5 +14,9 @@ namespace HerculesSystem.Models
 
         [StringLength(100)]
         public string ZoneName { get; set; }
+
+        public DateTime CreationDate { get; set; }
+
+        public bool Status { get; set; }
     }
 }

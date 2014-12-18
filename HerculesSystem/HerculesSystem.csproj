@@ -595,6 +595,7 @@
     <Content Include="Content\kendo\2014.3.1119\Uniform\sprite_2x.png" />
     <Content Include="Content\kendo\2014.3.1119\Uniform\sprite_kpi.png" />
     <Content Include="Content\kendo\2014.3.1119\Uniform\sprite_kpi_2x.png" />
+    <Content Include="Content\Logger\list.css" />
     <Content Include="DotNet.Highcharts.dll" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
