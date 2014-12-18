@@ -1,11 +1,52 @@
-﻿@using HerculesSystem.Models
+﻿@model IEnumerable<dynamic>
 
-@{
-    ViewBag.Title = "List";
-}
+    @{
+        ViewBag.Title = "Zone List";
+    }
 
-<h2>List</h2>
+    <h2>List</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+    <div id="grid" class="grid">
+
+        @(Html.Kendo().Grid(Model).Name("GridLoggers")
+              .DataSource(d => d.Ajax()
+                .Model(c =>
+                {
+                    c.Id("ID");
+                    c.Field("ZoneName", typeof(string));
+                    c.Field("Status", typeof(bool));
+                    c.Field("CreationDate", typeof(DateTime));
+
+                })
+                .Read(r => r.Action("Read", "ZoneSites"))
+                .Update(update => update.Action("Edit", "ZoneSites"))
+
+               )
+                .Columns(columns =>
+                {
+                    columns.Bound("ZoneName").Title("Zone Name");
+                    columns.Bound("CreationDate").Title("Creation Date");
+                    columns.Bound("Status").Title("Status");
+                    columns.Command(command => { command.Custom("View").Click("showDetails"); command.Edit(); }).Title("Detail");
+
+                })
+
+                        .Editable(editable => editable.Mode(GridEditMode.PopUp))
+                        .Sortable()
+                        .Filterable()
+                        .Pageable()
+
+        )
+
+        <script type="text/javascript">
+            var detailsTemplate = kendo.template($("#template").html());
+
+            function showDetails(e) {
+                e.preventDefault();
+                window.location.href = "Detail";
+            }
+        </script>
+
+
+    </div>
+

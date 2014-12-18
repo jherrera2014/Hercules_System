@@ -34,7 +34,7 @@ namespace Hercules.Controllers
 
 
        [HttpPost]
-    [ValidateAntiForgeryToken]
+ 
     [AllowAnonymous]
     public ActionResult Login(user u)
     {
