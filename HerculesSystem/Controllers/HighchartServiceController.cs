@@ -40,7 +40,7 @@ namespace Hercules.Controllers
 
             public double c3pressure { get; set; }
 
-           
+            public string loggtype { get; set; }
 
         }
 
@@ -83,8 +83,8 @@ namespace Hercules.Controllers
                  using (SqlCommand cmd1 = new SqlCommand())
                  {
 
-                     cmd1.CommandText = @"SELECT  RecordDateTime,C1Leak ,C2Noise , C3Spreand  From datagraph dat Inner Join loggers lg on lg.Id =@ID Where dat.IDLogger = lg.LoggerSMSNumber and dat.RecordDateTime
-   BETWEEN CONVERT(datetime,('2014-10-04' + ' ' + '23:45:00')) AND CONVERT(datetime,('2014-11-04' + ' ' + '23:45:00'))  ";
+                     cmd1.CommandText = @"SELECT  RecordDateTime,C1Leak ,C2Noise , C3Spreand,Address From datagraph dat Inner Join loggers lg on lg.Id =4 JOIN sites t  ON lg.ID = t.ID Where dat.IDLogger = lg.LoggerSMSNumber and dat.RecordDateTime
+                                         BETWEEN CONVERT(datetime,('2014-10-04' + ' ' + '23:45:00')) AND CONVERT(datetime,('2014-11-04' + ' ' + '23:45:00'))  ";
                      cmd1.Parameters.Add("@ID", SqlDbType.Int);
                      cmd1.Parameters["@ID"].Value = data;
 
@@ -127,8 +127,8 @@ namespace Hercules.Controllers
                                  datetime = ToJsonTicks(new DateTime(Int32.Parse(dr["RecordDateTime"].ToString().Substring(6, 4)), Int32.Parse(dr["RecordDateTime"].ToString().Substring(3, 2)), Int32.Parse(dr["RecordDateTime"].ToString().Substring(0, 2)), Int32.Parse(dr["RecordDateTime"].ToString().Substring(11, 2)), Int32.Parse(dr["RecordDateTime"].ToString().Substring(14, 2)), 0)),
                                  c1pressure = Convert.ToDouble(dr["C1Leak"], System.Globalization.CultureInfo.InvariantCulture),
                                  c2flow = Convert.ToDouble(dr["C2Noise"], System.Globalization.CultureInfo.InvariantCulture),
-                                 c3pressure = Convert.ToDouble(dr["C3Spreand"], System.Globalization.CultureInfo.InvariantCulture)
-                                  
+                                 c3pressure = Convert.ToDouble(dr["C3Spreand"], System.Globalization.CultureInfo.InvariantCulture),
+                                  loggtype= (dr["Address"].ToString())
 
 
                              });

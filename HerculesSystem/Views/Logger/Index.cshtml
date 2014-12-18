@@ -18,7 +18,9 @@
 </head>
 
 <body>
-    <table border="1">
+    
+    
+     <table border="1">
         <tr>
             <td>
                 <div>
@@ -45,7 +47,12 @@
         </tr>
     </table>
 
-    <div id="grid" style="width: 640px; height: 200px;position: relative; top:20px; ">
+    <div id="container" align="left" style="width: 740px; height: 300px;position: relative;top:20px; ">
+
+
+    </div>
+    <div id="grid" style="width: 440px; height: 200px;position: absolute;  bottom:90px; ">
+    </div>
         <script>
             $(function () {
                 $(".myButton").kendoButton();
@@ -69,7 +76,17 @@
         return meanTotal;
     }
 
+    function Min(elem) {
+        var min = parseFloat(elem[0]);
+        for (i = 1; i < 20; i++) {
+        
+            if (min > parseFloat(elem[i]))
+                min = parseFloat(elem[i]);
+        }
 
+        alert(min);
+        return min;
+    }
 
 
     var Math2 = {
@@ -160,6 +177,8 @@
 
                 var data2 = [];
 
+                var data3 = [];
+
                 var dat = [];
 
                 var dat1 = [];
@@ -171,7 +190,18 @@
 
                 var seriesOneData = [];
 
-           
+                function Min(elem) {
+                    var min = parseFloat(elem[0]);
+                    for (i = 1; i < 20; i++) {
+
+                        if (min > parseFloat(elem[i]))
+                            min = parseFloat(elem[i]);
+                    }
+
+                    alert(min);
+                    return min;
+                }
+
 
 
                 for (var i in Result) {
@@ -186,19 +216,19 @@
 
                     data2.push([Result[i].datetime, Result[i].c3pressure]);
 
-                    dat.push(parseInt(Result[i].c1pressure));
+                    dat.push(parseFloat(Result[i].c1pressure));
 
-                    dat1.push(parseInt(Result[i].c2flow));
+                    dat1.push(parseFloat(Result[i].c2flow));
 
-                    dat2.push(parseInt(Result[i].c3pressure));
+                    dat2.push(parseFloat(Result[i].c3pressure));
 
                     fech.push(Result[i].datetime);
-
+                    data3.push([Result[i].loggtype]);
 
 
                 }
 
-                alert(dat1[35]);
+           
 
                 var maximo1 = Math2.max(dat);
 
@@ -206,13 +236,15 @@
 
                 var maximo3 = Math2.max(dat2);
 
-                var minimo1 = Math.min(dat);
+                var minimo1 = Min(dat);
 
-                var minimo2 = Math.min(dat1);
+                var minimo2 = Min(dat1);
 
-                var minimo3 = Math.min(dat2);
+                var minimo3 = Min(dat2);
 
+              
 
+             
 
 
                 var prom1 = mean(dat);
@@ -221,10 +253,15 @@
 
                 var prom3 = mean(dat2);
 
+                var loggertype = data3[0].toString();
+
+
+                alert(loggertype);
+
 
                 $("#grid").kendoGrid({
-                    width: 150,
-                    width: 150,
+                    width: 200,
+                  
                     columns: [
                         { field: "Operacion" },
                         { field: "Maximo", groupable: false },
@@ -251,7 +288,7 @@
 
 
 
-                DreawChart(data, data1, data2, maximo1, maximo2, maximo3, minimo1, minimo2, minimo3, fech,str);
+                DreawChart(data, data1, data2, maximo1, maximo2, maximo3, minimo1, minimo2, minimo3, fech, loggertype);
 
             },
 
@@ -268,7 +305,7 @@
 
     });
 
-            function DreawChart(series, series1, series2, maximo1, maximo2, maximo3, minimo1, minimo2, minimo3, fech, str) {
+    function DreawChart(series, series1, series2, maximo1, maximo2, maximo3, minimo1, minimo2, minimo3, fech, loggertype) {
 
 
 
@@ -410,7 +447,7 @@
 
                         title: {
 
-                            text: 'Aguas de Antofagasta' + str,
+                            text: 'Aguas de Antofagasta' + '-- Tipo de Logger:' + loggertype,
 
                             //center
                         },
@@ -681,7 +718,7 @@
                         { // Secondary yAxis
 
                             gridLineWidth: 0,
-                            offset: 35,
+                            offset: 40,
                             opposite: true,
                             min: -5000,
                             max: 35000,
@@ -945,19 +982,12 @@
 
 
 
-    </div>
+    
 
 
-    <div id="container" align="left" style="width: 540px; height: 300px;position: relative; bottom:-50px; ">
+   
 
-    </div>
-
-
-
-
-
-
-
+    
 </body>
 
 

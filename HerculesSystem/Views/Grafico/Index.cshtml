@@ -56,20 +56,17 @@
         <script type="text/javascript">
 
 
-            function mean(elem) {
-                var meanTotal = 0;
-                for (var i = 0; i < elem.length; i++) {
-                    // the array fields are strings so ato type(convert~) to numbers
-                    meanTotal += elem[i] * 1;
+            function Min(elem) {
+                var min = elem[0];
+                for (i = 1; i < 20; i++) {
+                    if (min > elem[i])
+                        min = elem[i];
                 }
-              
-                meanTotal = meanTotal / elem.length;
-                return meanTotal;
+           
+               
+                return min;
             }
-
-
-
-
+          
 
             var Math2 = {
 
@@ -192,7 +189,11 @@
 
                         }
                     
+                        var minimo1 = Min(dat);
 
+                        var minimo2 = Min(dat1);
+
+                        var minimo3 = Min(dat2);
 
                         var maximo1 = Math2.max(dat);
 
@@ -200,11 +201,7 @@
 
                         var maximo3 = Math2.max(dat2);
 
-                        var minimo1 = Math.min(dat);
-
-                        var minimo2 = Math.min(dat1);
-
-                        var minimo3 = Math.min(dat2);
+                       
                        
                   
 
@@ -264,7 +261,7 @@
 
             });
 
-            function DreawChart(series, series1, series2, maximo1, maximo2, maximo3, fech) {
+            function DreawChart(series, series1, series2, maximo1, maximo2, maximo3,minimo1,minimo2,minimo3, fech) {
 
 
 
