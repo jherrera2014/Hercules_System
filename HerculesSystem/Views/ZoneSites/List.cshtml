@@ -25,7 +25,7 @@
                 .Columns(columns =>
                 {
                     columns.Bound("ZoneName").Title("Zone Name");
-                    columns.Bound("CreationDate").Title("Creation Date");
+                    columns.Bound("CreationDate").Title("Creation Date").Format("{0:dd/MM/yyyy HH:mm:ss}");
                     columns.Bound("Status").Title("Status");
                     columns.Command(command => { command.Custom("View").Click("showDetails"); command.Edit(); }).Title("Detail");
 

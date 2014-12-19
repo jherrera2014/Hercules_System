@@ -36,15 +36,15 @@ namespace HerculesSystem
     partial void Insertsites(sites instance);
     partial void Updatesites(sites instance);
     partial void Deletesites(sites instance);
-    partial void Insertzone(zone instance);
-    partial void Updatezone(zone instance);
-    partial void Deletezone(zone instance);
     partial void Insertalarms(alarms instance);
     partial void Updatealarms(alarms instance);
     partial void Deletealarms(alarms instance);
     partial void InsertalarmTypes(alarmTypes instance);
     partial void UpdatealarmTypes(alarmTypes instance);
     partial void DeletealarmTypes(alarmTypes instance);
+    partial void Insertzone(zone instance);
+    partial void Updatezone(zone instance);
+    partial void Deletezone(zone instance);
     #endregion
 		
 		public DataClasses1DataContext() : 
@@ -93,14 +93,6 @@ namespace HerculesSystem
 			}
 		}
 		
-		public System.Data.Linq.Table<zone> zone
-		{
-			get
-			{
-				return this.GetTable<zone>();
-			}
-		}
-		
 		public System.Data.Linq.Table<alarms> alarms
 		{
 			get
@@ -114,6 +106,14 @@ namespace HerculesSystem
 			get
 			{
 				return this.GetTable<alarmTypes>();
+			}
+		}
+		
+		public System.Data.Linq.Table<zone> zone
+		{
+			get
+			{
+				return this.GetTable<zone>();
 			}
 		}
 	}
@@ -750,9 +750,9 @@ namespace HerculesSystem
 		
 		private int _ZoneID;
 		
-		private EntityRef<zone> _zone;
-		
 		private EntityRef<loggers> _loggers;
+		
+		private EntityRef<zone> _zone;
 		
     #region Definiciones de métodos de extensibilidad
     partial void OnLoaded();
@@ -794,8 +794,8 @@ namespace HerculesSystem
 		
 		public sites()
 		{
-			this._zone = default(EntityRef<zone>);
 			this._loggers = default(EntityRef<loggers>);
+			this._zone = default(EntityRef<zone>);
 			OnCreated();
 		}
 		
@@ -1127,40 +1127,6 @@ namespace HerculesSystem
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="zone_sites", Storage="_zone", ThisKey="ZoneID", OtherKey="ID", IsForeignKey=true)]
-		public zone zone
-		{
-			get
-			{
-				return this._zone.Entity;
-			}
-			set
-			{
-				zone previousValue = this._zone.Entity;
-				if (((previousValue != value) 
-							|| (this._zone.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._zone.Entity = null;
-						previousValue.sites.Remove(this);
-					}
-					this._zone.Entity = value;
-					if ((value != null))
-					{
-						value.sites.Add(this);
-						this._ZoneID = value.ID;
-					}
-					else
-					{
-						this._ZoneID = default(int);
-					}
-					this.SendPropertyChanged("zone");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="loggers_sites", Storage="_loggers", ThisKey="LoggerID", OtherKey="ID", IsForeignKey=true)]
 		public loggers loggers
 		{
@@ -1195,105 +1161,37 @@ namespace HerculesSystem
 			}
 		}
 		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.zone")]
-	public partial class zone : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private string _ZoneName;
-		
-		private EntitySet<sites> _sites;
-		
-    #region Definiciones de métodos de extensibilidad
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnZoneNameChanging(string value);
-    partial void OnZoneNameChanged();
-    #endregion
-		
-		public zone()
-		{
-			this._sites = new EntitySet<sites>(new Action<sites>(this.attach_sites), new Action<sites>(this.detach_sites));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int ID
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="zone_sites", Storage="_zone", ThisKey="ZoneID", OtherKey="ID", IsForeignKey=true)]
+		public zone zone
 		{
 			get
 			{
-				return this._ID;
+				return this._zone.Entity;
 			}
 			set
 			{
-				if ((this._ID != value))
+				zone previousValue = this._zone.Entity;
+				if (((previousValue != value) 
+							|| (this._zone.HasLoadedOrAssignedValue == false)))
 				{
-					this.OnIDChanging(value);
 					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
+					if ((previousValue != null))
+					{
+						this._zone.Entity = null;
+						previousValue.sites.Remove(this);
+					}
+					this._zone.Entity = value;
+					if ((value != null))
+					{
+						value.sites.Add(this);
+						this._ZoneID = value.ID;
+					}
+					else
+					{
+						this._ZoneID = default(int);
+					}
+					this.SendPropertyChanged("zone");
 				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ZoneName", DbType="VarChar(100)")]
-		public string ZoneName
-		{
-			get
-			{
-				return this._ZoneName;
-			}
-			set
-			{
-				if ((this._ZoneName != value))
-				{
-					this.OnZoneNameChanging(value);
-					this.SendPropertyChanging();
-					this._ZoneName = value;
-					this.SendPropertyChanged("ZoneName");
-					this.OnZoneNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="zone_sites", Storage="_sites", ThisKey="ID", OtherKey="ZoneID")]
-		public EntitySet<sites> sites
-		{
-			get
-			{
-				return this._sites;
-			}
-			set
-			{
-				this._sites.Assign(value);
 			}
 		}
 		
@@ -1315,18 +1213,6 @@ namespace HerculesSystem
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-		
-		private void attach_sites(sites entity)
-		{
-			this.SendPropertyChanging();
-			entity.zone = this;
-		}
-		
-		private void detach_sites(sites entity)
-		{
-			this.SendPropertyChanging();
-			entity.zone = null;
 		}
 	}
 	
@@ -1664,6 +1550,168 @@ namespace HerculesSystem
 		{
 			this.SendPropertyChanging();
 			entity.alarmTypes = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.zone")]
+	public partial class zone : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _ZoneName;
+		
+		private System.Nullable<System.DateTime> _CreationDate;
+		
+		private System.Nullable<bool> _Status;
+		
+		private EntitySet<sites> _sites;
+		
+    #region Definiciones de métodos de extensibilidad
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnZoneNameChanging(string value);
+    partial void OnZoneNameChanged();
+    partial void OnCreationDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCreationDateChanged();
+    partial void OnStatusChanging(System.Nullable<bool> value);
+    partial void OnStatusChanged();
+    #endregion
+		
+		public zone()
+		{
+			this._sites = new EntitySet<sites>(new Action<sites>(this.attach_sites), new Action<sites>(this.detach_sites));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ZoneName", DbType="VarChar(100)")]
+		public string ZoneName
+		{
+			get
+			{
+				return this._ZoneName;
+			}
+			set
+			{
+				if ((this._ZoneName != value))
+				{
+					this.OnZoneNameChanging(value);
+					this.SendPropertyChanging();
+					this._ZoneName = value;
+					this.SendPropertyChanged("ZoneName");
+					this.OnZoneNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreationDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> CreationDate
+		{
+			get
+			{
+				return this._CreationDate;
+			}
+			set
+			{
+				if ((this._CreationDate != value))
+				{
+					this.OnCreationDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreationDate = value;
+					this.SendPropertyChanged("CreationDate");
+					this.OnCreationDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Bit")]
+		public System.Nullable<bool> Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="zone_sites", Storage="_sites", ThisKey="ID", OtherKey="ZoneID")]
+		public EntitySet<sites> sites
+		{
+			get
+			{
+				return this._sites;
+			}
+			set
+			{
+				this._sites.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_sites(sites entity)
+		{
+			this.SendPropertyChanging();
+			entity.zone = this;
+		}
+		
+		private void detach_sites(sites entity)
+		{
+			this.SendPropertyChanging();
+			entity.zone = null;
 		}
 	}
 }
