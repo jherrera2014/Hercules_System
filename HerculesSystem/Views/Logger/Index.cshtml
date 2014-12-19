@@ -19,8 +19,10 @@
 
 <body>
     
+
     
-     <table border="1">
+
+    <table border="1" style=" margin-top: 20px; ">
         <tr>
             <td>
                 <div>
@@ -47,12 +49,18 @@
         </tr>
     </table>
 
-    <div id="container" align="left" style="width: 740px; height: 300px;position: relative;top:20px; ">
+   
+    
+    
+    
+    
+    <div id="container" align="left" style=" height: 500px;position: relative;top:20px; ">
 
 
     </div>
-    <div id="grid" style="width: 440px; height: 200px;position: absolute;  bottom:90px; ">
+    <div id="grid" style="width: 440px; height: 200px; ">
     </div>
+
         <script>
             $(function () {
                 $(".myButton").kendoButton();
@@ -143,6 +151,11 @@
         
     $(document).ready(function () {
 
+
+      
+
+
+
         $.ajax({
 
             type: "POST",
@@ -162,6 +175,9 @@
             cache: false,
 
             success: function (Result) {
+
+            
+
 
                 Result = Result;
 
@@ -251,13 +267,13 @@
 
                 var loggertype = data3[1].toString();
 
-
+               
               
 
 
                 $("#grid").kendoGrid({
                     width: 200,
-                  
+                   
                     columns: [
                         { field: "Operacion" },
                         { field: "Maximo", groupable: false },
@@ -270,6 +286,7 @@
                       }
                     ],
                     groupable: true,
+                 
                     dataSource: {
                         data: [
                           { Operacion: "C1pressure", Maximo: maximo1, Minimo: minimo1, Promedio: prom1 },
@@ -283,7 +300,9 @@
                     "overflow-y": "hidden"
                 });
                
+               
 
+             
 
 
                 DreawChart(data, data1, data2, maximo1, maximo2, maximo3, minimo1, minimo2, minimo3, fech, loggertype);
@@ -513,13 +532,13 @@
 
                         events: {
 
-                            setExtremes: function (e) {
+                           
 
-
-                            }
+                           
 
 
                         },
+                        minRange: 3600 * 1000,
 
                         yAxis: [{ // Primary yAxis
 
@@ -961,6 +980,7 @@
 
                 });
 
+              
 
 
 
