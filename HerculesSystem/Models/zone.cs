@@ -12,6 +12,7 @@ namespace HerculesSystem.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ID { get; set; }
 
+        [Required]
         [StringLength(100)]
         public string ZoneName { get; set; }
 
