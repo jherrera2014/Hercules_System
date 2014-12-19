@@ -22,6 +22,16 @@ namespace HerculesSystem.Controllers
             return View();
         }
 
+
+        public ActionResult Loading()
+        {
+
+
+            return View();
+        }
+
+
+
         public ActionResult Index(string ID)
         {
             ViewData["id"] = ID;

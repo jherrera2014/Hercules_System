@@ -103,6 +103,10 @@ namespace Hercules.Controllers
             return googleMarkers;
         }
 
+
+       
+        
+        
         
         public ActionResult Index()
         {
@@ -115,12 +119,17 @@ namespace Hercules.Controllers
            
         }
 
-        public ActionResult Detail(string ID)
+        public ActionResult Detail()
         {
-            return RedirectToAction("Detail", new { id = ID });
+            return View();
 
         }
-
+        public ActionResult DatosMostrar()
+        {
+            return View();
+        }
+     
+        
 
         List<DataGridDashboard> datosplot;
 
