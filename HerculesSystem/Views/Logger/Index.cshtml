@@ -13,8 +13,8 @@
 
 <head>
 
-    <title>Proyecto Hercules con loggers @ViewData["ID"]</title>
-    es una prueba @ViewData["ID"]
+    <title>Proyecto Hercules </title>
+   
 </head>
 
 <body>
@@ -140,7 +140,7 @@
 
     var str = JSON.parse('@Html.Raw(Json.Encode(ViewData["ID"]))');
 
-            alert(str);
+        
     $(document).ready(function () {
 
         $.ajax({
@@ -209,7 +209,7 @@
 
                     data2.push([Result[i].datetime, Result[i].c3pressure]);
 
-                    dat.push((Result[i].c1pressure));
+                    dat.push(parseFloat(Result[i].c1pressure));
 
                     dat1.push(parseFloat(Result[i].c2flow));
 
@@ -222,7 +222,7 @@
                 }
 
                 var datosm = parseFloat(dat[2]);
-                alert(datosm);
+             
 
                 var maximo1 = Math2.max(dat);
 
@@ -230,29 +230,29 @@
 
                 var maximo3 = Math2.max(dat2);
 
-                var minimo1 = Min(dat);
+                var minimo1 = 12000;
 
-                var minimo2 = Math2.min(dat1);
+                var minimo2 = 10000;
 
-                var minimo3 = Min(dat2.pop);
+                var minimo3 = 10000;
                 var max = dat1.pop;
               
 
              
 
 
-                var prom1 = mean(dat);
+                var prom1 = 20000;
 
-                var prom2 = mean(dat1);
+                var prom2 = 20000;
 
-                var prom3 = mean(dat2);
+                var prom3 = 20000;
 
                
 
                 var loggertype = data3[1].toString();
 
 
-                alert(loggertype);
+              
 
 
                 $("#grid").kendoGrid({
