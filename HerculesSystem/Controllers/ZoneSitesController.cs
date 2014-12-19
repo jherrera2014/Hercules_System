@@ -61,8 +61,8 @@ namespace HerculesSystem.Controllers
                         var dbuser = result.First();
                         dbuser.ZoneName = product.ZoneName;
                        // DateTime drt = Convert.ToDateTime(product.CreationDate);
-                       // dbuser.CreationDate = product.CreationDate.Value;
-                        dbuser.Status = Convert.ToBoolean(product.Status);
+                        dbuser.CreationDate = product.CreationDate.Value;
+                        dbuser.Status = product.Status.Value;
                         
 
                         db.SaveChanges();
