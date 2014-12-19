@@ -49,22 +49,26 @@ namespace HerculesSystem.Controllers
         public ActionResult Edit([DataSourceRequest] DataSourceRequest request, zone product)
         {
             DataClasses1DataContext dt = new DataClasses1DataContext();
-            if (product != null && ModelState.IsValid)
+            if (product != null)
+              //  && ModelState.IsValid
             {
-                using (DataClasses1DataContext db = new DataClasses1DataContext())
+
+                using (ZoneLogger db = new ZoneLogger())
                 {
                     var result = from u in db.zone where (u.ID == product.ID) select u;
                     if (result.Count() != 0)
                     {
                         var dbuser = result.First();
                         dbuser.ZoneName = product.ZoneName;
-                        //dbuser. = ent.UpdateLastLogOutDate;
-                        //db.SaveChanges();
+                       // DateTime drt = Convert.ToDateTime(product.CreationDate);
+                       // dbuser.CreationDate = product.CreationDate.Value;
+                        dbuser.Status = Convert.ToBoolean(product.Status);
                         
+
+                        db.SaveChanges();
                     }
                 } 
-                UpdateModel(product);
-                dt.SubmitChanges();
+              
 
             }
 

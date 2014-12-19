@@ -117,7 +117,7 @@ namespace Hercules.Controllers
 
         public ActionResult Detail(string ID)
         {
-            return RedirectToAction("Index", new { id = ID });
+            return RedirectToAction("Detail", new { id = ID });
 
         }
 
@@ -240,22 +240,6 @@ namespace Hercules.Controllers
 
             }
 
-        public void FilterButton(Object sender, EventArgs e)
-        {
-            //string value_zone= "";
-
-           
-        }
-        public ActionResult Index(string query)
-        {
-            var movies = query;
-
-            if (Request.IsAjaxRequest())
-            {
-                return PartialView("_MovieTable", movies);
-            }
-
-            return View("Index", movies);      
-        }
+    
     }
 }

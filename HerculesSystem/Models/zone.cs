@@ -18,5 +18,7 @@ namespace HerculesSystem.Models
         public DateTime CreationDate { get; set; }
 
         public bool Status { get; set; }
+
+      
     }
 }
