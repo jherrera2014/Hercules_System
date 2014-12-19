@@ -19,7 +19,13 @@
 
 <body>
     
-
+    <div id="overlay" style="position:absolute; top: 170px;">
+  
+        Loading...
+   
+        <img src=" ~/Content/images/PistonFillerAnimationCVX200a.gif" alt="Smiley face" style=" height: 200px;width:200px; " > 
+    
+     </div>
     
 
     <table border="1" style=" margin-top: 20px; ">
@@ -68,6 +74,12 @@
         </script>
 
         <script type="text/javascript">
+            $(document).ready(function () {
+
+                $('#overlay').fadeOut(11000, function () {
+                    $('#container').fadeIn(3000);
+                });
+            });
 
 
     function mean(elem) {
