@@ -83,7 +83,7 @@ namespace Hercules.Controllers
                  using (SqlCommand cmd1 = new SqlCommand())
                  {
 
-                     cmd1.CommandText = @"SELECT  RecordDateTime,C1Leak ,C2Noise , C3Spreand,Address From datagraph dat Inner Join loggers lg on lg.Id =4 JOIN sites t  ON lg.ID = t.ID Where dat.IDLogger = lg.LoggerSMSNumber and dat.RecordDateTime
+                     cmd1.CommandText = @"SELECT  RecordDateTime,C1Leak ,C2Noise , C3Spreand,Address From datagraph dat Inner Join loggers lg on lg.Id =@ID JOIN sites t  ON lg.ID = t.ID Where dat.IDLogger = lg.LoggerSMSNumber and dat.RecordDateTime
                                          BETWEEN CONVERT(datetime,('2014-10-04' + ' ' + '23:45:00')) AND CONVERT(datetime,('2014-11-04' + ' ' + '23:45:00'))  ";
                      cmd1.Parameters.Add("@ID", SqlDbType.Int);
                      cmd1.Parameters["@ID"].Value = data;

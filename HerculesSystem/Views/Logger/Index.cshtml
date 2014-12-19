@@ -4,7 +4,7 @@
 
 <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
 
-<script src="~/Scripts/Highcharts-4.0.1/js/themes/grid-light.js"></script>
+<script src="~/Scripts/Highcharts-4.0.1/js/themes/sand-signika.js"></script>
 
 
 
@@ -102,13 +102,7 @@
             return this.calculate(values, Math.max);
 
         },
-        average: function (values) {
-            var cnt, tot, i;
-            cnt = values.length;
-            tot = i = 0;
-            while (i < cnt) tot += parseFloat(values[i++]);
-            return tot / cnt;
-        },
+       
 
         calculate: function (values, operation) {
 
@@ -142,11 +136,11 @@
 
     }
 
+   
+
     var str = JSON.parse('@Html.Raw(Json.Encode(ViewData["ID"]))');
 
- 
-
-
+            alert(str);
     $(document).ready(function () {
 
         $.ajax({
@@ -191,15 +185,14 @@
                 var seriesOneData = [];
 
                 function Min(elem) {
-                    var min = parseFloat(elem[0]);
+                    var min = Number(elem[0]);
                     for (i = 1; i < 20; i++) {
 
-                        if (min > parseFloat(elem[i]))
-                            min = parseFloat(elem[i]);
+                        if (min > Number(elem[i]))
+                            min = Number(elem[i]);
                     }
 
-                    alert(min);
-                    return min;
+                    return Number(min);
                 }
 
 
@@ -216,7 +209,7 @@
 
                     data2.push([Result[i].datetime, Result[i].c3pressure]);
 
-                    dat.push(parseFloat(Result[i].c1pressure));
+                    dat.push((Result[i].c1pressure));
 
                     dat1.push(parseFloat(Result[i].c2flow));
 
@@ -228,7 +221,8 @@
 
                 }
 
-           
+                var datosm = parseFloat(dat[2]);
+                alert(datosm);
 
                 var maximo1 = Math2.max(dat);
 
@@ -238,10 +232,10 @@
 
                 var minimo1 = Min(dat);
 
-                var minimo2 = Min(dat1);
+                var minimo2 = Math2.min(dat1);
 
-                var minimo3 = Min(dat2);
-
+                var minimo3 = Min(dat2.pop);
+                var max = dat1.pop;
               
 
              
@@ -253,7 +247,9 @@
 
                 var prom3 = mean(dat2);
 
-                var loggertype = data3[0].toString();
+               
+
+                var loggertype = data3[1].toString();
 
 
                 alert(loggertype);
@@ -283,7 +279,9 @@
                     }
                 });
 
-
+                $("#grid .k-grid-content").css({
+                    "overflow-y": "hidden"
+                });
                
 
 
@@ -561,7 +559,7 @@
 
                             plotLines: [{
 
-                                value: 120.6738,
+                                value: 40000,
 
                                 color: 'red',
 
@@ -581,7 +579,7 @@
 
                             {
 
-                                value: 15.7419,
+                                value: 30000,
 
                                 color: 'orange',
 
@@ -793,7 +791,7 @@
 
                             data: series,
 
-                            yAxis: 1,
+                            yAxis: 0,
                             total: maximo1,
 
                             tooltip: {
@@ -813,7 +811,7 @@
                         {
 
                             name: 'C3pressure',
-                            total: maximo2,
+                            total: maximo3,
 
 
                             data: series2,
@@ -826,7 +824,7 @@
                          {
 
                              name: 'C2flow',
-                             total: maximo3,
+                             total: maximo2,
 
 
                              data: series1,
@@ -840,15 +838,15 @@
 
                             data: [{
 
-                                x: Date.UTC(2014, 9, 23, 17, 55),
+                                x: Date.UTC(2014, 10, 11, 17, 55),
 
-                                title: 'A',
+                                title: 'PC',
 
                                 text: ': "squarepin"',
-                                y: 3000,
+                                y: 30000,
                             }, {
 
-                                x: Date.UTC(2014, 9, 23, 18, 29),
+                                x: Date.UTC(2014, 10, 11, 18, 29),
 
                                 title: 'A',
 
