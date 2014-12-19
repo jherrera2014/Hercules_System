@@ -1524,6 +1524,7 @@
     <Content Include="Views\Logger\ListLogger.cshtml" />
     <Content Include="Views\Logger\Index.cshtml" />
     <Content Include="Views\Logger\Loading.cshtml" />
+    <Content Include="Views\Dashboard\DatosMostrar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
