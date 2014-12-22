@@ -1,159 +1,124 @@
-﻿
-@model IEnumerable<Hercules.Models.GoogleMarker>
-@(Html.Kendo().ComboBox()
-    .Name("productComboBox") //The name of the combobox is mandatory. It specifies the "id" attribute of the widget.
-    .DataTextField("SiteName") //Specifies which property of the Product to be used by the combobox as a text.
-    .DataValueField("ProductID") //Specifies which property of the Product to be used by the combobox as a value.
-    .Filter(FilterType.Contains)
-         .Events(e => e
-            .Select("combobox_select")
-            .Change("combobox_change")
-        )
+﻿<!DOCTYPE LINK HREF="https://maps/documentation/javascript/examples/default.css" REL="stylesheet">
 
-
-    .DataSource(source =>
-    {
-        source.Read(read =>
-        {
-            read.Action("Index", "Dashboard"); //Set the Action and Controller name
-            read.Data("onAdditionalData");
-        })
-        .ServerFiltering(true); //If true the DataSource will not filter the data on the client.
-    })
-    .SelectedIndex(0) //Select first item.
-
-
-
-)
+<html>
 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false" type="text/javascript"></script>
-<script>
-    function onAdditionalData() {
-        return {
-            text: $("#productComboBox").data("kendoComboBox").text(),
+
+<script language="javascript" type="text/javascript">
+
+    $(document).ready(function () {
+
+        var zoom = 15;
+
+
+
+
+
+        var ne = new google.maps.LatLng(-20.009901, -71.258046);
+
+        var sw = new google.maps.LatLng(-20.009901, -71.258046);
+
+        var limache = new google.maps.LatLng(-33.009901, -71.258046);
+
+        var bounds = new google.maps.LatLngBounds(ne, sw);
+
+        var image = "@Url.Content("~/Content/images/Pegasus1.png")";
+        var image1 = "@Url.Content("~/Content/images/Limache1.png")";
+
+
+
+
+        var options = {
+
+            zoom: 15,
+
+
+
+
+
+            mapTypeId: google.maps.MapTypeId.ROADMAP
 
         };
-    }
 
+        var googleMap = new google.maps.Map($("#map")[0], options);
 
+        var infoWindow = new google.maps.InfoWindow({ content: "Cargando..." });
 
-    function combobox_select() {
-        //Handle the select event
+        var myCity = new google.maps.Circle({
 
+            center: limache,
 
+            radius: 60000,
 
-    }
+            strokeColor: "#0000FF",
 
-    function combobox_change() {
-        //Handle the change event
+            strokeOpacity: 0.8,
 
+            strokeWeight: 2,
 
+            fillColor: "#0000FF",
 
-        $(document).ready(function () {
-            var zoom = 15;
-
-
-            var ne = new google.maps.LatLng(-33.009901, -71.258046);
-            var sw = new google.maps.LatLng(-33.009901, -71.258046);
-            var limache = new google.maps.LatLng(-33.009901, -71.258046);
-            var bounds = new google.maps.LatLngBounds(ne,sw);
-            var image = "@Url.Content("~/Content/images/Pegasus1.png")";
-
-
-
-            var options = {
-                zoom: 15,
-
-
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-            var googleMap = new google.maps.Map($("#map")[0], options);
-            var infoWindow = new google.maps.InfoWindow({ content: "Cargando..." });
-            var myCity = new google.maps.Circle({
-                center: limache,
-                radius: 60000,
-                strokeColor: "#0000FF",
-                strokeOpacity: 0.8,
-                strokeWeight: 2,
-                fillColor: "#0000FF",
-                fillOpacity: 0.4
-            });
-            myCity.setMap(googleMap);
-            $.ajax({
-                type: "POST",
-                url: "Index",
-                datatype: "json",
-                success: function (data,combobox) {
-                    var pos = 0;
-
-                    var combobox = $("#productComboBox").data("kendoComboBox").text();
-                    var comuna = combobox;
-                    var lat;
-                    var lot;
-
-
-
-                    for (var i = 0; i < data.length; i++) {
-
-                        if(data[i].SiteName==combobox){
-                            pos = i;
-                             lat = data[pos].Latitude;
-                             lot = data[pos].Longitude;
-
-
-                        }
-
-
-
-                    }
-
-
-                        var point = new google.maps.LatLng(lat,lot);
-
-
-                        bounds.extend(point);
-
-                        var marker = new google.maps.Marker({
-                            position: point,
-                            map: googleMap,
-                            icon:image,
-
-
-                            html: "<div><div style='float:left;'>" + "<h1>" + data[pos].InfoWindow + "</h1>" +
-                                  "<span style='font-size:18px;font-weight:bold;'>Tipo de Equipo</span><hr>" +
-                                "<p><span style='font-weight:bold;'>Nombre Localidad: </span>" + data[pos].SiteName + "</p>" + +
-                                  "Aqui se puede describir las partes importantes del equipo <br>" +
-                                  "y tambiem las instalaciones <br>" +
-                                  "Se pueden describir otras caracteristicas y fotos de las instalcion <br>" +
-                                  "Sitio Web de Dnk Water.<a href='http://www.dnk-water.com' " +
-                                  "style='text-decoration:none;color:#cccccc;font-size:10px;'> enlazar aqui</a>" +
-                                  "</div><div style='float:right; padding:5px;'><img src='" +
-                                  "http://www.dnk-water.com/wp-content/uploads/2013/01/" +
-                                  "DNKLOGO_182_102.jpg'>" +
-                                  "</img></div></div>"
-
-                        });
-
-
-
-
-
-                        google.maps.event.addListener(marker, "click", function () {
-                            infoWindow.setContent(this.html);
-                            infoWindow.open(googleMap, marker);
-
-                        });
-                    }
-
-            });
-
-            googleMap.fitBounds(bounds);
-            googleMap.setCenter(bounds.getCenter());
-            googleMap.setZoom(10);
+            fillOpacity: 0.4
 
         });
 
-    }
+        myCity.setMap(googleMap);
+
+        $.ajax({
+
+            type: "POST",
+
+            url: "http://localhost:17647/Dashboard/Index",
+
+            datatype: "json",
+
+            success: function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+
+
+                  
+                    var point = new google.maps.LatLng((data[i].LatEast), (data[i].LongNorth));
+
+                    alert(data[i].LatEast);
+
+                    bounds.extend(point);
+
+
+
+                    var marker = new google.maps.Marker({
+
+                        position: point,
+
+                        map: googleMap,
+
+                        icon: image,
+
+
+
+
+
+                        html: "<div><div style='float:left;'>" + "<h1>" + data[i].Address + "</h1>" +
+
+                              "<span style='font-size:18px;font-weight:bold;'>Tipo de Equipo</span><hr>" +
+
+                            "<p><span style='font-weight:bold;'>Nombre Localidad: </span>" + data[i].ZoneName + "</p>" + +
+
+                              "Aqui se puede describir las partes importantes del equipo <br>" +
+
+                              "y tambiem las instalaciones <br>" +
+
+                              "Se pueden describir otras caracteristicas y fotos de las instalcion <br>" +
+
+                              "Sitio Web de Dnk Water.<a href='http://www.dnk-water.com' " +
+
+                              "style='text-decoration:none;color:#cccccc;font-size:10px;'> enlazar aqui</a>" +
+
+                              "</div><div style='float:right; padding:5px;'><img src='" + "/Content/images/" + "Limache1.png'>" + "</img></div></div>"
+
+
+
+                    });
 
 
 
@@ -162,6 +127,54 @@
 
 
 
+
+
+
+                    google.maps.event.addListener(marker, "click", function () {
+
+                        infoWindow.setContent(this.html);
+
+                        infoWindow.open(googleMap, marker);
+
+
+
+                    });
+
+                }
+
+            }
+
+        });
+
+
+
+        googleMap.fitBounds(bounds);
+
+        googleMap.setCenter(bounds.getCenter());
+
+        googleMap.setZoom(10);
+
+
+
+    });
 
 </script>
-<div id="map" style="width: 1400px; height: 700px;">
+
+
+
+<body>
+
+   
+
+    <div id="map" style="width: 1400px; height: 700px;">
+
+    </div>
+
+    </div>
+
+</body>
+
+</html>
+
+
+
