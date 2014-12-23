@@ -7,9 +7,11 @@ namespace Hercules.Models
 {
     public class GoogleMarker
     {
-        public string SiteName { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public string InfoWindow { get; set; }
+        public double LatEast { get; set; }
+        public double LongNorth { get; set; }
+        public string Address { get; set; }
+        public string ZoneName { get; set; }
+        public string Notes { get; set; }
+
     }
 }

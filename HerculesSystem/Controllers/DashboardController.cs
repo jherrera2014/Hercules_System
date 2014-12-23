@@ -11,6 +11,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
+using System.Data.SqlClient;
+using System.Xml;
+using System.Configuration;
+using System.Diagnostics;
 
 namespace Hercules.Controllers
 {
@@ -23,113 +27,172 @@ namespace Hercules.Controllers
     {
         // GET: Dashboard
 
-        public static IList<GoogleMarker> GetMarkers()
-        {
-            var googleMarkers = new List<GoogleMarker>
-                                    {
-                                                                         
-                                        
-                                        
-                                        new GoogleMarker
-                                            {
-                                                SiteName = "Limachess",
-                                                Latitude =-33.009901,
-                                                Longitude = -71.258046,
-                                                InfoWindow = "FW125001U"
-                                            },
-                                        new GoogleMarker
-                                            {
-                                                SiteName = "Villa Alemana",
-                                                Latitude =  -33.048392,
-                                                Longitude = -71.363220   ,
-                                                InfoWindow = "MultilogLX"
-                                            },
-                                        new GoogleMarker
-                                            {
-                                                SiteName = "Real Curimon",
-                                          Latitude =  -33.018280,
-                                                Longitude = -71.494132 ,
-                                                InfoWindow = "FW125001U"
-                                            },
-                                   
-                                    new GoogleMarker
-                                            {
-                                                SiteName = "Hijuelas",
-                                          Latitude = -32.798778,
-                                                Longitude =  -71.143029 ,
-                                                InfoWindow = "MultilogLX"
-                                            },
-                                    
-                                    
-                                     new GoogleMarker
-                                            {
-                                                SiteName = "Cabildo",
-                                          Latitude = -32.425048,
-                                                Longitude = -71.075179 ,
-                                                InfoWindow = "FW125001U"
-                                            },
-                                    
-                                     new GoogleMarker
-                                            {
-                                                SiteName = "Chincolco",
-                                          Latitude = -32.220642,
-                                                Longitude = -70.834928 ,
-                                                InfoWindow = "FW125001U"
-                                            },
-                                    
-                                    new GoogleMarker
-                                            {
-                                                SiteName = "La Ligua",
-                                          Latitude =  -32.452033,
-                                                Longitude =  -71.231773 ,
-                                                InfoWindow = "MultilogLX"
-                                            },
-                                     
-                                     new GoogleMarker
-                                            {
-                                                SiteName = "La Cruz",
-                                          Latitude =  -32.825263,
-                                                Longitude =  -71.228107 ,
-                                                InfoWindow = "MultilogLX"
-                                            },
-                                     
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    };
+        List<GoogleMarker> datamap;
 
-            return googleMarkers;
+        public class GoogleMarker
+        {
+
+            public double LatEast { get; set; }
+
+            public double LongNorth { get; set; }
+
+            public string Address { get; set; }
+
+            public string ZoneName { get; set; }
+
+            public string Notes { get; set; }
+
+
+
         }
 
 
-       
-        
-        
+
+
+
+        public List<GoogleMarker> DatAnalysis(int data)
+        {
+
+            datamap = new List<GoogleMarker>();
+
+            var dat = data;
+
+
+
+            DataSet ds = new DataSet();
+
+
+
+            SqlConnection con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+
+
+
+            {
+
+                using (SqlCommand cmd1 = new SqlCommand())
+                {
+
+
+
+                    cmd1.CommandText = @"   SELECT  LatEast,LongNorth ,lg.Notes , ZoneName,Address From alarms a Inner Join loggers lg on a.ID =@ID JOIN zone t  ON a.LoggerSMSNumber = lg.LoggerSMSNumber JOIN sites s ON lg.ID = s.LoggerID Where s.ZoneID = t.ID ";
+
+                    cmd1.Parameters.Add("@ID", SqlDbType.Int);
+
+                    cmd1.Parameters["@ID"].Value = data;
+
+
+
+                    cmd1.Connection = con1;
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                    {
+
+                        da.Fill(ds, "MapsGraph");
+
+                    }
+
+                }
+
+            }
+
+            if (ds != null)
+            {
+
+                if (ds.Tables.Count > 0)
+                {
+
+                    if (ds.Tables["MapsGraph"].Rows.Count > 0)
+                    {
+
+
+
+                        foreach (DataRow dr in ds.Tables["MapsGraph"].Rows)
+                        {
+
+                            datamap.Add(new GoogleMarker
+
+                            {
+
+                                LatEast = Convert.ToDouble(dr["LatEast"], System.Globalization.CultureInfo.InvariantCulture),
+
+                                LongNorth = Convert.ToDouble(dr["LongNorth"], System.Globalization.CultureInfo.InvariantCulture),
+
+                                Notes = (dr["Notes"].ToString()),
+
+                                Address = (dr["Address"].ToString()),
+
+                                ZoneName = (dr["ZoneName"].ToString())
+
+                            });
+
+
+                        }
+
+                    }
+
+                }
+
+
+            }
+
+            return datamap;
+
+        }
+
+
+
+
         
         public ActionResult Index()
         {
-            return Json(MapsController.GetMarkers(), JsonRequestBehavior.AllowGet);
-           
-        }
-        public ActionResult List()
-        {
-            return View();
-           
-        }
+            string data1 = Convert.ToString(Session["idmap"]);
+            string data = Request["param1"];
+            int datval = Convert.ToInt16(data1);
+            
 
-        public ActionResult Detail()
-        {
-            return View();
+            Debug.WriteLine("llego" + data1);
+            string prueba = "p1";
 
-        }
-        public ActionResult DatosMostrar()
-        {
-            return View();
-        }
-     
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(DatAnalysis(datval));
         
+            return Json(DatAnalysis(datval), JsonRequestBehavior.AllowGet);
+           
+        }
+        public ActionResult List(string ID)
+        {
+
+       
+            return View();
+           
+        }
+
+
+
+        public ActionResult DatosMostrar(string ID)
+        {
+
+            ViewData["id"] = ID;
+            Session["idmap"] = ViewData["id"];
+            return View();
+
+        }
+
+        
+        
+        
+        
+        
+        
+        public ActionResult Detail(string ID)
+        {
+
+            ViewData["id"] = ID;
+          
+            
+            return RedirectToAction("DatosMostrar", new { id = ID });
+
+        }
+
 
         List<DataGridDashboard> datosplot;
 

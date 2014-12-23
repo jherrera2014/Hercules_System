@@ -241,7 +241,7 @@
 
                     dat.push(parseFloat(Result[i].c1pressure));
 
-                    dat1.push(parseFloat(Result[i].c2flow));
+                    dat1.push(parseInt((Result[i].c2flow)));
 
                     dat2.push(parseFloat(Result[i].c3pressure));
 
@@ -262,7 +262,7 @@
 
                 var minimo1 = 12000;
 
-                var minimo2 = 10000;
+                var minimo2 = Math.min(dat2);
 
                 var minimo3 = 10000;
                 var max = dat1.pop;
