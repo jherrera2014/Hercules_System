@@ -42,12 +42,7 @@ namespace Hercules.Controllers
 
             public string Notes { get; set; }
 
-
-
         }
-
-
-
 
 
         public List<GoogleMarker> DatAnalysis(int data)
@@ -151,7 +146,7 @@ namespace Hercules.Controllers
             
 
             Debug.WriteLine("llego" + data1);
-            string prueba = "p1";
+            
 
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(DatAnalysis(datval));
         
@@ -176,12 +171,6 @@ namespace Hercules.Controllers
             return View();
 
         }
-
-        
-        
-        
-        
-        
         
         public ActionResult Detail(string ID)
         {
@@ -221,6 +210,8 @@ namespace Hercules.Controllers
 
             return Json(dato);
         }
+
+        //Gridview grilla alert
         public ActionResult Read([DataSourceRequest] DataSourceRequest request)
         {
             return GetView(request);
@@ -234,55 +225,41 @@ namespace Hercules.Controllers
         {
             DataClasses1DataContext db = new DataClasses1DataContext();
             //var zone = new ZoneLogger();
-            var result = from a in db.alarms
-                         join b in db.alarmTypes
-                             on new { emp = a.MessageID } equals new { emp = b.AlarmTypeId }
-                         join c in db.loggers
-                             on new { emp = a.LoggerSMSNumber } equals new { emp = c.LoggerSMSNumber}
+            var result = from a in db.loggers
+                         join b in db.alarms
+                             on new { emp = a.LoggerSMSNumber } equals new { emp = b.LoggerSMSNumber }
+                         join c in db.sites
+                             on new { emp = a.ID } equals new { emp = c.LoggerID }
+                         join d in db.zone
+                            on new { emp = c.ZoneID } equals new { emp = d.ID }
+                         join e in db.alarmTypes
+                            on new { emp = b.MessageID } equals new { emp = e.AlarmTypeId }
                          select new
                          {
-                             IDAlarm = a.ID,
-                             IDLogger = c.ID,
-                             AlarmType = b.AlarmType,
-                             LoggerSerialNumber = c.LoggerSerialNumber,
-                             LoggerType = c.LoggerType,
-                             LoggerSMS = c.LoggerSMSNumber
+                             IDAlarm = b.ID,
+                             IDLogger = a.ID,
+                             AlarmType = e.AlarmType,
+                             ZoneName = d.ZoneName,
+                             ZoneID = d.ID,
+                             LoggerSMS = a.LoggerSMSNumber,
+                             SerialNumber = a.LoggerSerialNumber,
+                             LoggerType = a.LoggerType,
+                             SitesName = c.Address
                          };
 
-            var loggerName = from a in db.loggers
-                            join b in db.sites
-                                on new { emp = a.ID } equals new { emp = b.LoggerID }
+            
 
-                            select new
-                            {
-                                ID = a.ID,
-                                IDZone = b.ZoneID,
-                                LoggerName = b.Address
-                            };
-
-            var finaltable = from a in result
-                             join b in loggerName
-                             on new {emp = a.IDLogger} equals new {emp = b.ID}
-                             select new
-                             {
-                                 IDAlarm = a.IDAlarm,
-                                 IDLogger = a.IDLogger,
-                                 AlarmType = a.AlarmType,
-                                 LoggerSerialNumber = a.LoggerSerialNumber,
-                                 LoggerType = a.LoggerType,
-                                 LoggerSMS = a.LoggerSMS,
-                                 LoggerName = b.LoggerName
-                             };
-
-            return finaltable;
+            return result;
         }
 
+        //Data Zone
         public JsonResult GetZone()
         {
             ZoneLogger zone = new ZoneLogger();
             return Json(zone.zone, JsonRequestBehavior.AllowGet);
         }
        
+        //Data Logger
         public JsonResult GetLogger(int? ZoneDropDownList)
         {
             //ZoneLogger zone = new ZoneLogger();

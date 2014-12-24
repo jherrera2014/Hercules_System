@@ -129,8 +129,7 @@ namespace Hercules.Controllers
             
             
             Debug.WriteLine("llego" + data1);
-            string prueba = "p1";
-            
+        
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(DatAnalysis(datval));
             JavaScriptSerializer serializer = new JavaScriptSerializer();
 
