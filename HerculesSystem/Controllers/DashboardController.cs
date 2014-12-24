@@ -28,6 +28,7 @@ namespace Hercules.Controllers
         // GET: Dashboard
 
         List<GoogleMarker> datamap;
+        List<GoogleMarker> datamap1;
 
         public class GoogleMarker
         {
@@ -42,6 +43,11 @@ namespace Hercules.Controllers
 
             public string Notes { get; set; }
 
+            public int ZoneID { get; set; }
+
+            public double LatEast1 { get; set; }
+
+            public double LongNorth1 { get; set; }
 
 
         }
@@ -79,8 +85,6 @@ namespace Hercules.Controllers
                     cmd1.Parameters.Add("@ID", SqlDbType.Int);
 
                     cmd1.Parameters["@ID"].Value = data;
-
-
 
                     cmd1.Connection = con1;
 
@@ -139,6 +143,96 @@ namespace Hercules.Controllers
 
         }
 
+        public List<GoogleMarker> DatMapaZona()
+        {
+
+            datamap1 = new List<GoogleMarker>();
+
+        
+
+
+
+            DataSet ds = new DataSet();
+
+
+
+            SqlConnection con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+
+
+
+            {
+
+                using (SqlCommand cmd1 = new SqlCommand())
+                {
+
+
+
+                    cmd1.CommandText = @" SELECT LatEast,LongNorth ,ZoneID From sites WHERE  LatEast IS NOT NULL and LongNorth IS NOT NULL ";
+
+              
+
+                    cmd1.Connection = con1;
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
+                    {
+
+                        da.Fill(ds, "MapsGraph1");
+
+                    }
+
+                }
+
+            }
+
+            if (ds != null)
+            {
+
+                if (ds.Tables.Count > 0)
+                {
+
+                    if (ds.Tables["MapsGraph1"].Rows.Count > 0)
+                    {
+
+
+
+                        foreach (DataRow dr in ds.Tables["MapsGraph1"].Rows)
+                        {
+                           
+                            
+                            
+                            Debug.WriteLine((dr["LatEast"].ToString()));
+                            
+                            
+                            datamap1.Add(new GoogleMarker
+
+                            {
+
+                                
+                             
+                                
+                                LatEast1 = Convert.ToDouble(dr["LatEast"].ToString(), System.Globalization.CultureInfo.InvariantCulture),
+
+                                LongNorth1 = Convert.ToDouble(dr["LongNorth"].ToString(), System.Globalization.CultureInfo.InvariantCulture),
+
+                                ZoneID =  Convert.ToInt16(dr["ZoneID"], System.Globalization.CultureInfo.InvariantCulture),
+                                   
+                               
+
+                            });
+
+                             
+                        }
+
+                    }
+
+                }
+
+
+            }
+
+            return datamap1;
+
+        }
 
 
 
@@ -167,6 +261,33 @@ namespace Hercules.Controllers
         }
 
 
+        public ActionResult MapaAll()
+        {
+
+
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(DatMapaZona());
+
+
+
+
+
+            return Json(DatMapaZona(), JsonRequestBehavior.AllowGet);
+
+        }
+
+
+        public ActionResult MostarMapa()
+        {
+
+
+            return View();
+
+        }
+
+        public ActionResult SparkLine(){
+
+            return View();
+        }
 
         public ActionResult DatosMostrar(string ID)
         {
