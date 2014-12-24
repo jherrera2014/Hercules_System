@@ -28,7 +28,6 @@ namespace Hercules.Controllers
         // GET: Dashboard
 
         List<GoogleMarker> datamap;
-        List<GoogleMarker> datamap1;
 
         public class GoogleMarker
         {
@@ -43,17 +42,7 @@ namespace Hercules.Controllers
 
             public string Notes { get; set; }
 
-            public int ZoneID { get; set; }
-
-            public double LatEast1 { get; set; }
-
-            public double LongNorth1 { get; set; }
-
-
         }
-
-
-
 
 
         public List<GoogleMarker> DatAnalysis(int data)
@@ -85,6 +74,8 @@ namespace Hercules.Controllers
                     cmd1.Parameters.Add("@ID", SqlDbType.Int);
 
                     cmd1.Parameters["@ID"].Value = data;
+
+
 
                     cmd1.Connection = con1;
 
@@ -143,96 +134,6 @@ namespace Hercules.Controllers
 
         }
 
-        public List<GoogleMarker> DatMapaZona()
-        {
-
-            datamap1 = new List<GoogleMarker>();
-
-        
-
-
-
-            DataSet ds = new DataSet();
-
-
-
-            SqlConnection con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
-
-
-
-            {
-
-                using (SqlCommand cmd1 = new SqlCommand())
-                {
-
-
-
-                    cmd1.CommandText = @" SELECT LatEast,LongNorth ,ZoneID From sites WHERE  LatEast IS NOT NULL and LongNorth IS NOT NULL ";
-
-              
-
-                    cmd1.Connection = con1;
-
-                    using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
-                    {
-
-                        da.Fill(ds, "MapsGraph1");
-
-                    }
-
-                }
-
-            }
-
-            if (ds != null)
-            {
-
-                if (ds.Tables.Count > 0)
-                {
-
-                    if (ds.Tables["MapsGraph1"].Rows.Count > 0)
-                    {
-
-
-
-                        foreach (DataRow dr in ds.Tables["MapsGraph1"].Rows)
-                        {
-                           
-                            
-                            
-                            Debug.WriteLine((dr["LatEast"].ToString()));
-                            
-                            
-                            datamap1.Add(new GoogleMarker
-
-                            {
-
-                                
-                             
-                                
-                                LatEast1 = Convert.ToDouble(dr["LatEast"].ToString(), System.Globalization.CultureInfo.InvariantCulture),
-
-                                LongNorth1 = Convert.ToDouble(dr["LongNorth"].ToString(), System.Globalization.CultureInfo.InvariantCulture),
-
-                                ZoneID =  Convert.ToInt16(dr["ZoneID"], System.Globalization.CultureInfo.InvariantCulture),
-                                   
-                               
-
-                            });
-
-                             
-                        }
-
-                    }
-
-                }
-
-
-            }
-
-            return datamap1;
-
-        }
 
 
 
@@ -245,7 +146,7 @@ namespace Hercules.Controllers
             
 
             Debug.WriteLine("llego" + data1);
-            string prueba = "p1";
+            
 
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(DatAnalysis(datval));
         
@@ -261,33 +162,6 @@ namespace Hercules.Controllers
         }
 
 
-        public ActionResult MapaAll()
-        {
-
-
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(DatMapaZona());
-
-
-
-
-
-            return Json(DatMapaZona(), JsonRequestBehavior.AllowGet);
-
-        }
-
-
-        public ActionResult MostarMapa()
-        {
-
-
-            return View();
-
-        }
-
-        public ActionResult SparkLine(){
-
-            return View();
-        }
 
         public ActionResult DatosMostrar(string ID)
         {
@@ -297,12 +171,6 @@ namespace Hercules.Controllers
             return View();
 
         }
-
-        
-        
-        
-        
-        
         
         public ActionResult Detail(string ID)
         {
@@ -342,6 +210,8 @@ namespace Hercules.Controllers
 
             return Json(dato);
         }
+
+        //Gridview grilla alert
         public ActionResult Read([DataSourceRequest] DataSourceRequest request)
         {
             return GetView(request);
@@ -355,55 +225,41 @@ namespace Hercules.Controllers
         {
             DataClasses1DataContext db = new DataClasses1DataContext();
             //var zone = new ZoneLogger();
-            var result = from a in db.alarms
-                         join b in db.alarmTypes
-                             on new { emp = a.MessageID } equals new { emp = b.AlarmTypeId }
-                         join c in db.loggers
-                             on new { emp = a.LoggerSMSNumber } equals new { emp = c.LoggerSMSNumber}
+            var result = from a in db.loggers
+                         join b in db.alarms
+                             on new { emp = a.LoggerSMSNumber } equals new { emp = b.LoggerSMSNumber }
+                         join c in db.sites
+                             on new { emp = a.ID } equals new { emp = c.LoggerID }
+                         join d in db.zone
+                            on new { emp = c.ZoneID } equals new { emp = d.ID }
+                         join e in db.alarmTypes
+                            on new { emp = b.MessageID } equals new { emp = e.AlarmTypeId }
                          select new
                          {
-                             IDAlarm = a.ID,
-                             IDLogger = c.ID,
-                             AlarmType = b.AlarmType,
-                             LoggerSerialNumber = c.LoggerSerialNumber,
-                             LoggerType = c.LoggerType,
-                             LoggerSMS = c.LoggerSMSNumber
+                             IDAlarm = b.ID,
+                             IDLogger = a.ID,
+                             AlarmType = e.AlarmType,
+                             ZoneName = d.ZoneName,
+                             ZoneID = d.ID,
+                             LoggerSMS = a.LoggerSMSNumber,
+                             SerialNumber = a.LoggerSerialNumber,
+                             LoggerType = a.LoggerType,
+                             SitesName = c.Address
                          };
 
-            var loggerName = from a in db.loggers
-                            join b in db.sites
-                                on new { emp = a.ID } equals new { emp = b.LoggerID }
+            
 
-                            select new
-                            {
-                                ID = a.ID,
-                                IDZone = b.ZoneID,
-                                LoggerName = b.Address
-                            };
-
-            var finaltable = from a in result
-                             join b in loggerName
-                             on new {emp = a.IDLogger} equals new {emp = b.ID}
-                             select new
-                             {
-                                 IDAlarm = a.IDAlarm,
-                                 IDLogger = a.IDLogger,
-                                 AlarmType = a.AlarmType,
-                                 LoggerSerialNumber = a.LoggerSerialNumber,
-                                 LoggerType = a.LoggerType,
-                                 LoggerSMS = a.LoggerSMS,
-                                 LoggerName = b.LoggerName
-                             };
-
-            return finaltable;
+            return result;
         }
 
+        //Data Zone
         public JsonResult GetZone()
         {
             ZoneLogger zone = new ZoneLogger();
             return Json(zone.zone, JsonRequestBehavior.AllowGet);
         }
        
+        //Data Logger
         public JsonResult GetLogger(int? ZoneDropDownList)
         {
             //ZoneLogger zone = new ZoneLogger();

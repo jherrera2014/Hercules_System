@@ -62,8 +62,7 @@ namespace Hercules.Controllers
             return (value.ToUniversalTime().Ticks - ((new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).Ticks)) / 10000;
         }
 
-     
-       
+
   
          public List<DataDnk> DatAnalysis(int data)
          {
@@ -74,11 +73,7 @@ namespace Hercules.Controllers
 
              SqlConnection con1 = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
              
-             
-             
-            
-      
-             
+
              {
                  using (SqlCommand cmd1 = new SqlCommand())
                  {
@@ -87,13 +82,6 @@ namespace Hercules.Controllers
                                          BETWEEN CONVERT(datetime,('2014-10-04' + ' ' + '23:45:00')) AND CONVERT(datetime,('2014-11-04' + ' ' + '23:45:00'))  ";
                      cmd1.Parameters.Add("@ID", SqlDbType.Int);
                      cmd1.Parameters["@ID"].Value = data;
-
-                    
-                    
-
-
-
-
                      cmd1.Connection = con1;
                      using (SqlDataAdapter da = new SqlDataAdapter(cmd1))
                      {
@@ -110,18 +98,9 @@ namespace Hercules.Controllers
                        
                          foreach (DataRow dr in ds.Tables["DatosGraph"].Rows)
                          {
-                             Debug.WriteLine((dr["RecordDateTime"].ToString()));
-                             Debug.WriteLine((dr["RecordDateTime"].ToString()).Split(':')[0]);
-                             Debug.WriteLine((dr["RecordDateTime"].ToString().Trim()).Substring(6, 4));
-                             Debug.WriteLine((dr["RecordDateTime"].ToString().Trim()).Substring(3,2));
-                             Debug.WriteLine((dr["RecordDateTime"].ToString().Trim()).Substring(0,2));
-                             Debug.WriteLine((dr["RecordDateTime"].ToString()).Substring(11,2));
-                             Debug.WriteLine((dr["RecordDateTime"].ToString()).Substring(14, 2));
-                             string firstCharacter = (dr["RecordDateTime"].ToString().Split(':')[0].Substring(11, 2));
-                             Debug.WriteLine(firstCharacter);
-                             Debug.WriteLine(Convert.ToDouble(dr["C2Noise"], System.Globalization.CultureInfo.InvariantCulture));
-
-                             datosplot.Add(new DataDnk
+                       
+                            string firstCharacter = (dr["RecordDateTime"].ToString().Split(':')[0].Substring(11, 2));
+                                                         datosplot.Add(new DataDnk
                              {
 
                                  datetime = ToJsonTicks(new DateTime(Int32.Parse(dr["RecordDateTime"].ToString().Substring(6, 4)), Int32.Parse(dr["RecordDateTime"].ToString().Substring(3, 2)), Int32.Parse(dr["RecordDateTime"].ToString().Substring(0, 2)), Int32.Parse(dr["RecordDateTime"].ToString().Substring(11, 2)), Int32.Parse(dr["RecordDateTime"].ToString().Substring(14, 2)), 0)),
@@ -132,33 +111,16 @@ namespace Hercules.Controllers
 
 
                              });
-                             
-                             
-                             
-                             
-                             
-                            
-                             
                          }
                      }
                  }
 
-
-
-
-
              }
-
-
-
-
 
              return datosplot;
          }
 
 
-      
-   
         public ActionResult Index()
         {
             string data1 =Convert.ToString(Session["id"]);
@@ -167,8 +129,7 @@ namespace Hercules.Controllers
             
             
             Debug.WriteLine("llego" + data1);
-            string prueba = "p1";
-            
+        
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(DatAnalysis(datval));
             JavaScriptSerializer serializer = new JavaScriptSerializer();
 
