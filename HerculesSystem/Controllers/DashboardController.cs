@@ -223,14 +223,14 @@ namespace Hercules.Controllers
         }
         private IEnumerable<dynamic> GetData()
         {
-            DataClasses1DataContext db = new DataClasses1DataContext();
+            var db = new hercules_dbEntities();
             //var zone = new ZoneLogger();
             var result = from a in db.loggers
                          join b in db.alarms
                              on new { emp = a.LoggerSMSNumber } equals new { emp = b.LoggerSMSNumber }
                          join c in db.sites
                              on new { emp = a.ID } equals new { emp = c.LoggerID }
-                         join d in db.zone
+                         join d in db.zones2
                             on new { emp = c.ZoneID } equals new { emp = d.ID }
                          join e in db.alarmTypes
                             on new { emp = b.MessageID } equals new { emp = e.AlarmTypeId }
@@ -255,17 +255,16 @@ namespace Hercules.Controllers
         //Data Zone
         public JsonResult GetZone()
         {
-            ZoneLogger zone = new ZoneLogger();
-            return Json(zone.zone, JsonRequestBehavior.AllowGet);
+            var dt = new hercules_dbEntities();
+            var d = dt.zones2.AsQueryable();
+
+            return Json(d.Select(p => new {ID = p.ID, ZoneName = p.ZoneName}), JsonRequestBehavior.AllowGet);
         }
        
         //Data Logger
         public JsonResult GetLogger(int? ZoneDropDownList)
         {
-            //ZoneLogger zone = new ZoneLogger();
-            //var logger = zone.logger.AsQueryable();
-
-            DataClasses1DataContext db = new DataClasses1DataContext();
+            var db = new hercules_dbEntities();
 
             var jointable = from a in db.loggers
                          join b in db.sites

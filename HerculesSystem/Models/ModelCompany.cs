@@ -12,17 +12,5 @@ namespace Hercules.Models
         {
         }
 
-        public virtual DbSet<Company> company { get; set; }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Company>()
-                .Property(e => e.CompanyName)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Company>()
-                .Property(e => e.Description)
-                .IsUnicode(false);
-        }
     }
 }

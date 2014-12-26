@@ -12,18 +12,18 @@ namespace HerculesSystem.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class zone
+    public partial class alarmTypes
     {
-        public zone()
+        public alarmTypes()
         {
-            this.sites = new HashSet<sites>();
+            this.alarms = new HashSet<alarms>();
         }
     
-        public int ID { get; set; }
-        public string ZoneName { get; set; }
-        public Nullable<System.DateTime> CreationDate { get; set; }
-        public Nullable<bool> Status { get; set; }
+        public int AlarmTypeId { get; set; }
+        public string AlarmType { get; set; }
+        public Nullable<int> AlarmTypeCode { get; set; }
+        public Nullable<int> Channel { get; set; }
     
-        public virtual ICollection<sites> sites { get; set; }
+        public virtual ICollection<alarms> alarms { get; set; }
     }
 }

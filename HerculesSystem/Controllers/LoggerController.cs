@@ -59,7 +59,7 @@ namespace HerculesSystem.Controllers
 
           private IEnumerable<dynamic> GetData()
         {
-            DataClasses1DataContext db = new DataClasses1DataContext();
+            var db = new hercules_dbEntities();
             var zone = new ZoneLogger();
             var result = from a in db.loggers
                          join b in db.sites

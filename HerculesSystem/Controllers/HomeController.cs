@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using Hercules.Models;
 using System.Web.Security;
+using HerculesSystem;
+using HerculesSystem.Models;
 
 namespace Hercules.Controllers
 {
@@ -41,7 +43,7 @@ namespace Hercules.Controllers
         // this action is for handle post (login)
         if (ModelState.IsValid) // this is check validity
         {
-            using (ModelCompany mc = new ModelCompany())
+            using (var mc = new hercules_dbEntities())
             {
 
                 var vc = mc.company.Where(c => c.CompanyName.Equals(u.Email)).FirstOrDefault();
