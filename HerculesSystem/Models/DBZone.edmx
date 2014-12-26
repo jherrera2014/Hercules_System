@@ -1,0 +1,420 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="hercules_dbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="alarms">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="MessageID" Type="int" Nullable="false" />
+          <Property Name="LoggerSMSNumber" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="AlarmText" Type="varchar" MaxLength="40" />
+          <Property Name="Acknowledged" Type="bit" />
+        </EntityType>
+        <EntityType Name="alarmTypes">
+          <Key>
+            <PropertyRef Name="AlarmTypeId" />
+          </Key>
+          <Property Name="AlarmTypeId" Type="int" Nullable="false" />
+          <Property Name="AlarmType" Type="varchar" MaxLength="150" />
+          <Property Name="AlarmTypeCode" Type="int" />
+          <Property Name="Channel" Type="int" />
+        </EntityType>
+        <EntityType Name="company">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="CompanyName" Type="varchar" MaxLength="50" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="Description" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="loggers">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="LoggerType" Type="varchar" MaxLength="50" />
+          <Property Name="LoggerSoftware" Type="varchar" MaxLength="10" />
+          <Property Name="LoggerSerialNumber" Type="varchar" MaxLength="10" />
+          <Property Name="LoggerSMSNumber" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="LoggerGSMNumber" Type="varchar" MaxLength="20" />
+          <Property Name="OwnerAccount" Type="int" />
+          <Property Name="LastCallIn" Type="datetime" />
+          <Property Name="RST" Type="datetime" />
+          <Property Name="SignalLevel" Type="int" />
+          <Property Name="BatteryLevel" Type="float" />
+          <Property Name="LogRateMs" Type="int" />
+          <Property Name="NetID" Type="int" />
+          <Property Name="LAC" Type="int" />
+          <Property Name="CellID" Type="int" />
+          <Property Name="MastLongitude" Type="float" />
+          <Property Name="MastLatitude" Type="float" />
+          <Property Name="DataCount" Type="bigint" />
+          <Property Name="Notes" Type="varchar" MaxLength="1024" />
+          <Property Name="LastMessageType" Type="varchar" MaxLength="10" />
+          <Property Name="CallFrequency" Type="int" />
+          <Property Name="CompanyID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sites">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="DatagateID" Type="int" />
+          <Property Name="OwnerAccount" Type="int" />
+          <Property Name="SiteID" Type="varchar" MaxLength="32" />
+          <Property Name="Address" Type="varchar" MaxLength="256" />
+          <Property Name="LatEast" Type="varchar" MaxLength="20" />
+          <Property Name="LongNorth" Type="varchar" MaxLength="20" />
+          <Property Name="HeightAOD" Type="varchar" MaxLength="20" />
+          <Property Name="LoggerID" Type="int" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="Notes" Type="varchar(max)" />
+          <Property Name="quietdays" Type="int" />
+          <Property Name="ZoneID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="zone">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ZoneName" Type="varchar" MaxLength="100" />
+          <Property Name="CreationDate" Type="datetime" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <Association Name="FK_alarms_messages">
+          <End Role="alarmTypes" Type="Self.alarmTypes" Multiplicity="1" />
+          <End Role="alarms" Type="Self.alarms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="alarmTypes">
+              <PropertyRef Name="AlarmTypeId" />
+            </Principal>
+            <Dependent Role="alarms">
+              <PropertyRef Name="MessageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_loggers_company">
+          <End Role="company" Type="Self.company" Multiplicity="1" />
+          <End Role="loggers" Type="Self.loggers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="company">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="loggers">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_sites_zone">
+          <End Role="zone" Type="Self.zone" Multiplicity="1" />
+          <End Role="sites" Type="Self.sites" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="zone">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="sites">
+              <PropertyRef Name="ZoneID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="hercules_dbModelStoreContainer">
+          <EntitySet Name="alarms" EntityType="Self.alarms" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="alarmTypes" EntityType="Self.alarmTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="company" EntityType="Self.company" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="loggers" EntityType="Self.loggers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sites" EntityType="Self.sites" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="zone" EntityType="Self.zone" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_alarms_messages" Association="Self.FK_alarms_messages">
+            <End Role="alarmTypes" EntitySet="alarmTypes" />
+            <End Role="alarms" EntitySet="alarms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_loggers_company" Association="Self.FK_loggers_company">
+            <End Role="company" EntitySet="company" />
+            <End Role="loggers" EntitySet="loggers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_sites_zone" Association="Self.FK_sites_zone">
+            <End Role="zone" EntitySet="zone" />
+            <End Role="sites" EntitySet="sites" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="hercules_dbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="zone">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ZoneName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreationDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="sites" Relationship="hercules_dbModel.FK_sites_zone" FromRole="zone" ToRole="sites" />
+        </EntityType>
+        <EntityContainer Name="hercules_dbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="zones2" EntityType="Self.zone" />
+          <EntitySet Name="sites" EntityType="hercules_dbModel.sites" />
+          <AssociationSet Name="FK_sites_zone" Association="hercules_dbModel.FK_sites_zone">
+            <End Role="zone" EntitySet="zones2" />
+            <End Role="sites" EntitySet="sites" />
+          </AssociationSet>
+          <EntitySet Name="company" EntityType="hercules_dbModel.company" />
+          <EntitySet Name="loggers" EntityType="hercules_dbModel.loggers" />
+          <AssociationSet Name="FK_loggers_company" Association="hercules_dbModel.FK_loggers_company">
+            <End Role="company" EntitySet="company" />
+            <End Role="loggers" EntitySet="loggers" />
+          </AssociationSet>
+          <EntitySet Name="alarms" EntityType="hercules_dbModel.alarms" />
+          <EntitySet Name="alarmTypes" EntityType="hercules_dbModel.alarmTypes" />
+          <AssociationSet Name="FK_alarms_messages" Association="hercules_dbModel.FK_alarms_messages">
+            <End Role="alarmTypes" EntitySet="alarmTypes" />
+            <End Role="alarms" EntitySet="alarms" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="sites">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="DatagateID" Type="Int32" />
+          <Property Name="OwnerAccount" Type="Int32" />
+          <Property Name="SiteID" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="LatEast" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LongNorth" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="HeightAOD" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LoggerID" Type="Int32" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="quietdays" Type="Int32" />
+          <Property Name="ZoneID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="zone" Relationship="hercules_dbModel.FK_sites_zone" FromRole="sites" ToRole="zone" />
+        </EntityType>
+        <Association Name="FK_sites_zone">
+          <End Type="hercules_dbModel.zone" Role="zone" Multiplicity="1" />
+          <End Type="hercules_dbModel.sites" Role="sites" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="zone">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="sites">
+              <PropertyRef Name="ZoneID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="company">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="CompanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="loggers" Relationship="hercules_dbModel.FK_loggers_company" FromRole="company" ToRole="loggers" />
+        </EntityType>
+        <EntityType Name="loggers">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="LoggerType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LoggerSoftware" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LoggerSerialNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LoggerSMSNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LoggerGSMNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="OwnerAccount" Type="Int32" />
+          <Property Name="LastCallIn" Type="DateTime" Precision="3" />
+          <Property Name="RST" Type="DateTime" Precision="3" />
+          <Property Name="SignalLevel" Type="Int32" />
+          <Property Name="BatteryLevel" Type="Double" />
+          <Property Name="LogRateMs" Type="Int32" />
+          <Property Name="NetID" Type="Int32" />
+          <Property Name="LAC" Type="Int32" />
+          <Property Name="CellID" Type="Int32" />
+          <Property Name="MastLongitude" Type="Double" />
+          <Property Name="MastLatitude" Type="Double" />
+          <Property Name="DataCount" Type="Int64" />
+          <Property Name="Notes" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" />
+          <Property Name="LastMessageType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CallFrequency" Type="Int32" />
+          <Property Name="CompanyID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="company" Relationship="hercules_dbModel.FK_loggers_company" FromRole="loggers" ToRole="company" />
+        </EntityType>
+        <Association Name="FK_loggers_company">
+          <End Type="hercules_dbModel.company" Role="company" Multiplicity="1" />
+          <End Type="hercules_dbModel.loggers" Role="loggers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="company">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="loggers">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="alarms">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="MessageID" Type="Int32" Nullable="false" />
+          <Property Name="LoggerSMSNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="AlarmText" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="Acknowledged" Type="Boolean" />
+          <NavigationProperty Name="alarmTypes" Relationship="hercules_dbModel.FK_alarms_messages" FromRole="alarms" ToRole="alarmTypes" />
+        </EntityType>
+        <EntityType Name="alarmTypes">
+          <Key>
+            <PropertyRef Name="AlarmTypeId" />
+          </Key>
+          <Property Name="AlarmTypeId" Type="Int32" Nullable="false" />
+          <Property Name="AlarmType" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="AlarmTypeCode" Type="Int32" />
+          <Property Name="Channel" Type="Int32" />
+          <NavigationProperty Name="alarms" Relationship="hercules_dbModel.FK_alarms_messages" FromRole="alarmTypes" ToRole="alarms" />
+        </EntityType>
+        <Association Name="FK_alarms_messages">
+          <End Type="hercules_dbModel.alarmTypes" Role="alarmTypes" Multiplicity="1" />
+          <End Type="hercules_dbModel.alarms" Role="alarms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="alarmTypes">
+              <PropertyRef Name="AlarmTypeId" />
+            </Principal>
+            <Dependent Role="alarms">
+              <PropertyRef Name="MessageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="hercules_dbModelStoreContainer" CdmEntityContainer="hercules_dbEntities">
+          <EntitySetMapping Name="zones2">
+            <EntityTypeMapping TypeName="hercules_dbModel.zone">
+              <MappingFragment StoreEntitySet="zone">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ZoneName" ColumnName="ZoneName" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sites">
+            <EntityTypeMapping TypeName="hercules_dbModel.sites">
+              <MappingFragment StoreEntitySet="sites">
+                <ScalarProperty Name="ZoneID" ColumnName="ZoneID" />
+                <ScalarProperty Name="quietdays" ColumnName="quietdays" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="LoggerID" ColumnName="LoggerID" />
+                <ScalarProperty Name="HeightAOD" ColumnName="HeightAOD" />
+                <ScalarProperty Name="LongNorth" ColumnName="LongNorth" />
+                <ScalarProperty Name="LatEast" ColumnName="LatEast" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="OwnerAccount" ColumnName="OwnerAccount" />
+                <ScalarProperty Name="DatagateID" ColumnName="DatagateID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="company">
+            <EntityTypeMapping TypeName="hercules_dbModel.company">
+              <MappingFragment StoreEntitySet="company">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="loggers">
+            <EntityTypeMapping TypeName="hercules_dbModel.loggers">
+              <MappingFragment StoreEntitySet="loggers">
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="CallFrequency" ColumnName="CallFrequency" />
+                <ScalarProperty Name="LastMessageType" ColumnName="LastMessageType" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="DataCount" ColumnName="DataCount" />
+                <ScalarProperty Name="MastLatitude" ColumnName="MastLatitude" />
+                <ScalarProperty Name="MastLongitude" ColumnName="MastLongitude" />
+                <ScalarProperty Name="CellID" ColumnName="CellID" />
+                <ScalarProperty Name="LAC" ColumnName="LAC" />
+                <ScalarProperty Name="NetID" ColumnName="NetID" />
+                <ScalarProperty Name="LogRateMs" ColumnName="LogRateMs" />
+                <ScalarProperty Name="BatteryLevel" ColumnName="BatteryLevel" />
+                <ScalarProperty Name="SignalLevel" ColumnName="SignalLevel" />
+                <ScalarProperty Name="RST" ColumnName="RST" />
+                <ScalarProperty Name="LastCallIn" ColumnName="LastCallIn" />
+                <ScalarProperty Name="OwnerAccount" ColumnName="OwnerAccount" />
+                <ScalarProperty Name="LoggerGSMNumber" ColumnName="LoggerGSMNumber" />
+                <ScalarProperty Name="LoggerSMSNumber" ColumnName="LoggerSMSNumber" />
+                <ScalarProperty Name="LoggerSerialNumber" ColumnName="LoggerSerialNumber" />
+                <ScalarProperty Name="LoggerSoftware" ColumnName="LoggerSoftware" />
+                <ScalarProperty Name="LoggerType" ColumnName="LoggerType" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="alarms">
+            <EntityTypeMapping TypeName="hercules_dbModel.alarms">
+              <MappingFragment StoreEntitySet="alarms">
+                <ScalarProperty Name="Acknowledged" ColumnName="Acknowledged" />
+                <ScalarProperty Name="AlarmText" ColumnName="AlarmText" />
+                <ScalarProperty Name="LoggerSMSNumber" ColumnName="LoggerSMSNumber" />
+                <ScalarProperty Name="MessageID" ColumnName="MessageID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="alarmTypes">
+            <EntityTypeMapping TypeName="hercules_dbModel.alarmTypes">
+              <MappingFragment StoreEntitySet="alarmTypes">
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="AlarmTypeCode" ColumnName="AlarmTypeCode" />
+                <ScalarProperty Name="AlarmType" ColumnName="AlarmType" />
+                <ScalarProperty Name="AlarmTypeId" ColumnName="AlarmTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

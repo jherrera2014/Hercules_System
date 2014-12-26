@@ -1,35 +1,19 @@
 ﻿using Hercules.App_Code;
-
 using Hercules.Models;
-
 using HerculesSystem;
-
 using HerculesSystem.Models;
-
 using Kendo.Mvc.UI;
-
 using System;
-
 using System.Collections;
-
 using System.Collections.Generic;
-
 using System.Data;
-
 using System.Linq;
-
 using System.Web;
-
 using System.Web.Mvc;
-
 using Kendo.Mvc.Extensions;
-
 using System.Data.SqlClient;
-
 using System.Xml;
-
 using System.Configuration;
-
 using System.Diagnostics;
 
 
@@ -37,28 +21,14 @@ using System.Diagnostics;
 namespace Hercules.Controllers
 {
 
-
-
-
-
-
-
-
-
-
-
     public class DashboardController : Controller
     {
 
         // GET: Dashboard
 
-
-
         List<GoogleMarker> datamap;
 
         List<GoogleMarker> datamap1;
-
-
 
         public class GoogleMarker
         {
@@ -100,16 +70,6 @@ namespace Hercules.Controllers
 
 
         }
-
-
-
-
-
-
-
-
-
-
 
         public List<GoogleMarker> DatAnalysis(int data)
         {
@@ -275,8 +235,6 @@ namespace Hercules.Controllers
 
 
         }
-
-
 
         public List<GoogleMarker> DatMapaZona()
         {
@@ -451,59 +409,23 @@ namespace Hercules.Controllers
 
         }
 
-
-
-
-
-
-
-
-
         public ActionResult Index()
         {
 
             string data1 = Convert.ToString(Session["idmap"]);
-
             string data = Request["param1"];
-
             int datval = Convert.ToInt16(data1);
-
-
-
-
-
             Debug.WriteLine("llego" + data1);
-
-            string prueba = "p1";
-
-
-
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(DatAnalysis(datval));
-
-
-
             return Json(DatAnalysis(datval), JsonRequestBehavior.AllowGet);
-
-
 
         }
 
         public ActionResult List(string ID)
         {
 
-
-
-
-
             return View();
-
-
-
         }
-
-
-
-
 
         public ActionResult MapaAll()
         {
@@ -530,10 +452,6 @@ namespace Hercules.Controllers
 
         }
 
-
-
-
-
         public ActionResult MostarMapa()
         {
 
@@ -547,8 +465,6 @@ namespace Hercules.Controllers
 
         }
 
-
-
         public ActionResult SparkLine()
         {
 
@@ -557,8 +473,6 @@ namespace Hercules.Controllers
             return View();
 
         }
-
-
 
         public ActionResult DatosMostrar(string ID)
         {
@@ -574,20 +488,6 @@ namespace Hercules.Controllers
 
 
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         public ActionResult Detail(string ID)
         {
@@ -606,13 +506,7 @@ namespace Hercules.Controllers
 
         }
 
-
-
-
-
         List<DataGridDashboard> datosplot;
-
-
 
         public JsonResult GetAlarm()
         {
@@ -669,8 +563,6 @@ namespace Hercules.Controllers
 
         }
 
-
-
         private JsonResult GetView(DataSourceRequest request)
         {
 
@@ -680,164 +572,68 @@ namespace Hercules.Controllers
 
         private IEnumerable<dynamic> GetData()
         {
+            var db = new hercules_dbEntities();
 
-            DataClasses1DataContext db = new DataClasses1DataContext();
-
-            //var zone = new ZoneLogger();
-
-            var result = from a in db.alarms
-
-                         join b in db.alarmTypes
-
-                             on new { emp = a.MessageID } equals new { emp = b.AlarmTypeId }
-
-                         join c in db.loggers
-
-                             on new { emp = a.LoggerSMSNumber } equals new { emp = c.LoggerSMSNumber }
-
-                         select new
-
-                         {
-
-                             IDAlarm = a.ID,
-
-                             IDLogger = c.ID,
-
-                             AlarmType = b.AlarmType,
-
-                             LoggerSerialNumber = c.LoggerSerialNumber,
-
-                             LoggerType = c.LoggerType,
-
-                             LoggerSMS = c.LoggerSMSNumber
-
-                         };
-
-
-
-            var loggerName = from a in db.loggers
-
+            var finaltable = from a in db.loggers
                              join b in db.sites
-
-                                 on new { emp = a.ID } equals new { emp = b.LoggerID }
-
-
-
+                                on a.ID equals b.LoggerID
+                             join c in db.zones2
+                                 on b.ZoneID equals c.ID
+                             join d in db.alarms
+                                 on a.LoggerSMSNumber equals d.LoggerSMSNumber
                              select new
-
                              {
-
-                                 ID = a.ID,
-
-                                 IDZone = b.ZoneID,
-
-                                 LoggerName = b.Address
-
+                                IDLogger = a.ID,
+                                IDAlarm = d.ID,
+                                SitesName = b.Address,
+                                ZoneName = c.ZoneName,
+                                ZoneID = c.ID,
+                                LoggerSMS = a.LoggerSMSNumber,
+                                SerialNumber = a.LoggerSerialNumber,
+                                LoggerType = a.LoggerType,
+                                AlarmType = d.AlarmText
+                               
                              };
-
-
-
-            var finaltable = from a in result
-
-                             join b in loggerName
-
-                             on new { emp = a.IDLogger } equals new { emp = b.ID }
-
-                             select new
-
-                             {
-
-                                 IDAlarm = a.IDAlarm,
-
-                                 IDLogger = a.IDLogger,
-
-                                 AlarmType = a.AlarmType,
-
-                                 LoggerSerialNumber = a.LoggerSerialNumber,
-
-                                 LoggerType = a.LoggerType,
-
-                                 LoggerSMS = a.LoggerSMS,
-
-                                 LoggerName = b.LoggerName
-
-                             };
-
-
-
-            return finaltable;
+         
+            return finaltable.ToList();
 
         }
-
-
 
         public JsonResult GetZone()
         {
 
-            ZoneLogger zone = new ZoneLogger();
+            var zone = new hercules_dbEntities();
 
-            return Json(zone.zone, JsonRequestBehavior.AllowGet);
+            return Json(zone.zones2.Select(c => new {ID = c.ID, ZoneName = c.ZoneName}), JsonRequestBehavior.AllowGet);
 
         }
-
-
 
         public JsonResult GetLogger(int? ZoneDropDownList)
         {
 
-            //ZoneLogger zone = new ZoneLogger();
-
-            //var logger = zone.logger.AsQueryable();
-
-
-
-            DataClasses1DataContext db = new DataClasses1DataContext();
-
-
+            var db = new hercules_dbEntities();
 
             var jointable = from a in db.loggers
 
                             join b in db.sites
-
                                 on new { emp = a.ID } equals new { emp = b.LoggerID }
-
-
-
                             select new
-
                             {
-
                                 ID = a.ID,
-
                                 IDZone = b.ZoneID,
-
                                 LoggerName = b.Address
-
                             };
-
-
 
             if (ZoneDropDownList != null)
             {
-
                 jointable = jointable.Where(o => o.IDZone == ZoneDropDownList);
-
                 return Json(jointable.Select(o => new { LoggerID = o.ID, LoggerName = o.LoggerName }), JsonRequestBehavior.AllowGet);
-
-
-
             }
 
             else
 
                 return Json(null);
-
-
-
         }
-
-
-
 
 
     }

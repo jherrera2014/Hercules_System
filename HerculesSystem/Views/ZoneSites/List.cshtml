@@ -20,6 +20,7 @@
                 })
                 .Read(r => r.Action("Read", "ZoneSites"))
                 .Update(update => update.Action("Edit", "ZoneSites"))
+                .Create(create => create.Action("Create", "ZoneSites"))
 
                )
                 .Columns(columns =>
@@ -30,7 +31,7 @@
                     columns.Command(command => { command.Custom("View").Click("showDetails"); command.Edit(); }).Title("Detail");
 
                 })
-
+                        .ToolBar(toolbar => toolbar.Create())
                         .Editable(editable => editable.Mode(GridEditMode.PopUp))
                         .Sortable()
                         .Filterable()
