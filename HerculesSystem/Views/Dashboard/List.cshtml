@@ -99,7 +99,7 @@
                     columns.Bound("LoggerType").Title("Logger Type").Width("");
                     columns.Bound("AlarmType").Title("Alarm Type").Width("");
                     columns.Bound("DateAlarm").Title("Date Alarm").Width("");
-                    columns.Bound("AlarmPoint").Title("Alarm Point").Width("");
+                    columns.Bound("AlarmPoint").Template(t => { }).Title("Row No").ClientTemplate("<span id='temp-range'  style='line-height: 60px ;'></span>").HtmlAttributes("<span id='temp-range' style='line-height: 60px'></span>");
                     columns.Bound("LoggerNow").Title("Logger Now").Width("");
                     
                     
@@ -193,10 +193,216 @@
                 filters: currentFilters
             });
 
+            var internetUsers = [{
+                "country": "United States",
+                "year": "2005",
+                "value": 67.96
+            }, {
+                "country": "United States",
+                "year": "2006",
+                "value": 68.93
+            }];
+
+            $("#sparkline").kendoSparkline({
+                field: "Wind",
+
+                series: [{
+                    name: "C1Pressure",
+                    data: [35.7, 26.7, 40, 23.5, 26.6, 24.8, 24.1, 20.1, 14.1, 8.6, 15.5, 13.5, 0.7, 10.8, 15.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 27.5],
+
+                }, {
+                    name: 'C2flow',
+                    data: [48.9, 54.8, 65.7, 69.3, 74.0, 66.0, 68.8, 69.1, 50.1, 64.1, 66.6, 77.5],
+                    tooltip: {
+                        format: "{0}M"
+                    }
+
+
+                },
+                {
+                    name: 'C3Pressure',
+                    data: internetUsers,
+                    
+
+
+                },
+
+
+
+                ],
+                categoryAxis: {
+                    field: "Pressure"
+                }
+
+
+            });
+
+            $("#temp-range").kendoSparkline({
+                type: "bullet",
+                data: [23,10],
+                theme: "metro",
+                valueAxis: {
+                    min: 0,
+                    max: 25,
+                    plotBands: [{
+                        from: 0, to: 12, color: "#ccc", opacity: 0.15
+                    }, {
+                        from: 12, to: 20, color: "#ccc", opacity: 0.40
+                    }, {
+                        from: 21, to: 23, color: "#ccc", opacity: 0.75
+                    }]
+                },
+                tooltip: {
+                    visible: true
+                }
+            });
+
+            $("#chart-mmHg").kendoSparkline({
+                legend: {
+                    visible: false
+                },
+                series: [{
+                    type: "bullet",
+                    data: [[750, 762.5]]
+                }],
+                chartArea: {
+                    margin: {
+                        left: 0
+                    }
+                },
+                categoryAxis: {
+                    majorGridLines: {
+                        visible: false
+                    },
+                    majorTicks: {
+                        visible: false
+                    }
+                },
+                valueAxis: [{
+                    plotBands: [{
+                        from: 715, to: 752, color: "#yellow", opacity: .6
+                    }, {
+                        from: 752, to: 772, color: "#green", opacity: .3
+                    }],
+                    majorGridLines: {
+                        visible: true
+                    },
+                    min: 715,
+                    max: 795,
+                    minorTicks: {
+                        visible: true
+                    }
+                }],
+                tooltip: {
+                    visible: true,
+                    template: "Maximum: #= value.target # <br /> Average: #= value.current #"
+                }
+            });
+
+
+            $("#chart-temp").kendoSparkline({
+                legend: {
+                    visible: true
+                },
+                series: [{
+                    type: "bullet",
+                    data: [[25, 22]]
+                }],
+                categoryAxis: {
+                    majorGridLines: {
+                        visible: false
+                    },
+                    majorTicks: {
+                        visible: true
+                    }
+                },
+                valueAxis: [{
+                    plotBands: [{
+                        from: 0, to: 10, color: "yellow", opacity: .3
+                    }, {
+                        from: 10, to: 20, color: "green", opacity: .3
+                    }, {
+                        from: 20, to: 30, color: "blac", opacity: .3
+                    }],
+                    majorGridLines: {
+                        visible: false
+                    },
+                    min: 0,
+                    max: 30,
+                    minorTicks: {
+                        visible: true
+                    }
+                }],
+                tooltip: {
+                    visible: true,
+                    template: "Maximum: #= value.target # <br /> Average: #= value.current #"
+                }
+            });
+
+
+            $("#chart-hum").kendoSparkline({
+                legend: {
+                    visible: false
+                },
+                series: [{
+                    type: "bullet",
+                    data: [[45, 60]]
+                }],
+                categoryAxis: {
+                    majorGridLines: {
+                        visible: true
+                    },
+                    majorTicks: {
+                        visible: true
+                    }
+                },
+                valueAxis: [{
+                    plotBands: [{
+                        from: 0, to: 33, color: "#c6f4be", opacity: 0.6
+                    }, {
+                        from: 33, to: 66, color: "#b5cdee", opacity: 1
+                    }],
+                    majorGridLines: {
+                        visible: false
+                    },
+                    min: 0,
+                    max: 100,
+                    minorTicks: {
+                        visible: true
+                    }
+                }],
+                tooltip: {
+                    visible: true,
+                    template: "Maximum: #= value.target # <br /> Average: #= value.current #"
+                }
+            });
+
+           
+
+
+
         }
 
 
-    </script>
-</div>
 
+       
+
+
+
+
+
+
+    </script>
+
+    <script>
+        $("#sparkline1").sparkline([10, 12, 12, 9, 7], {
+            type: 'bullet'
+        });
+
+
+    </script>
+
+
+</div>
+<div id="sparkline1"></div>
 
