@@ -27,7 +27,7 @@
                 {
                     columns.Bound("ZoneName").Title("Zone Name");
                     columns.Bound("CreationDate").Title("Creation Date").Format("{0:dd/MM/yyyy HH:mm:ss}").EditorTemplateName("CreationDate");
-                    columns.Bound("Status").Title("Status");
+                    columns.Bound("Status").Title("Status").ClientTemplate("#=checkMark(Status)#");
                     columns.Command(command => { command.Custom("View").Click("showDetails"); command.Edit(); }).Title("Detail");
 
                 })
@@ -45,6 +45,13 @@
             function showDetails(e) {
                 e.preventDefault();
                 window.location.href = "Detail";
+            }
+
+            function checkMark(mark) {
+                if (mark == 0 || mark == null)
+                    return 'absert';
+                else
+                    return Activo;
             }
         </script>
 
