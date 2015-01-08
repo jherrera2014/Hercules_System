@@ -14,13 +14,13 @@
                     .Name("ZoneDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
                     .DataTextField("ZoneName") //Specifies which property of the Product to be used by the dropdownlist as a text.
                     .DataValueField("ID") //Specifies which property of the Product to be used by the dropdownlist as a value.
-                    .HtmlAttributes(new { style = "width:300px" })
+                    .HtmlAttributes(new { style = "width:170px" })
                     .OptionLabel("Zone")
                     .DataSource(source =>
                     {
                         source.Read(read =>
                         {
-                            read.Action("GetZone", "Dashboard"); //Set the Action and Controller name
+                            read.Action("GetZone", "Helper"); //Set the Action and Controller name
                         }); //If true the DataSource will not filter the data on the client.
                     })
                     .Events(e =>
@@ -36,13 +36,13 @@
                     .Name("LoggerDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
                     .DataTextField("LoggerName") //Specifies which property of the Product to be used by the dropdownlist as a text.
                     .DataValueField("LoggerID") //Specifies which property of the Product to be used by the dropdownlist as a value.
-                    .HtmlAttributes(new { style = "width:300px" })
+                    .HtmlAttributes(new { style = "width:170px" })
                     .OptionLabel("Logger")
                     .DataSource(source =>
                     {
                         source.Read(read =>
                         {
-                            read.Action("GetLogger", "Dashboard")//Set the Action and Controller name
+                            read.Action("GetLogger", "Helper")//Set the Action and Controller name
                            .Data("filterLogger");
                         })
                         .ServerFiltering(true); //If true the DataSource will not filter the data on the client.
@@ -56,6 +56,19 @@
                     })
         )
     </p>
+
+    @(Html.Kendo().Button()
+        .Name("linkButton")
+        .Tag("a")
+        
+        .Content("Create")
+        .Events(e =>
+        {
+            e.Click("ClickCreate");
+        })
+    )
+
+   
    
   
 </div>
@@ -71,35 +84,44 @@
                 c.Id("ID");
                 c.Field("LoggerSMSNumber",typeof(int));
                 c.Field("BatteryLevel", typeof(int));
-                c.Field("LastCallIn", typeof(DateTime));
+                c.Field("CreationDate", typeof(DateTime));
                 c.Field("LoggerSerialNumber", typeof(int));
                 c.Field("LoggerType", typeof(string));
                 c.Field("SignalLevel", typeof(int));
                 c.Field("Adress", typeof(string));
-                c.Field("LoggerID", typeof(string));
+                c.Field("ZoneID", typeof(int));
+                c.Field("ZoneName", typeof(string));
+
+                c.Field("Owner", typeof(string));
                 //c.Field(command => command.Custom("View").Click("ViewDetail")).Title("Detail").Width("100px");
             })
             .Read(r => r.Action("Read", "Logger"))
             .Create(u => u.Action("Create", "Home"))
+            .Destroy(u => u.Action("Delete", "Logger"))
             
             )
             
             .Columns(columns =>
                 {
-                    columns.Bound("Adress").Title("Adress");
                     columns.Bound("LoggerSMSNumber").Title("SMS");
-                    columns.Bound("BatteryLevel").Title("Battery Level");
-                    columns.Bound("LastCallIn").Title("Last Call in");
                     columns.Bound("LoggerSerialNumber").Title("Serial Number");
-                    columns.Bound("LoggerType").Title("Type");
-                    columns.Bound("SignalLevel").Title("Signal Level");
+                    columns.Bound("Owner").Title("Owner");
+                    columns.Bound("Adress").Title("Adress");
+                   // columns.Bound("BatteryLevel").Title("Battery Level");
+                    columns.Bound("CreationDate").Title("Creation Date").Format("{0:dd/MM/yyyy HH:mm:ss}");
+                   // columns.Bound("LoggerType").Title("Type");
+                    //columns.Bound("SignalLevel").Title("Signal Level");
+                    columns.Bound("ZoneName").Title("Signal Name");
                     
                     columns.Command(command =>
                     {
                         command.Custom("View").Click("ViewDetail");
+                        command.Destroy().Text("Delete");
                     });
+                    
                 })
                         .Editable(editable => editable.TemplateName("ProductItem").Mode(GridEditMode.PopUp))
+                        
                         .Sortable()
                         .Filterable()
                         .Pageable()
@@ -142,7 +164,7 @@
         });
 
         function onChangeZone() {
-            applyFilter("LoggerID", $("#LoggerDropDownList").val());
+            applyFilter("ZoneID", $("#ZoneDropDownList").val());
         }
 
         function onChange() {
@@ -184,6 +206,12 @@
 
         }
 
+        function ClickCreate(e) {
+          
+            window.location.href = "@Url.Action("Create", "Logger")";   
+        }
+
+      
 </script>
 
 

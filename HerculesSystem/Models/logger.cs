@@ -18,9 +18,11 @@ namespace HerculesSystem.Models
         [StringLength(50)]
         public string LoggerType { get; set; }
 
+        [Required(ErrorMessage= "Campo obligatorio.")]
         public string LoggerSerialNumber { get; set; }
 
-        [StringLength(20)]
+        [Required(ErrorMessage = "Campo obligatorio.")]
+        [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Solo números")]
         public string LoggerSMSNumber { get; set; }
          
         
@@ -29,6 +31,23 @@ namespace HerculesSystem.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int SignalLevel { get; set; }
         public double BatteryLevel { get; set; }
+
+        public string LoggerGSMNumber { get; set; }
+
+        public int LoggerRateMs { get; set; }
+       
+        public string Notes { get; set; }
+
+        public string owner_name { get; set; }
+
+        public int SitedID { get; set; }
+
+        public int OwnerAccount { get; set; }
+
+        public bool WithSite { get; set; }
+
+
+
 
        
 

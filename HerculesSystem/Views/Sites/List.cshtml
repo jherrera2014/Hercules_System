@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>List</h2>
+
+@(Html.Kendo().Button()
+        .Name("linkButton")
+        .Tag("a")
+
+        .Content("Create")
+        .Events(e =>
+        {
+            e.Click("ClickCreate");
+        })
+)
+
+<script>
+    function ClickCreate(e) {
+
+            window.location.href = "@Url.Action("Create", "Sites")";
+            }
+ </script>
+
+
+
