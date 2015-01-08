@@ -187,13 +187,14 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DataGraphController.cs" />
     <Compile Include="Controllers\GraficoController.cs" />
-    <Compile Include="Controllers\GraphStockController.cs" />
     <Compile Include="Controllers\GridDashboardController.cs" />
+    <Compile Include="Controllers\HelperController.cs" />
     <Compile Include="Controllers\HighchartServiceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoggerController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MapsController.cs" />
+    <Compile Include="Controllers\SitesController.cs" />
     <Compile Include="Controllers\ZoneSitesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -239,6 +240,9 @@
       <DependentUpon>DBZone.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\user.cs" />
+    <Compile Include="Models\users.cs">
+      <DependentUpon>DBZone.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\zone.cs">
       <DependentUpon>DBZone.tt</DependentUpon>
     </Compile>
@@ -1566,6 +1570,9 @@
     <Content Include="Views\Dashboard\MostarMapa.cshtml" />
     <Content Include="Views\Dashboard\SparkLine.cshtml" />
     <Content Include="Views\Dashboard\GetYesNoValues.cshtml" />
+    <Content Include="Views\Logger\Create.cshtml" />
+    <Content Include="Views\Sites\Create.cshtml" />
+    <Content Include="Views\Sites\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -632,41 +632,6 @@ namespace Hercules.Controllers
 
         }
 
-        public JsonResult GetZone()
-        {
-
-            var zone = new hercules_dbEntities();
-
-            return Json(zone.zones2.Select(c => new {ID = c.ID, ZoneName = c.ZoneName}), JsonRequestBehavior.AllowGet);
-
-        }
-
-        public JsonResult GetLogger(int? ZoneDropDownList)
-        {
-
-            var db = new hercules_dbEntities();
-
-            var jointable = from a in db.loggers
-
-                            join b in db.sites
-                                on new { emp = a.ID } equals new { emp = b.LoggerID}
-                            select new
-                            {
-                                ID = a.ID,
-                                IDZone = b.ZoneID,
-                                LoggerName = b.Address
-                            };
-
-            if (ZoneDropDownList != null)
-            {
-                jointable = jointable.Where(o => o.IDZone == ZoneDropDownList);
-                return Json(jointable.Select(o => new { LoggerID = o.ID, LoggerName = o.LoggerName }), JsonRequestBehavior.AllowGet);
-            }
-
-            else
-
-                return Json(null);
-        }
 
 
     }
