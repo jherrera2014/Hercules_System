@@ -1,0 +1,844 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<link href="@Url.Content("~/Content/Dashboard/List.css")" rel="stylesheet" type="text/css" />
+<style>
+   .k-state-selected a {
+    color: #FFF;
+}
+.k-sparkline span {
+    height: 80px;
+    width: 140px;
+
+}
+.burndown-wrap {
+height: 50px;
+width: 100px;
+
+} 
+
+.k-sparkline .k-tooltip table {
+    table-layout: auto;
+    width: auto;
+}
+.k-sparkline .k-tooltip table td {
+    border-left-width: medium;
+    text-overflow: clip;
+}
+.k-sparkline .k-tooltip table td, .k-sparkline .k-tooltip table th {
+    border-width: 0;
+}
+.k-grid td {
+    overflow: visible !important;
+}
+#sparkline .k-grid-content {
+    overflow: visible !important;
+}
+</style>
+<h2>Dashboard</h2>
+<br />Network :
+  
+
+
+    <div>
+        <div class="demo-section k-header">
+            <h4>Filter</h4>
+
+
+            <p>
+                @(Html.Kendo().DropDownList()
+                   .Name("color")
+                  .DataTextField("Text")
+                  .DataValueField("Value")
+
+                                          .Events(e => e.Change("onChange1").DataBound("onDatabound"))
+                .DataSource(source => source.Read("GetYesNoValues", "Dashboard"))
+
+
+
+                )
+            </p>
+
+
+
+
+
+
+
+
+
+
+
+            <p>
+                @(Html.Kendo().DropDownList()
+                    .Name("ZoneDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
+                    .DataTextField("ZoneName") //Specifies which property of the Product to be used by the dropdownlist as a text.
+                    .DataValueField("ID") //Specifies which property of the Product to be used by the dropdownlist as a value.
+                    .HtmlAttributes(new { style = "width:300px" })
+                    .OptionLabel("Zone")
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetZone", "Dashboard"); //Set the Action and Controller name
+                        }); //If true the DataSource will not filter the data on the client.
+                    })
+                    .Events(e =>
+                    {
+                        e.Change("onChangeZone").DataBound("onDatabound");
+                    })
+
+                )
+            </p>
+            <p>
+                @(Html.Kendo().DropDownList()
+                        .Name("LoggerDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
+                        .DataTextField("LoggerName") //Specifies which property of the Product to be used by the dropdownlist as a text.
+                        .DataValueField("LoggerID") //Specifies which property of the Product to be used by the dropdownlist as a value.
+                        .HtmlAttributes(new { style = "width:300px" })
+                        .OptionLabel("Logger")
+                        .DataSource(source =>
+                        {
+                            source.Read(read =>
+                            {
+                                read.Action("GetLogger", "Dashboard")//Set the Action and Controller name
+                               .Data("filterLogger");
+                            })
+                            .ServerFiltering(true); //If true the DataSource will not filter the data on the client.
+                        })
+                        .Enable(false)
+                        .AutoBind(false)
+
+                        .CascadeFrom("ZoneDropDownList")
+                                        .Events(e =>
+                                        {
+                                            e.Change("onChange").DataBound("onDatabound");
+                                        })
+
+                )
+
+
+            </p>
+
+
+            @*<input type="button" class="k-button k-primary" value="Filter" onclick="location.href='@Url.Action("FilterButton", "Dashboard")'" />*@
+
+        </div>
+
+        <div id="grid" class="grid">
+
+            @(Html.Kendo().Grid(Model).Name("Dashboars")
+
+    .DataSource(ds => ds.Ajax()
+                .Model(c =>
+                {
+                    c.Id("IDLogger");
+                    c.Field("IDAlarm", typeof(int));
+                    c.Field("SitesName", typeof(string));
+                    c.Field("ZoneName", typeof(string));
+                    c.Field("ZoneID", typeof(int));
+                    c.Field("LoggerSMS", typeof(string));
+                    c.Field("SerialNumber", typeof(string));
+                    c.Field("LoggerType", typeof(string));
+                    c.Field("AlarmType", typeof(string));
+                    c.Field("DateAlarm", typeof(DateTime));
+                    c.Field("AlarmPoint", typeof(string));
+                    c.Field("LoggerNow", typeof(string));
+
+                })
+                .Read(r => r.Action("Read", "Dashboard"))
+                .Create(u => u.Action("Create", "Home"))
+
+
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound("IDAlarm").Title("ID Alarm").Visible(false);
+                    columns.Bound("SitesName").Title("Sites").Width("");
+                    columns.Bound("ZoneName").Title("Zone").Width("");
+                    columns.Bound("LoggerSMS").Title("Logger SMS").Width("");
+                    columns.Bound("SerialNumber").Title("Serial Number").Width("");
+                    columns.Bound("LoggerType").Title("Logger Type").Width("");
+                    columns.Bound("AlarmType").Title("Alarm Type").Width("");
+                    columns.Bound("DateAlarm").Title("Date Alarm").Width("");
+                    columns.Bound("AlarmPoint").Title("Row No").Template(@<text></text>).ClientTemplate("<span id='sparkline'  style='line-height: 60px ;line-width: 100px'></span>").HtmlAttributes("").Width(120).EditorTemplateName("GetYesNoValues");
+
+
+                    columns.Bound("LoggerNow").Title("Logger Now").Template(@<text></text>).ClientTemplate("<span id='temp-range'  style='line-height: 60px ;'></span>").HtmlAttributes("").Width(120);
+
+
+                    columns.Command(command =>
+                    {
+                        command.Custom("View").Click("ViewDetail");
+                    });
+                } )
+                .Editable(editable => editable.TemplateName("ProductItem").Mode(GridEditMode.PopUp))
+                .Sortable(sortable => sortable.AllowUnsort(false))
+                .Filterable()
+                .Pageable()
+                .Events(events => events.DataBound("onDatabound"))
+
+
+
+
+
+
+
+
+            )
+
+
+
+
+        </div>
+
+        <script type="text/javascript">
+            var detailsTemplate = kendo.template($("#template").html());
+
+            $(document).ready(function () {
+                var zones = $("#ZoneDropDownList").data("kendoDropDownList");
+                logger = $("#LoggerDropDownList").data("kendoDropDownList");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            });
+
+
+            function onDatabound() {
+
+                $("#sparkline").kendoSparkline({
+                    field: "Wind",
+                    refresh: true,
+
+                    series: [{
+                        name: "C1Pressure",
+                        aggregate: "sum",
+                        data: [35.7, 26.7, 40, 23.5, 26.6, 24.8, 24.1, 20.1, 14.1, 8.6, 15.5, 13.5, 0.7, 10.8, 15.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 27.5],
+
+                    }, {
+                        name: 'C2flow',
+                        data: [48.9, 54.8, 65.7, 69.3, 74.0, 66.0, 68.8, 69.1, 50.1, 64.1, 66.6, 77.5],
+                        tooltip: {
+                            format: "{0}M"
+                        }
+
+
+                    },
+                    {
+                        name: 'C3Pressure',
+                        data: internetUsers,
+
+
+
+                    },
+
+
+
+                    ],
+                    categoryAxis: {
+                        field: "Pressure"
+                    }
+
+
+                });
+
+                $("#temp-range").kendoSparkline({
+                    type: "bullet",
+                    refresh: true,
+                    data: [21, 23],
+
+                    refresh: true,
+                    valueAxis: {
+                        min: 0,
+                        max: 30,
+                        minorTicks: {
+                            visible: false
+                        },
+                        plotBands: [{
+                            from: 0, to: 15, color: "#ffffff", opacity: 0.15
+                        }, {
+                            from: 15, to: 22, color: "#ffffff", opacity: 0.30
+                        }, {
+                            from: 22, to: 30, color: "#ffffff", opacity: 0.65
+                        }],
+
+                        majorGridLines: {
+                            visible: false
+                        }
+
+                    },
+                    tooltip: {
+                        visible: true
+                    }
+                });
+
+
+
+
+
+            }
+
+            function onChange1() {
+
+
+                var color = $("#color").data("kendoDropDownList");
+
+                if (color.value() == 1) {
+
+                    $("#sparkline").kendoSparkline({
+
+                        field: "Wind",
+
+                        refresh: true,
+
+
+
+                        series: [{
+                            name: "C1Pressure",
+                            aggregate: "sum",
+                            data: [35.7, 26.7, 40, 23.5, 26.6, 24.8, 24.1, 20.1, 14.1, 8.6, 15.5, 13.5, 0.7, 10.8, 15.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 27.5],
+
+                            tooltip: {
+
+                                format: "{0}M"
+
+                            }
+
+
+
+
+
+                        },
+
+
+
+
+
+
+
+
+
+                        ],
+
+                        categoryAxis: {
+
+                            field: "Pressure"
+
+                        }
+
+
+
+
+
+                    });
+
+
+
+                }
+
+
+
+                if (color.value() == 2) {
+
+                    $("#sparkline").kendoSparkline({
+
+                        field: "Wind",
+
+                        refresh: true,
+
+
+
+                        series: [{
+
+                            name: 'C2flow',
+
+                            data: [48.9, 54.8, 65.7, 69.3, 74.0, 66.0, 68.8, 69.1, 50.1, 64.1, 66.6, 77.5],
+
+                            tooltip: {
+
+                                format: "{0}M"
+
+                            }
+
+
+
+
+
+                        },
+
+
+
+
+
+
+
+
+
+                        ],
+
+                        categoryAxis: {
+
+                            field: "Pressure"
+
+                        }
+
+
+
+
+
+                    });
+
+
+
+                }
+
+
+                if (color.value() == 3) {
+
+                    $("#sparkline").kendoSparkline({
+
+                        type: "line",
+
+                        refresh: true,
+                        theme: "blueopal",
+
+
+
+
+                        series: [{
+
+                            name: 'C3Pressure',
+
+                            data: [{ name: "C3pressure", value: 30 },
+        { name: "C3Pressure", value: 80 }, { name: "C3Pressure", value: 18 },
+        { name: "C3Pressure", value: 15 }, { name: "C3Pressure", value: 45 },
+        { name: "C3Pressure", value: 63 }, { name: "C3Pressure", value: 70 },
+        { name: "C3Pressure", value: 12 }, { name: "C3Pressure", value: 30 },
+        { name: "C3Pressure", value: 8 }],
+
+
+                            tooltip: {
+
+                                format: "{0}M"
+
+                            },
+                            aggregate: [
+        { field: "value", aggregate: "sum" }, {
+            name: 'CP',
+            data: [{ name: "CP", value:40},
+        { name: "CP", value: 40 }, { name: "CP", value: 40 },
+        { name: "CP", value: 40 }, { name: "CP", value: 40 },
+        { name: "CP", value: 40 }, { name: "CP", value: 40 },
+        { name: "CP", value: 40 }, { name: "CP", value: 40 },
+        { name: "CP", value: 40 }],
+            tooltip: {
+                format: "{0}M"
+            }
+
+
+        }
+
+
+
+
+
+                            ]
+
+
+
+
+
+                        },
+
+
+
+
+
+
+
+
+
+                        ],
+
+                        categoryAxis: {
+
+
+                            categories: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013]
+
+                        },
+                        valueAxis: {
+                            min: 0,
+                            max: 100,
+                            plotBands: [{
+                                from: 0,
+                                to: 60,
+                                color: "#f99"
+                            }]
+
+
+                        },
+
+
+
+
+
+                    });
+
+
+
+                }
+
+
+
+
+
+
+            }
+
+            function onChange() {
+                applyFilter("IDLogger", $("#LoggerDropDownList").val());
+
+                var color = $("#color").data("kendoDropDownList");
+                var selectedItem = color.dataItem(selectedRows[0]);
+
+                alert(color.value());
+
+
+
+
+
+
+
+
+
+            }
+            function onChangeZone() {
+                applyFilter("ZoneID", $("#ZoneDropDownList").val());
+            }
+
+
+            function filterLogger() {
+                return {
+                    ZoneDropDownList: $("#ZoneDropDownList").val()
+                };
+            }
+
+
+
+            function ViewDetail(e) {
+                e.preventDefault();
+                var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                var stockReceiptId = dataItem.IDAlarm;
+                window.location.href = "@Url.Action("Detail", "Dashboard")?ID=" + stockReceiptId;
+
+            }
+
+
+
+
+            function applyFilter(filterField, filterValue) {
+
+                // get the kendoGrid element.
+                var gridData = $("#Dashboars").data("kendoGrid");
+
+                // get currently applied filters from the Grid.
+                var currFilterObj = gridData.dataSource.filter();
+
+                var currentFilters = currFilterObj ? currFilterObj.filters : [];
+
+                // iterate over current filters array. if a filter for "filterField" is already
+                // defined, remove it from the array
+                // once an entry is removed, we stop looking at the rest of the array.
+                if (currentFilters && currentFilters.length > 0) {
+                    for (var i = 0; i < currentFilters.length; i++) {
+                        if (currentFilters[i].field == filterField) {
+                            currentFilters.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+
+                // if "filterValue" is "0", meaning "-- select --" option is selected, we don't
+                // do any further processing. That will be equivalent of removing the filter.
+                // if a filterValue is selected, we add a new object to the currentFilters array.
+                if (filterValue != "") {
+                    currentFilters.push({
+                        field: filterField,
+                        operator: "eq",
+                        value: filterValue
+                    });
+                }
+
+                // finally, the currentFilters array is applied back to the Grid, using "and" logic.
+                gridData.dataSource.filter({
+                    logic: "and",
+                    filters: currentFilters
+                });
+
+                var internetUsers = [{
+                    "country": "United States",
+                    "year": "2005",
+                    "value": 67.96
+                }, {
+                    "country": "United States",
+                    "year": "2006",
+                    "value": 68.93
+                }];
+
+                $("#sparkline").kendoSparkline({
+                    field: "Wind",
+
+                    series: [{
+                        name: "C1Pressure",
+                        data: [35.7, 26.7, 40, 23.5, 26.6, 24.8, 24.1, 20.1, 14.1, 8.6, 15.5, 13.5, 0.7, 10.8, 15.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 27.5],
+
+                    }, {
+                        name: 'C2flow',
+                        data: [48.9, 54.8, 65.7, 69.3, 74.0, 66.0, 68.8, 69.1, 50.1, 64.1, 66.6, 77.5],
+                        tooltip: {
+                            format: "{0}M"
+                        }
+
+
+                    },
+                    {
+                        name: 'C3Pressure',
+                        data: internetUsers,
+
+
+
+                    },
+
+
+
+                    ],
+                    categoryAxis: {
+                        field: "Pressure"
+                    }
+
+
+                });
+
+
+                $("#temp-range").kendoSparkline({
+                    type: "bullet",
+                    data: [20, 23],
+                    chartArea: {
+                        background: "#eceef0",
+                        margin: 0, padding: 0, height: (screen.height * 0.05), width: (screen.width * 0.08)
+                       
+                       
+                    },  
+                    plotArea: {
+                        background: "#c0c0c0",
+                        margin: 14, padding: 14, height: (screen.height * 0.08), width: (screen.width * 0.04)
+                    },
+                    
+                    refresh: true,
+                    valueAxis: {
+                        min: 0,
+                        max: 30,
+                        plotBands: [{
+                            from: 0, to: 15, color: "#787878", opacity: .15
+                        }, {
+                            from: 15, to: 22, color: "#787878", opacity: .50
+                        }, {
+                            from: 22, to: 30, color: "#787878", opacity: .95
+                        }],
+                        majorGridLines: {
+                            visible: false
+                        }
+                    },
+                    tooltip: {
+                        visible: true,
+                        format: "{0}M",
+                        template: "Maximum: #= value.target # <br /> Average: #= value.current #"
+                    }
+                });
+
+                $("#chart-mmHg").kendoChart({
+                    legend: {
+                        visible: false
+                    },
+                    series: [{
+                        type: "bullet",
+                        data: [[750, 762.5]]
+                    }],
+                    chartArea: {
+                        margin: {
+                            left: 0
+                        }
+                    },
+                    categoryAxis: {
+                        majorGridLines: {
+                            visible: false
+                        },
+                        majorTicks: {
+                            visible: false
+                        }
+                    },
+                    valueAxis: [{
+                        plotBands: [{
+                            from: 715, to: 752, color: "#yellow", opacity: .6
+                        }, {
+                            from: 752, to: 772, color: "#green", opacity: .3
+                        }],
+                        majorGridLines: {
+                            visible: true
+                        },
+                        min: 715,
+                        max: 795,
+                        minorTicks: {
+                            visible: true
+                        }
+                    }],
+                    tooltip: {
+                        visible: true,
+                        template: "Maximum: #= value.target # <br /> Average: #= value.current #"
+                    }
+                });
+
+
+                $("#chart-temp").kendoSparkline({
+                    legend: {
+                        visible: true
+                    },
+                    series: [{
+                        type: "bullet",
+                        data: [[25, 22]]
+                    }],
+                    categoryAxis: {
+                        majorGridLines: {
+                            visible: false
+                        },
+                        majorTicks: {
+                            visible: true
+                        }
+                    },
+                    valueAxis: [{
+                        plotBands: [{
+                            from: 0, to: 10, color: "yellow", opacity: .3
+                        }, {
+                            from: 10, to: 20, color: "green", opacity: .3
+                        }, {
+                            from: 20, to: 30, color: "blac", opacity: .3
+                        }],
+                        majorGridLines: {
+                            visible: false
+                        },
+                        min: 0,
+                        max: 30,
+                        minorTicks: {
+                            visible: true
+                        }
+                    }],
+                    tooltip: {
+                        visible: true,
+                        template: "Maximum: #= value.target # <br /> Average: #= value.current #"
+                    }
+                });
+
+
+                $("#chart-hum").kendoSparkline({
+                    legend: {
+                        visible: false
+                    },
+                    series: [{
+                        type: "bullet",
+                        data: [[45, 60]]
+                    }],
+                    categoryAxis: {
+                        majorGridLines: {
+                            visible: true
+                        },
+                        majorTicks: {
+                            visible: true
+                        }
+                    },
+                    valueAxis: [{
+                        plotBands: [{
+                            from: 0, to: 33, color: "#c6f4be", opacity: 0.6
+                        }, {
+                            from: 33, to: 66, color: "#b5cdee", opacity: 1
+                        }],
+                        majorGridLines: {
+                            visible: false
+                        },
+                        min: 0,
+                        max: 100,
+                        minorTicks: {
+                            visible: true
+                        }
+                    }],
+                    tooltip: {
+                        visible: true,
+                        template: "Maximum: #= value.target # <br /> Average: #= value.current #"
+                    }
+                });
+
+
+
+
+
+                var filterMenu = _grid.thead.find("th:not(.k-hierarchy-cell,.k-group-cell):last").data("kendoFilterMenu");
+
+                filterMenu.form.find("div.k-filter-help-text").text("Select an item from the list:");
+                filterMenu.form.find("span.k-dropdown:first").css("display", "none");
+
+                // Change the text field to a dropdownlist in the Role filter menu.
+                filterMenu.form.find(".k-textbox:first")
+                    .removeClass("k-textbox")
+                    .kendoDropDownList({
+                        dataSource: new kendo.data.DataSource({
+                            data: [
+                                { title: "Software Engineer" },
+                                { title: "Quality Assurance Engineer" },
+                                { title: "Team Lead" }
+                            ]
+                        }),
+                        dataTextField: "title",
+                        dataValueField: "title"
+                    });
+
+
+
+
+
+
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+        </script>
+
+
+
+
+    </div>
+
+
