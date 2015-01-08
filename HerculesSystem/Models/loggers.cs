@@ -36,6 +36,8 @@ namespace HerculesSystem.Models
         public string LastMessageType { get; set; }
         public Nullable<int> CallFrequency { get; set; }
         public int CompanyID { get; set; }
+        public Nullable<System.DateTime> CreationDate { get; set; }
+        public Nullable<bool> LoggerStatus { get; set; }
     
         public virtual company company { get; set; }
     }

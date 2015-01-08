@@ -8,12 +8,14 @@
         <EntityTypeShape EntityType="hercules_dbModel.zone" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hercules_dbModel.sites" Width="1.5" PointX="3.75" PointY="0.875" />
         <AssociationConnector Association="hercules_dbModel.FK_sites_zone" />
-        <EntityTypeShape EntityType="hercules_dbModel.company" Width="1.5" PointX="6.375" PointY="2.875" />
-        <EntityTypeShape EntityType="hercules_dbModel.loggers" Width="1.5" PointX="8.625" PointY="1.125" />
+        <EntityTypeShape EntityType="hercules_dbModel.company" Width="1.5" PointX="5.625" PointY="1.75" />
+        <EntityTypeShape EntityType="hercules_dbModel.loggers" Width="1.5" PointX="7.375" PointY="0.875" />
         <AssociationConnector Association="hercules_dbModel.FK_loggers_company" />
-        <EntityTypeShape EntityType="hercules_dbModel.alarms" Width="1.5" PointX="3" PointY="6.875" />
-        <EntityTypeShape EntityType="hercules_dbModel.alarmTypes" Width="1.5" PointX="0.75" PointY="7" />
+        <EntityTypeShape EntityType="hercules_dbModel.alarms" Width="1.5" PointX="4.875" PointY="5.375" />
+        <EntityTypeShape EntityType="hercules_dbModel.alarmTypes" Width="1.5" PointX="2.625" PointY="5.625" />
         <AssociationConnector Association="hercules_dbModel.FK_alarms_messages" />
+        <EntityTypeShape EntityType="hercules_dbModel.users" Width="1.5" PointX="8.625" PointY="7.75" />
+        <AssociationConnector Association="hercules_dbModel.FK_users_company" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

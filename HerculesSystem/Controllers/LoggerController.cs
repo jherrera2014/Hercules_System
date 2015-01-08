@@ -17,16 +17,12 @@ namespace HerculesSystem.Controllers
        
         public ActionResult ListLogger()
         {
-            
-
             return View();
         }
 
 
         public ActionResult Loading()
         {
-
-
             return View();
         }
 
@@ -57,50 +53,123 @@ namespace HerculesSystem.Controllers
 
 
 
-          private IEnumerable<dynamic> GetData()
+        private IEnumerable<dynamic> GetData()
         {
-            var db = new hercules_dbEntities();
-            var zone = new ZoneLogger();
-            var result = from a in db.loggers
-                         join b in db.sites
-                             on new { emp = a.ID } equals new { emp = b.LoggerID }
-
-                         select new
-                            {
-                                ID = a.ID,
-                                LoggerSMSNumber = a.LoggerSMSNumber,
-                                BatteryLevel = a.BatteryLevel,
-                                LastCallIn = a.LastCallIn,
-                                LoggerSerialNumber = a.LoggerSerialNumber,
-                                LoggerType = a.LoggerType,
-                                SignalLevel = a.SignalLevel,
-                                Adress = b.Address,
-                                LoggerID = a.ID
-                            };
-
-            return result ;
+        var db = new hercules_dbEntities();
+        var zone = new ZoneLogger();
+        var result = from a in db.loggers
+                        join b in db.sites
+                            on a.ID equals b.LoggerID into abc from ab in abc.DefaultIfEmpty()
+                        join c in db.users
+                            on a.OwnerAccount equals c.Id
+                         //join e in db.zones2
+                         //    on new { emp = ab.ZoneID } equals new { emp = e.ID }
+                       
+                        select new
+                        {
+                            ID = a.ID,
+                            LoggerSMSNumber = a.LoggerSMSNumber,
+                            BatteryLevel = a.BatteryLevel,
+                            LastCallIn = a.LastCallIn,
+                            LoggerSerialNumber = a.LoggerSerialNumber,
+                            LoggerType = a.LoggerType,
+                            SignalLevel = a.SignalLevel,
+                            Adress = ab.Address,
+                            Owner = c.FirstName +" "+ c.LastName,
+                            a.LoggerStatus,
+                            a.CreationDate
+                            //ZoneID = e.ID,
+                            //ZoneName = e.ZoneName
+                        };
+        result = result.Where(u => u.LoggerStatus == true);
+        result = result.OrderBy(u => u.CreationDate);
+        return result ;
         }
 
-          public ActionResult Read([DataSourceRequest] DataSourceRequest request)
-          {
-              return GetView(request);
-          }
+        public ActionResult Read([DataSourceRequest] DataSourceRequest request)
+        {
+            return GetView(request);
+        }
 
-          private JsonResult GetView(DataSourceRequest request)
-          {
-              return Json(GetData().ToDataSourceResult(request));
-          }
+        private JsonResult GetView(DataSourceRequest request)
+        {
+            return Json(GetData().ToDataSourceResult(request));
+        }
 
-          [HttpPost]
-          public ActionResult RefreshSelfUpdatingPartial()
-          {
+        [HttpPost]
+        public ActionResult RefreshSelfUpdatingPartial()
+        {
 
-              // Setting the Models Content
-              // ...
+            // Setting the Models Content
+            // ...
 
-              return PartialView("_SelfUpdatingPartial");
-          }
+            return PartialView("_SelfUpdatingPartial");
+        }
+
+        public ActionResult Create()
+        {
+            //var log =  logger();
+            return View();
+        }
+
        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateLogger(logger d)
+        {
+            using (var northwind = new hercules_dbEntities())
+            {
+                //Get max ID table loggers
+                var crum = northwind.loggers.Max(sd => sd.ID);
+
+                int current_id = Convert.ToInt32(crum.ToString());
+
+                // Create a new Product entity and set its properties from the posted ProductViewModel
+                var entity = new loggers
+                {
+
+                    ID = current_id +1,
+                    LoggerSMSNumber = d.LoggerSMSNumber,
+                    LoggerSerialNumber = d.LoggerSerialNumber,
+                    OwnerAccount = d.OwnerAccount,
+                    Notes = d.Notes,
+                    CreationDate = DateTime.Now,
+                    CompanyID = Convert.ToInt16(Session["CompanyID"].ToString()),
+                    LoggerStatus = true
+
+                };
+                // Add the entity
+                northwind.loggers.Add(entity);
+                // Insert the entity in the database
+                northwind.SaveChanges();
+                // Get the ProductID generated by the database
+               
+            }
+
+            return RedirectToAction("ListLogger");
+           // return View();
+           
+        }
+
+        public ActionResult Delete([DataSourceRequest] DataSourceRequest request,loggers log)
+        {
+            using (var db = new hercules_dbEntities())
+            {
+                   var result = from u in db.loggers where (u.ID == log.ID) select u;
+                    if (result.Count() != 0)
+                    {
+                        var dbuser = result.First();
+                        dbuser.LoggerStatus = false;
+     
+                        db.SaveChanges();
+                    }
+            }
+
+            return Json(new[] { log }.ToDataSourceResult(request, ModelState));
+        }
+
+         
+        
     }
   
 }

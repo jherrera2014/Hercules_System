@@ -59,6 +59,8 @@
           <Property Name="LastMessageType" Type="varchar" MaxLength="10" />
           <Property Name="CallFrequency" Type="int" />
           <Property Name="CompanyID" Type="int" Nullable="false" />
+          <Property Name="CreationDate" Type="datetime" />
+          <Property Name="LoggerStatus" Type="bit" />
         </EntityType>
         <EntityType Name="sites">
           <Key>
@@ -72,7 +74,7 @@
           <Property Name="LatEast" Type="varchar" MaxLength="20" />
           <Property Name="LongNorth" Type="varchar" MaxLength="20" />
           <Property Name="HeightAOD" Type="varchar" MaxLength="20" />
-          <Property Name="LoggerID" Type="int" Nullable="false" />
+          <Property Name="LoggerID" Type="int" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="StartDate" Type="datetime" />
@@ -80,6 +82,29 @@
           <Property Name="Notes" Type="varchar(max)" />
           <Property Name="quietdays" Type="int" />
           <Property Name="ZoneID" Type="int" Nullable="false" />
+          <Property Name="CompanyID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="50" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="Username" Type="varchar" MaxLength="50" />
+          <Property Name="Password" Type="varchar" MaxLength="200" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="Mobile" Type="varchar" MaxLength="50" />
+          <Property Name="ParentAccount" Type="int" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="LastLogin" Type="datetime" />
+          <Property Name="LoggedIn" Type="bit" />
+          <Property Name="Photo" Type="varchar" MaxLength="50" />
+          <Property Name="Role" Type="int" />
+          <Property Name="RecieveNotifications" Type="bit" />
+          <Property Name="AlarmForwardingMethod" Type="int" />
+          <Property Name="CompanyID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="zone">
           <Key>
@@ -126,12 +151,25 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_users_company">
+          <End Role="company" Type="Self.company" Multiplicity="1" />
+          <End Role="users" Type="Self.users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="company">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="hercules_dbModelStoreContainer">
           <EntitySet Name="alarms" EntityType="Self.alarms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="alarmTypes" EntityType="Self.alarmTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="company" EntityType="Self.company" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="loggers" EntityType="Self.loggers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sites" EntityType="Self.sites" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="zone" EntityType="Self.zone" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_alarms_messages" Association="Self.FK_alarms_messages">
             <End Role="alarmTypes" EntitySet="alarmTypes" />
@@ -144,6 +182,10 @@
           <AssociationSet Name="FK_sites_zone" Association="Self.FK_sites_zone">
             <End Role="zone" EntitySet="zone" />
             <End Role="sites" EntitySet="sites" />
+          </AssociationSet>
+          <AssociationSet Name="FK_users_company" Association="Self.FK_users_company">
+            <End Role="company" EntitySet="company" />
+            <End Role="users" EntitySet="users" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -179,6 +221,11 @@
             <End Role="alarmTypes" EntitySet="alarmTypes" />
             <End Role="alarms" EntitySet="alarms" />
           </AssociationSet>
+          <EntitySet Name="users" EntityType="hercules_dbModel.users" />
+          <AssociationSet Name="FK_users_company" Association="hercules_dbModel.FK_users_company">
+            <End Role="company" EntitySet="company" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="sites">
           <Key>
@@ -192,7 +239,7 @@
           <Property Name="LatEast" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="LongNorth" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="HeightAOD" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="LoggerID" Type="Int32" Nullable="false" />
+          <Property Name="LoggerID" Type="Int32" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
           <Property Name="StartDate" Type="DateTime" Precision="3" />
@@ -201,6 +248,7 @@
           <Property Name="quietdays" Type="Int32" />
           <Property Name="ZoneID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="zone" Relationship="hercules_dbModel.FK_sites_zone" FromRole="sites" ToRole="zone" />
+          <Property Name="CompanyID" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="FK_sites_zone">
           <End Type="hercules_dbModel.zone" Role="zone" Multiplicity="1" />
@@ -223,6 +271,7 @@
           <Property Name="Date" Type="DateTime" Precision="3" />
           <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="loggers" Relationship="hercules_dbModel.FK_loggers_company" FromRole="company" ToRole="loggers" />
+          <NavigationProperty Name="users" Relationship="hercules_dbModel.FK_users_company" FromRole="company" ToRole="users" />
         </EntityType>
         <EntityType Name="loggers">
           <Key>
@@ -251,6 +300,8 @@
           <Property Name="CallFrequency" Type="Int32" />
           <Property Name="CompanyID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="company" Relationship="hercules_dbModel.FK_loggers_company" FromRole="loggers" ToRole="company" />
+          <Property Name="CreationDate" Type="DateTime" Precision="3" />
+          <Property Name="LoggerStatus" Type="Boolean" />
         </EntityType>
         <Association Name="FK_loggers_company">
           <End Type="hercules_dbModel.company" Role="company" Multiplicity="1" />
@@ -297,6 +348,41 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ParentAccount" Type="Int32" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="LastLogin" Type="DateTime" Precision="3" />
+          <Property Name="LoggedIn" Type="Boolean" />
+          <Property Name="Photo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Role" Type="Int32" />
+          <Property Name="RecieveNotifications" Type="Boolean" />
+          <Property Name="AlarmForwardingMethod" Type="Int32" />
+          <Property Name="CompanyID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="company" Relationship="hercules_dbModel.FK_users_company" FromRole="users" ToRole="company" />
+        </EntityType>
+        <Association Name="FK_users_company">
+          <End Type="hercules_dbModel.company" Role="company" Multiplicity="1" />
+          <End Type="hercules_dbModel.users" Role="users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="company">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -316,6 +402,7 @@
           <EntitySetMapping Name="sites">
             <EntityTypeMapping TypeName="hercules_dbModel.sites">
               <MappingFragment StoreEntitySet="sites">
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
                 <ScalarProperty Name="ZoneID" ColumnName="ZoneID" />
                 <ScalarProperty Name="quietdays" ColumnName="quietdays" />
                 <ScalarProperty Name="Notes" ColumnName="Notes" />
@@ -348,6 +435,8 @@
           <EntitySetMapping Name="loggers">
             <EntityTypeMapping TypeName="hercules_dbModel.loggers">
               <MappingFragment StoreEntitySet="loggers">
+                <ScalarProperty Name="LoggerStatus" ColumnName="LoggerStatus" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
                 <ScalarProperty Name="CallFrequency" ColumnName="CallFrequency" />
                 <ScalarProperty Name="LastMessageType" ColumnName="LastMessageType" />
@@ -391,6 +480,29 @@
                 <ScalarProperty Name="AlarmTypeCode" ColumnName="AlarmTypeCode" />
                 <ScalarProperty Name="AlarmType" ColumnName="AlarmType" />
                 <ScalarProperty Name="AlarmTypeId" ColumnName="AlarmTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="hercules_dbModel.users">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="AlarmForwardingMethod" ColumnName="AlarmForwardingMethod" />
+                <ScalarProperty Name="RecieveNotifications" ColumnName="RecieveNotifications" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="LoggedIn" ColumnName="LoggedIn" />
+                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="ParentAccount" ColumnName="ParentAccount" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -17,6 +17,7 @@ namespace HerculesSystem.Models
         public company()
         {
             this.loggers = new HashSet<loggers>();
+            this.users = new HashSet<users>();
         }
     
         public int ID { get; set; }
@@ -25,5 +26,6 @@ namespace HerculesSystem.Models
         public string Description { get; set; }
     
         public virtual ICollection<loggers> loggers { get; set; }
+        public virtual ICollection<users> users { get; set; }
     }
 }

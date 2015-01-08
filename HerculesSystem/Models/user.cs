@@ -20,7 +20,6 @@ namespace Hercules.Models
         public string LastName { get; set; }
 
         [StringLength(50)]
-
         [Required(ErrorMessage = "Please Provide Username", AllowEmptyStrings = false)]
         public string Username { get; set; }
 

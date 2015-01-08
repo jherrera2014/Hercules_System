@@ -1,0 +1,205 @@
+﻿@model HerculesSystem.Models.logger
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm("CreateLogger","Logger"))
+{ 
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+     
+    <div>
+        <p>
+            @Html.TextBoxFor(model => model.LoggerSMSNumber, new { @class = "form-control", placeholder = "SMS", style = "width:170px" })
+            @Html.ValidationMessageFor(model => model.LoggerSMSNumber)
+        </p>
+
+        <p>
+            @Html.TextBoxFor(model => model.LoggerSerialNumber, new { @class = "form-control", placeholder = "Serial Number", style = "width:170px" })
+            @Html.ValidationMessageFor(model => model.LoggerSerialNumber)
+        </p>
+        <p>
+            
+            @(Html.Kendo().DropDownListFor(model => model.OwnerAccount)
+                .DataTextField("UserName") //Specifies which property of the Product to be used by the dropdownlist as a text.
+                .DataValueField("ID") //Specifies which property of the Product to be used by the dropdownlist as a value.
+                .HtmlAttributes(new { style = "width:170px" })
+                .OptionLabel("Owner")
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("GetUser", "Helper"); //Set the Action and Controller name
+                    }); //If true the DataSource will not filter the data on the client.
+                })
+            )
+
+        </p>
+       
+        <p>
+            @(Html.CheckBoxFor(model => model.WithSite)
+
+            )
+            @(Html.Label("Con Sites"))
+        </p>
+        <div id="ValidateMyContents">
+            <p>
+              @(Html.Kendo().DropDownListFor(m => m.SitedID)
+              .Name("SitedID")
+              .Enable(false)
+              .DataTextField("Adress")
+              .DataValueField("ID")
+              .DataSource(source =>
+                  {
+                      source.Read(read =>
+                      {
+                          read.Action("GetSites", "Helper"); //Set the Action and Controller name
+                      }); //If true the DataSource will not filter the data on the client.
+                  })
+
+                )
+                <script>
+                    $('.SitedID').kendoDropDownList();
+                </script>
+
+
+            </p>
+            <span id="status"></span>
+        </div>
+        <p>
+            @Html.TextAreaFor(model => model.Notes, new { @class = "form-control", placeholder = "Notes", style = "width:175px" })
+            @Html.ValidationMessageFor(model => model.Notes)
+
+        </p>
+     
+
+        </div>
+    
+    <input type="submit" value="Create" class="btn btn-default" width="170" id="btnCreate" />
+
+
+    @*<p>
+            @(Html.Kendo().DropDownList()
+            .Name("CmbLoggerType")
+
+            .OptionLabel("Logger Type")
+            .DataTextField("Text")
+            .DataValueField("Value")
+            .BindTo(new List<SelectListItem>() {
+                new SelectListItem() {
+                Text = "MultilogLX", Value = "1"
+                },
+                new SelectListItem() {
+                Text = "FW-102-002U", Value = "2"
+                },
+                new SelectListItem() {
+                Text = "Permalog", Value = "3"
+                }
+            })
+                )
+        </p>*@
+
+            @*<p>
+                @(Html.Kendo().DateTimePicker()
+              .Name("DateStart")
+              .Value(DateTime.Now)
+              .HtmlAttributes(new { style = "width:175px" })
+                )
+            </p>
+
+            <p>
+                @(Html.Kendo().DateTimePicker()
+              .Name("DateEnd")
+              .Value(DateTime.Now)
+              .HtmlAttributes(new { style = "width:175px" })
+                )
+            </p>
+
+            <p>
+                @(Html.Kendo().ComboBox()
+          .Name("CmbNetwork")
+          .Filter("contains")
+          .Placeholder("Owner")
+          .DataTextField("Text")
+          .DataValueField("Value")
+          .BindTo(new List<SelectListItem>() {
+              new SelectListItem() {
+                Text = "O2", Value = "1"
+              },
+              new SelectListItem() {
+                Text = "Orange", Value = "2"
+              },
+              new SelectListItem() {
+                Text = "T-Mobile", Value = "3"
+              }
+          })
+
+          .Suggest(true)
+                )
+            </p>
+
+            <p>
+                @(Html.Kendo().AutoComplete()
+        .Name("TxtLAC")
+        .Placeholder("LAC")
+
+                )
+            </p>
+
+            <p>
+                @(Html.Kendo().AutoComplete()
+        .Name("TxtCellID")
+        .Placeholder("Cell ID")
+
+                )
+            </p>
+
+            <p>
+                @(Html.Kendo().AutoComplete()
+        .Name("TxtMastLat")
+        .Placeholder("Mast Lat")
+
+                )
+            </p>
+
+            <p>
+                @(Html.Kendo().AutoComplete()
+        .Name("TxtMastLong")
+        .Placeholder("Mast Long")
+                )
+            </p>
+
+            <p>
+                @(Html.Kendo().AutoComplete()
+        .Name("TxtNotes")
+        .Placeholder("Notes")
+                )
+            </p>*@
+    
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var site = $("#SitedID").data("kendoDropDownList");
+
+        $("#WithSite").change(function () {
+            var isChecked = $(this).is(':checked');
+            site.enable(isChecked);
+        });
+
+    });
+
+ </script>
+
+
+
+

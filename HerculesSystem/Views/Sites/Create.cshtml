@@ -1,0 +1,166 @@
+﻿@model HerculesSystem.Models.sites
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm("CreateSite","Sites"))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <p>
+        @Html.TextBoxFor(model => model.Address, new { @class = "form-control", placeholder = "Adress", style = "width:170px" })
+        @Html.ValidationMessageFor(model => model.Address)
+    </p>
+
+    <p>
+
+        @(Html.Kendo().DropDownListFor(model => model.OwnerAccount)
+                    .DataTextField("UserName") //Specifies which property of the Product to be used by the dropdownlist as a text.
+                    .DataValueField("ID") //Specifies which property of the Product to be used by the dropdownlist as a value.
+                    .HtmlAttributes(new { style = "width:170px" })
+                    .OptionLabel("Owner")
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetUser", "Helper"); //Set the Action and Controller name
+                        }); //If true the DataSource will not filter the data on the client.
+                    })
+        )
+
+    </p>
+
+    <p>
+        @(Html.Kendo().DropDownListFor(m => m.ZoneID)
+              .Name("ZoneID")
+              .DataTextField("ZoneName")
+              .DataValueField("ID")
+               .HtmlAttributes(new { style = "width:170px" })
+              .OptionLabel("Zone")
+              .DataSource(source =>
+                  {
+                      source.Read(read =>
+                      {
+                          read.Action("GetZone", "Helper"); //Set the Action and Controller name
+                      }); //If true the DataSource will not filter the data on the client.
+                  })
+        )
+
+    </p>
+    
+    <p>
+        @(Html.CheckBoxFor(model => model.WithLogger)
+
+        )
+        @(Html.Label("Asociar a Logger"))
+    </p>
+    
+    <p>
+        @(Html.Kendo().DropDownListFor(m => m.LoggerID)
+              .Name("LoggerID")
+              .Enable(false)
+              .DataTextField("LoggerSMS")
+              .DataValueField("ID")
+               .HtmlAttributes(new { style = "width:170px" })
+              .DataSource(source =>
+                  {
+                      source.Read(read =>
+                      {
+                          read.Action("GetOnlyLoggers", "Helper"); //Set the Action and Controller name
+                      }); //If true the DataSource will not filter the data on the client.
+                  })
+
+        )
+
+    </p>
+    
+    <p>
+
+        @Html.TextBoxFor(model => model.LatEast, new { @class = "form-control", placeholder = "Lat East", style = "width:170px" })
+        @Html.ValidationMessageFor(model => model.LatEast)
+    </p>
+    
+    <p>
+
+        @Html.TextBoxFor(model => model.LongNorth, new { @class = "form-control", placeholder = "Long North", style = "width:170px" })
+        @Html.ValidationMessageFor(model => model.LongNorth)
+    </p>
+    
+    <p>
+
+        @Html.TextBoxFor(model => model.HeightAOD, new { @class = "form-control", placeholder = "Height AOD", style = "width:170px" })
+        @Html.ValidationMessageFor(model => model.HeightAOD)
+    </p>
+
+
+    <p>
+        @Html.TextAreaFor(model => model.Notes, new { @class = "form-control", placeholder = "Notes", style = "width:170px" })
+        @Html.ValidationMessageFor(model => model.Notes)
+    </p>
+
+    <input type="submit" value="Create" class="btn btn-default" width="170" id="btnCreate" />
+}
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var site = $("#LoggerID").data("kendoDropDownList");
+
+        $("#WithLogger").change(function () {
+            var isChecked = $(this).is(':checked');
+            site.enable(isChecked);
+        });
+
+    });
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+@*<p>
+    @(Html.Kendo().DateTimePicker()
+              .Name("DateCreated")
+              .Value(DateTime.Now)
+              .HtmlAttributes(new { style = "width:175px" })
+    )
+</p>
+
+<p>
+    @(Html.Kendo().DateTimePicker()
+              .Name("DateUpdated")
+              .Value(DateTime.Now)
+              .HtmlAttributes(new { style = "width:175px" })
+    )
+</p>
+
+<p>
+    @(Html.Kendo().DateTimePicker()
+              .Name("DateStart")
+              .Value(DateTime.Now)
+              .HtmlAttributes(new { style = "width:175px" })
+    )
+</p>
+
+<p>
+    @(Html.Kendo().DateTimePicker()
+              .Name("DateEnd")
+              .Value(DateTime.Now)
+              .HtmlAttributes(new { style = "width:175px" })
+    )
+</p>*@
+
+
+
