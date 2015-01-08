@@ -2,15 +2,38 @@
 
 <html>
 
+<style scoped>
+    .k-button .k-image {
+        height: 16px;
+    }
+
+    .demo-section {
+        width: 500px;
+    }
+
+    .netherlandsFlag {
+        background-image: url("../content/shared/styles/flags.png");
+        background-position: 0 -64px;
+    }
+</style>
+
+
+
+<div id="latlong">
+    <p>Latitude: <input size="20" type="text" id="latbox" name="lat"></p>
+    <p>Longitude: <input size="20" type="text" id="lngbox" name="lng"></p>
+</div>
+<button type="button" id="imageButton">Ver Mapa</button>
+
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false" type="text/javascript"></script>
 
 <script language="javascript" type="text/javascript">
 
     $(document).ready(function () {
 
-        var zoom = 15;
+        var zoom = 10;
 
-
+       
 
 
 
@@ -24,13 +47,16 @@
 
         var image = "@Url.Content("~/Content/images/Pegasus1.png")";
         var image1 = "@Url.Content("~/Content/images/Limache1.png")";
+        var image2 = "@Url.Content("~/Content/images/Location.png")";
 
-
+        $("#imageButton").kendoButton({
+            imageUrl:image2
+        });
 
 
         var options = {
 
-            zoom: 15,
+            zoom: 10,
 
 
 
@@ -91,6 +117,7 @@
                         position: point,
 
                         map: googleMap,
+                        draggable: true,
 
                         icon: image,
 
@@ -123,8 +150,15 @@
 
 
 
+                    google.maps.event.addListener(googleMap, 'click', function (e) {
 
 
+                        document.getElementById("latbox").value = e.latLng.lat();
+                        document.getElementById("lngbox").value = e.latLng.lng();
+                        alert("Latitude: " + e.latLng.lat() + "\r\nLongitude: " + e.latLng.lng());
+                    });
+
+                   
 
 
 
@@ -158,11 +192,28 @@
 
     });
 
+    var button = document.getElementById('imageButton');
+
+    button.onclick = function () {
+        var div = document.getElementById('map');
+        if (div.style.display !== 'none') {
+            div.style.display = 'none';
+        }
+        else {
+            div.style.display = 'block';
+        }
+    };
+
+
+
 </script>
 
 
 
 <body>
+
+   
+
 
    
 

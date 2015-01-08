@@ -421,6 +421,39 @@ namespace Hercules.Controllers
 
         }
 
+
+
+        public ActionResult GetYesNoValues()
+        {
+            var list = new List<SelectListItem>() {
+                      new SelectListItem() {
+                          Text = "C1Pressure",
+                          Value = "1"
+                      },
+                      new SelectListItem() {
+                          Text = "C2Flow",
+                          Value = "2"
+                      },
+             new SelectListItem() {
+                          Text = "C3Pressure",
+                          Value = "3"
+                      }
+            
+            
+            
+            };
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
         public ActionResult List(string ID)
         {
 
@@ -616,7 +649,7 @@ namespace Hercules.Controllers
             var jointable = from a in db.loggers
 
                             join b in db.sites
-                                on new { emp = a.ID } equals new { emp = b.LoggerID }
+                                on new { emp = a.ID } equals new { emp = b.LoggerID}
                             select new
                             {
                                 ID = a.ID,

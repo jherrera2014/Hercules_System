@@ -347,6 +347,7 @@
     <Content Include="Content\images\hercules_logo2.png" />
     <Content Include="Content\images\hwm_logo.png" />
     <Content Include="Content\images\Limache1.png" />
+    <Content Include="Content\images\Location.png" />
     <Content Include="Content\images\Pegasus1.png" />
     <Content Include="Content\images\PistonFillerAnimationCVx200a.gif" />
     <Content Include="Content\kendo\2014.3.1119\Black\editor.png" />
@@ -689,7 +690,6 @@
     <Content Include="packages\EntityFramework.6.1.1\tools\EntityFramework.PowerShell.dll" />
     <Content Include="packages\EntityFramework.6.1.1\tools\EntityFramework.PowerShell.Utility.dll" />
     <Content Include="packages\EntityFramework.6.1.1\tools\migrate.exe" />
-    <Content Include="ClassDiagram1.cd" />
     <Content Include="Content\kendo\2014.3.1119\images\kendoui.ttf" />
     <Content Include="Content\kendo\2014.3.1119\images\kendoui.woff" />
     <EntityDeploy Include="Models\DBZone.edmx">
@@ -1565,6 +1565,7 @@
     <Content Include="Views\Dashboard\MapaAll.cshtml" />
     <Content Include="Views\Dashboard\MostarMapa.cshtml" />
     <Content Include="Views\Dashboard\SparkLine.cshtml" />
+    <Content Include="Views\Dashboard\GetYesNoValues.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
