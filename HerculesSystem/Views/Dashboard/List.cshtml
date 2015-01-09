@@ -224,7 +224,9 @@ width: 100px;
 
                 $("#sparkline").kendoSparkline({
                     field: "Wind",
+                    autoBind: true,
                     refresh: true,
+
 
                     series: [{
                         name: "C1Pressure",
@@ -257,6 +259,7 @@ width: 100px;
 
 
                 });
+            
 
                 $("#temp-range").kendoSparkline({
                     type: "bullet",
@@ -324,7 +327,15 @@ width: 100px;
 
 
 
-                        },
+                        }, {
+                            name: 'C2',
+                            data: [48.9, 54.8, 65.7, 69.3, 74.0, 66.0, 68.8, 69.1, 50.1, 64.1, 66.6, 77.5],
+                            tooltip: {
+                                format: "{0}M"
+                            }
+
+
+                        }
 
 
 
@@ -396,7 +407,7 @@ width: 100px;
 
                             field: "Pressure"
 
-                        }
+                        }, 
 
 
 
@@ -437,34 +448,29 @@ width: 100px;
 
                                 format: "{0}M"
 
+                            }, color: function (point) {
+                                if (point.value > 50) {
+                                    // Colorize matching points
+                                    return "#787878";
+                                }
+
+                                // Use default theme color
                             },
-                            aggregate: [
-        { field: "value", aggregate: "sum" }, {
-            name: 'CP',
-            data: [{ name: "CP", value:40},
-        { name: "CP", value: 40 }, { name: "CP", value: 40 },
-        { name: "CP", value: 40 }, { name: "CP", value: 40 },
-        { name: "CP", value: 40 }, { name: "CP", value: 40 },
-        { name: "CP", value: 40 }, { name: "CP", value: 40 },
-        { name: "CP", value: 40 }],
-            tooltip: {
-                format: "{0}M"
-            }
-
-
-        }
+                          
 
 
 
 
 
-                            ]
+                        }, {
+                            name: 'CP',
+                            data: [40, 40, 40, 40, 40, 40, 40,40, 40, 40, 40, 40],
+                            tooltip: {
+                                format: "{0}M"
+                            }
 
 
-
-
-
-                        },
+                        }
 
 
 
@@ -479,20 +485,20 @@ width: 100px;
                         categoryAxis: {
 
 
-                            categories: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013]
+                            categories: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013],
+                            
+                            notes: {
+                                icon: {
+                                    border: {
+                                        width: 2,
+                                        color: "red"
+                                    }
+                                },
+                                data: [{ value: 40 }]
+                            }
 
                         },
-                        valueAxis: {
-                            min: 0,
-                            max: 100,
-                            plotBands: [{
-                                from: 0,
-                                to: 60,
-                                color: "#f99"
-                            }]
-
-
-                        },
+                        
 
 
 
