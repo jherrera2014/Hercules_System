@@ -195,6 +195,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MapsController.cs" />
     <Compile Include="Controllers\SitesController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ZoneSitesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -631,6 +632,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\dnk_logo.jpg" />
+    <Content Include="images\hercules_logo.fw.png" />
+    <Content Include="images\hercules_logo.png" />
+    <Content Include="images\hercules_logo2.png" />
+    <Content Include="images\hwm_logo.png" />
+    <Content Include="images\nologofound.png" />
     <Content Include="Kendo.Mvc.dll" />
     <Content Include="obj\Debug\Hercules.csproj.FileListAbsolute.txt" />
     <Content Include="obj\Debug\Hercules.dll" />
@@ -1576,7 +1583,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="images\" />
+    <Folder Include="Views\Users\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

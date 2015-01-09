@@ -16,7 +16,16 @@ namespace HerculesSystem.Controllers
 
         public ActionResult Create()
         {
+            
             return View();
+        }
+
+        public ActionResult Ghaph()
+        {
+
+
+            return null;
+
         }
     }
 }

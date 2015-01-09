@@ -1,11 +1,3 @@
-c:\users\programacion\documents\visual studio 2013\Projects\HerculesSystem\HerculesSystem\bin\HerculesSystem.dll.config
-c:\users\programacion\documents\visual studio 2013\Projects\HerculesSystem\HerculesSystem\bin\HerculesSystem.dll
-c:\users\programacion\documents\visual studio 2013\Projects\HerculesSystem\HerculesSystem\bin\HerculesSystem.pdb
-c:\users\programacion\documents\visual studio 2013\Projects\HerculesSystem\HerculesSystem\obj\Debug\HerculesSystem.csprojResolveAssemblyReference.cache
-c:\users\programacion\documents\visual studio 2013\Projects\HerculesSystem\HerculesSystem\obj\Debug\HerculesSystem.dll
-c:\users\programacion\documents\visual studio 2013\Projects\HerculesSystem\HerculesSystem\obj\Debug\HerculesSystem.pdb
-c:\users\programacion\documents\visual studio 2013\Projects\HerculesSystem\HerculesSystem\obj\Debug\HerculesSystem.Properties.Resources.resources
-c:\users\programacion\documents\visual studio 2013\Projects\HerculesSystem\HerculesSystem\obj\Debug\HerculesSystem.csproj.GenerateResource.Cache
 C:\Users\Public\Documents\Hercules_System\HerculesSystem\obj\Debug\HerculesSystem.csprojResolveAssemblyReference.cache
 C:\Users\Public\Documents\Hercules_System\HerculesSystem\obj\Debug\HerculesSystem.Properties.Resources.resources
 C:\Users\Public\Documents\Hercules_System\HerculesSystem\obj\Debug\HerculesSystem.csproj.GenerateResource.Cache
@@ -82,3 +74,11 @@ C:\Users\Public\Documents\Documents\Hercules_System\HerculesSystem\obj\Debug\Her
 C:\Users\Public\Documents\Documents\Hercules_System\HerculesSystem\obj\Debug\HerculesSystem.csproj.GenerateResource.Cache
 C:\Users\Public\Documents\Documents\Hercules_System\HerculesSystem\obj\Debug\HerculesSystem.dll
 C:\Users\Public\Documents\Documents\Hercules_System\HerculesSystem\obj\Debug\HerculesSystem.pdb
+C:\Users\Programacion\Documents\Visual Studio 2013\Projects\HerculesSystem\HerculesSystem\bin\HerculesSystem.dll.config
+C:\Users\Programacion\Documents\Visual Studio 2013\Projects\HerculesSystem\HerculesSystem\bin\HerculesSystem.dll
+C:\Users\Programacion\Documents\Visual Studio 2013\Projects\HerculesSystem\HerculesSystem\bin\HerculesSystem.pdb
+C:\Users\Programacion\Documents\Visual Studio 2013\Projects\HerculesSystem\HerculesSystem\obj\Debug\HerculesSystem.csprojResolveAssemblyReference.cache
+C:\Users\Programacion\Documents\Visual Studio 2013\Projects\HerculesSystem\HerculesSystem\obj\Debug\HerculesSystem.Properties.Resources.resources
+C:\Users\Programacion\Documents\Visual Studio 2013\Projects\HerculesSystem\HerculesSystem\obj\Debug\HerculesSystem.csproj.GenerateResource.Cache
+C:\Users\Programacion\Documents\Visual Studio 2013\Projects\HerculesSystem\HerculesSystem\obj\Debug\HerculesSystem.dll
+C:\Users\Programacion\Documents\Visual Studio 2013\Projects\HerculesSystem\HerculesSystem\obj\Debug\HerculesSystem.pdb
