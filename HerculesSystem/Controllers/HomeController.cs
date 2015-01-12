@@ -22,7 +22,16 @@ namespace Hercules.Controllers
         public ActionResult Login()
         {
             Session.Clear();
+
+            FormsAuthentication.SetAuthCookie(null,false);
+            Session.Abandon();
+            //HttpCookie cookie = Request.Cookies["aLog"];
+            //cookie.Expires = DateTime.Now.AddYears(1);
+            //Response.AppendCookie(cookie);
+            //Response.Cookies.Clear();
+            //FormsAuthentication.RedirectToLoginPage();
             FormsAuthentication.SignOut();
+            
             return View();
         }
 

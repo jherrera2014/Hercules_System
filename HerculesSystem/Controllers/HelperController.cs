@@ -31,13 +31,15 @@ namespace Hercules.Controllers
 
             var jointable = from a in db.loggers
 
-                            join b in db.sites
+                            join b in db.siteloggersassociations
                                 on a.ID  equals b.LoggerID
+                            join c in db.sites
+                                on b.SiteID equals c.ID
                             select new
                             {
                                 ID = a.ID,
-                                IDZone = b.ZoneID,
-                                LoggerName = b.Address
+                                IDZone = c.ZoneID,
+                                LoggerName = c.Address
                             };
 
             if (ZoneDropDownList != null)
@@ -86,10 +88,9 @@ namespace Hercules.Controllers
                               {
                                   ID = a.ID,
                                   Adress = a.Address,
-                                  LoggerID = a.LoggerID,
                                   CompanyID = a.CompanyID
                               };
-            user_result = user_result.Where(o =>  o.LoggerID == null);
+            
             //o.CompanyID.ToString() == company_id && 
             
             return Json(user_result.Select(o => new { o.ID, o.Adress }), JsonRequestBehavior.AllowGet);

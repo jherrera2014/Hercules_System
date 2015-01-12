@@ -79,6 +79,25 @@
     </p>
     
     <p>
+        <style scoped>
+            .k-button .k-image {
+                height: 20px;
+                width: 20px;
+            }
+            /*#map {
+                display:none;*/
+
+            }
+            
+        </style>
+
+        @(Html.Kendo().Button()
+        .Name("imageButton")
+        .HtmlAttributes(new { type = "button" })
+        .ImageUrl(Url.Content("~/Content/images/Location.png"))
+        .Content("Map View")
+        .SpriteCssClass("k.image")
+        )
 
         @Html.TextBoxFor(model => model.LatEast, new { @class = "form-control", placeholder = "Lat East", style = "width:170px" })
         @Html.ValidationMessageFor(model => model.LatEast)
@@ -88,6 +107,8 @@
 
         @Html.TextBoxFor(model => model.LongNorth, new { @class = "form-control", placeholder = "Long North", style = "width:170px" })
         @Html.ValidationMessageFor(model => model.LongNorth)
+
+      
     </p>
     
     <p>
@@ -103,9 +124,14 @@
     </p>
 
     <input type="submit" value="Create" class="btn btn-default" width="170" id="btnCreate" />
+
+    <div id="map" style="width: 700px; height: 500px; " />
+
 }
 
 
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false" type="text/javascript"></script>
 <script type="text/javascript">
 
     $(document).ready(function () {
@@ -116,7 +142,92 @@
             site.enable(isChecked);
         });
 
+
+        var ne = new google.maps.LatLng(-20.009901, -71.258046);
+        var sw = new google.maps.LatLng(-20.009901, -71.258046);
+        var bounds = new google.maps.LatLngBounds(ne, sw);
+
+        var image2 = "@Url.Content("~/Content/images/Location.png")";
+
+        $("#imageButton").kendoButton({
+            imageUrl: image2
+        });
+
+
+        var options = {
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        var googleMap = new google.maps.Map($("#map")[0], options);
+        var infoWindow = new google.maps.InfoWindow({ content: "Cargando..." });
+
+
+        $.ajax({
+
+            success: function () {
+
+                    google.maps.event.addListener(googleMap, 'click', function (e) {
+
+                        document.getElementById("LatEast").value = e.latLng.lat();
+                        document.getElementById("LongNorth").value = e.latLng.lng();
+                      
+                    });
+            }
+        });
+
+        googleMap.setCenter(bounds.getCenter());
+        googleMap.setZoom(3);
+       
+
     });
+
+    var button = document.getElementById('imageButton');
+    var div = document.getElementById('map');
+    div.style.display = 'none'
+    button.onclick = function () {
+        var div = document.getElementById('map');
+        if (div.style.display !== 'none') {
+            div.style.display = 'none';
+            
+        }
+        else {
+            div.style.display = 'block';
+            initialize();
+        }
+    };
+
+    function initialize() {
+        // create the map
+
+        var myOptions = {
+            zoom: 3,
+            center: new google.maps.LatLng(0.0, 0.0),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        var options = {
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        $.ajax({
+
+            success: function () {
+
+                google.maps.event.addListener(map, 'click', function (e) {
+
+                    document.getElementById("LatEast").value = e.latLng.lat();
+                    document.getElementById("LongNorth").value = e.latLng.lng();
+
+                });
+            }
+        });
+
+        map = new google.maps.Map(document.getElementById("map"),
+                                    myOptions);
+
+    }
+   
+                 
+
 
 </script>
 
