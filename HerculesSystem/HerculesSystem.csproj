@@ -236,6 +236,9 @@
     <Compile Include="Models\Model1.cs" />
     <Compile Include="Models\Model2.cs" />
     <Compile Include="Models\ModelCompany.cs" />
+    <Compile Include="Models\siteloggersassociations.cs">
+      <DependentUpon>DBZone.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sites.cs">
       <DependentUpon>DBZone.tt</DependentUpon>
     </Compile>

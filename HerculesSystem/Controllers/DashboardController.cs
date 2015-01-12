@@ -608,25 +608,29 @@ namespace Hercules.Controllers
             var db = new hercules_dbEntities();
 
             var finaltable = from a in db.loggers
-                             join b in db.sites
+                             join b in db.siteloggersassociations
                                 on a.ID equals b.LoggerID
+                             join e in db.sites
+                                on b.SiteID equals e.ID
+
                              join c in db.zones2
-                                 on b.ZoneID equals c.ID
+                                 on e.ZoneID equals c.ID
                              join d in db.alarms
                                  on a.LoggerSMSNumber equals d.LoggerSMSNumber
                              select new
                              {
-                                IDLogger = a.ID,
-                                IDAlarm = d.ID,
-                                SitesName = b.Address,
-                                ZoneName = c.ZoneName,
-                                ZoneID = c.ID,
-                                LoggerSMS = a.LoggerSMSNumber,
-                                SerialNumber = a.LoggerSerialNumber,
-                                LoggerType = a.LoggerType,
-                                AlarmType = d.AlarmText
-                               
+                                 IDLogger = a.ID,
+                                 IDAlarm = d.ID,
+                                 SitesName = e.Address,
+                                 ZoneName = c.ZoneName,
+                                 ZoneID = c.ID,
+                                 LoggerSMS = a.LoggerSMSNumber,
+                                 SerialNumber = a.LoggerSerialNumber,
+                                 LoggerType = a.LoggerType,
+                                 AlarmType = d.AlarmText
+
                              };
+
          
             return finaltable.ToList();
 

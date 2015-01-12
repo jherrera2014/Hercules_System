@@ -43,6 +43,7 @@ width: 100px;
   
 
 
+
     <div>
         <div class="demo-section k-header">
             <h4>Filter</h4>
@@ -54,7 +55,7 @@ width: 100px;
                   .DataTextField("Text")
                   .DataValueField("Value")
 
-                                          .Events(e => e.Change("onChange1").DataBound("onDatabound"))
+                                          .Events(e => e.Change("onChange1"))
                 .DataSource(source => source.Read("GetYesNoValues", "Dashboard"))
 
 
@@ -126,13 +127,35 @@ width: 100px;
 
             @*<input type="button" class="k-button k-primary" value="Filter" onclick="location.href='@Url.Action("FilterButton", "Dashboard")'" />*@
 
+        
+        
+        
+        
+        
         </div>
+
+
+        <script id="sparkTemplate" type="text/kendo-tmpl">
+
+            @(Html.Kendo().Sparkline()
+                        .Name("temp-log")
+                        .Type(SparklineType.Column)
+                        .Tooltip(tooltip => tooltip.Format("{0} °C"))
+
+                                .Data(new int[] { 2, 4, 6, 8, 10 })
+                        .ToClientTemplate()
+            )
+
+        </script>
+
+
 
         <div id="grid" class="grid">
 
             @(Html.Kendo().Grid(Model).Name("Dashboars")
 
     .DataSource(ds => ds.Ajax()
+                 
                 .Model(c =>
                 {
                     c.Id("IDLogger");
@@ -154,6 +177,7 @@ width: 100px;
 
 
                 )
+                        .Events(events => events.DataBound("dataBound"))
                 .Columns(columns =>
                 {
                     columns.Bound("IDAlarm").Title("ID Alarm").Visible(false);
@@ -164,7 +188,15 @@ width: 100px;
                     columns.Bound("LoggerType").Title("Logger Type").Width("");
                     columns.Bound("AlarmType").Title("Alarm Type").Width("");
                     columns.Bound("DateAlarm").Title("Date Alarm").Width("");
-                    columns.Bound("AlarmPoint").Title("Row No").Template(@<text></text>).ClientTemplate("<span id='sparkline'  style='line-height: 60px ;line-width: 100px'></span>").HtmlAttributes("").Width(120).EditorTemplateName("GetYesNoValues");
+                    columns.Bound("AlarmPoint").Title("Row No").Template(@<text></text>).ClientTemplate(
+    Html.Kendo().Sparkline()
+                        .Name("temp-log")
+                        .Type(SparklineType.Column)
+                        .Tooltip(tooltip => tooltip.Format("{0} °C"))
+                        .Data(new int[] { 2, 4, 6, 8, 10 })
+                        .ToClientTemplate()
+                        .ToHtmlString()
+);
 
 
                     columns.Bound("LoggerNow").Title("Logger Now").Template(@<text></text>).ClientTemplate("<span id='temp-range'  style='line-height: 60px ;'></span>").HtmlAttributes("").Width(120);
@@ -175,12 +207,13 @@ width: 100px;
                         command.Custom("View").Click("ViewDetail");
                     });
                 } )
+               
+
                 .Editable(editable => editable.TemplateName("ProductItem").Mode(GridEditMode.PopUp))
                 .Sortable(sortable => sortable.AllowUnsort(false))
                 .Filterable()
                 .Pageable()
-                .Events(events => events.DataBound("onDatabound"))
-
+               
 
 
 
@@ -194,6 +227,20 @@ width: 100px;
 
 
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         <script type="text/javascript">
             var detailsTemplate = kendo.template($("#template").html());
@@ -219,11 +266,73 @@ width: 100px;
 
             });
 
+            function dataBound(e) {
+                this.tbody.find("script").each(function () {
+                    eval(this.innerHTML);
+
+
+
+                    $("#temp-range").kendoSparkline({
+                        type: "bullet",
+                        data: [20, 23],
+                        chartArea: {
+                            background: "#eceef0",
+                            margin: 0, padding: 0, height: (screen.height * 0.05), width: (screen.width * 0.08)
+
+
+                        },
+                        plotArea: {
+                            background: "#c0c0c0",
+                            margin: 14, padding: 14, height: (screen.height * 0.08), width: (screen.width * 0.04)
+                        },
+
+                        refresh: true,
+                        valueAxis: {
+                            min: 0,
+                            max: 30,
+                            plotBands: [{
+                                from: 0, to: 15, color: "#787878", opacity: .15
+                            }, {
+                                from: 15, to: 22, color: "#787878", opacity: .50
+                            }, {
+                                from: 22, to: 30, color: "#787878", opacity: .95
+                            }],
+                            majorGridLines: {
+                                visible: false
+                            }
+                        },
+                        tooltip: {
+                            visible: true,
+                            format: "{0}M",
+                            template: "Maximum: #= value.target # <br /> Average: #= value.current #"
+                        }
+                    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                });
+            }
+
+
+           
 
             function onDatabound() {
 
                 $("#sparkline").kendoSparkline({
-                    field: "Wind",
+                    field: "line",
                     autoBind: true,
                     refresh: true,
 
@@ -435,6 +544,8 @@ width: 100px;
                         series: [{
 
                             name: 'C3Pressure',
+                            zIndex: 1,
+                            color: "green",
 
                             data: [{ name: "C3pressure", value: 30 },
         { name: "C3Pressure", value: 80 }, { name: "C3Pressure", value: 18 },
@@ -446,12 +557,13 @@ width: 100px;
 
                             tooltip: {
 
-                                format: "{0}M"
+                                format: "{0}M",
+
 
                             }, color: function (point) {
                                 if (point.value > 50) {
                                     // Colorize matching points
-                                    return "#787878";
+                                    return "#ff0000";
                                 }
 
                                 // Use default theme color
@@ -464,13 +576,15 @@ width: 100px;
 
                         }, {
                             name: 'CP',
+                            zIndex: 2,
+                            color: "red",
                             data: [40, 40, 40, 40, 40, 40, 40,40, 40, 40, 40, 40],
                             tooltip: {
                                 format: "{0}M"
                             }
 
 
-                        }
+                        },
 
 
 
@@ -498,7 +612,15 @@ width: 100px;
                             }
 
                         },
-                        
+                        tooltip: {
+                            visible: true,
+                            shared: true,
+                            sharedTemplate:
+                               "#= category # </br>" +
+                               "# for (var i = 0; i < points.length; i++) { #" +
+                                   "#= points[i].series.name #: #= points[i].value # </br>" +
+                               "# } #"
+                        }
 
 
 

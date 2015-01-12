@@ -12,18 +12,12 @@ namespace HerculesSystem.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class zone
+    public partial class siteloggersassociations
     {
-        public zone()
-        {
-            this.sites = new HashSet<sites>();
-        }
-    
         public int ID { get; set; }
-        public string ZoneName { get; set; }
+        public Nullable<int> SiteID { get; set; }
+        public Nullable<int> LoggerID { get; set; }
         public Nullable<System.DateTime> CreationDate { get; set; }
         public Nullable<bool> Status { get; set; }
-    
-        public virtual ICollection<sites> sites { get; set; }
     }
 }

@@ -77,8 +77,8 @@ C:\Users\Public\Documents\Hercules_System\HerculesSystem\bin\es\Microsoft.Owin.S
 C:\Users\Public\Documents\Documents\Hercules_System\HerculesSystem\bin\HerculesSystem.dll.config
 C:\Users\Public\Documents\Documents\Hercules_System\HerculesSystem\bin\HerculesSystem.dll
 C:\Users\Public\Documents\Documents\Hercules_System\HerculesSystem\bin\HerculesSystem.pdb
-C:\Users\Public\Documents\Documents\Hercules_System\HerculesSystem\obj\Debug\HerculesSystem.csprojResolveAssemblyReference.cache
 C:\Users\Public\Documents\Documents\Hercules_System\HerculesSystem\obj\Debug\HerculesSystem.Properties.Resources.resources
 C:\Users\Public\Documents\Documents\Hercules_System\HerculesSystem\obj\Debug\HerculesSystem.csproj.GenerateResource.Cache
 C:\Users\Public\Documents\Documents\Hercules_System\HerculesSystem\obj\Debug\HerculesSystem.dll
 C:\Users\Public\Documents\Documents\Hercules_System\HerculesSystem\obj\Debug\HerculesSystem.pdb
+C:\Users\Public\Documents\Documents\Hercules_System\HerculesSystem\obj\Debug\HerculesSystem.csprojResolveAssemblyReference.cache
