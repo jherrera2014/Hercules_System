@@ -58,8 +58,8 @@ namespace HerculesSystem.Controllers
         var db = new hercules_dbEntities();
         var zone = new ZoneLogger();
         var result = from a in db.loggers
-                        join b in db.sites
-                            on a.ID equals b.LoggerID into abc from ab in abc.DefaultIfEmpty()
+                        //join b in db.sites
+                        //    on a.ID equals b.LoggerID into abc from ab in abc.DefaultIfEmpty()
                         join c in db.users
                             on a.OwnerAccount equals c.Id
                          //join e in db.zones2
@@ -74,7 +74,7 @@ namespace HerculesSystem.Controllers
                             LoggerSerialNumber = a.LoggerSerialNumber,
                             LoggerType = a.LoggerType,
                             SignalLevel = a.SignalLevel,
-                            Adress = ab.Address,
+                            //Adress = ab.Address,
                             Owner = c.FirstName +" "+ c.LastName,
                             a.LoggerStatus,
                             a.CreationDate

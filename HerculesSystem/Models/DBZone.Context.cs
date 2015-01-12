@@ -32,5 +32,6 @@ namespace HerculesSystem.Models
         public virtual DbSet<alarms> alarms { get; set; }
         public virtual DbSet<alarmTypes> alarmTypes { get; set; }
         public virtual DbSet<users> users { get; set; }
+        public virtual DbSet<siteloggersassociations> siteloggersassociations { get; set; }
     }
 }

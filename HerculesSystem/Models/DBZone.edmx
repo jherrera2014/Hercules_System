@@ -62,6 +62,16 @@
           <Property Name="CreationDate" Type="datetime" />
           <Property Name="LoggerStatus" Type="bit" />
         </EntityType>
+        <EntityType Name="siteloggersassociations">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="SiteID" Type="int" />
+          <Property Name="LoggerID" Type="int" />
+          <Property Name="CreationDate" Type="datetime" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
         <EntityType Name="sites">
           <Key>
             <PropertyRef Name="ID" />
@@ -74,7 +84,6 @@
           <Property Name="LatEast" Type="varchar" MaxLength="20" />
           <Property Name="LongNorth" Type="varchar" MaxLength="20" />
           <Property Name="HeightAOD" Type="varchar" MaxLength="20" />
-          <Property Name="LoggerID" Type="int" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="StartDate" Type="datetime" />
@@ -168,6 +177,7 @@
           <EntitySet Name="alarmTypes" EntityType="Self.alarmTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="company" EntityType="Self.company" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="loggers" EntityType="Self.loggers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="siteloggersassociations" EntityType="Self.siteloggersassociations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sites" EntityType="Self.sites" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="zone" EntityType="Self.zone" Schema="dbo" store:Type="Tables" />
@@ -226,6 +236,7 @@
             <End Role="company" EntitySet="company" />
             <End Role="users" EntitySet="users" />
           </AssociationSet>
+          <EntitySet Name="siteloggersassociations" EntityType="hercules_dbModel.siteloggersassociations" />
         </EntityContainer>
         <EntityType Name="sites">
           <Key>
@@ -239,7 +250,6 @@
           <Property Name="LatEast" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="LongNorth" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="HeightAOD" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="LoggerID" Type="Int32" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
           <Property Name="StartDate" Type="DateTime" Precision="3" />
@@ -383,6 +393,16 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="siteloggersassociations">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="SiteID" Type="Int32" />
+          <Property Name="LoggerID" Type="Int32" />
+          <Property Name="CreationDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -410,7 +430,6 @@
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="LoggerID" ColumnName="LoggerID" />
                 <ScalarProperty Name="HeightAOD" ColumnName="HeightAOD" />
                 <ScalarProperty Name="LongNorth" ColumnName="LongNorth" />
                 <ScalarProperty Name="LatEast" ColumnName="LatEast" />
@@ -503,6 +522,17 @@
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="siteloggersassociations">
+            <EntityTypeMapping TypeName="hercules_dbModel.siteloggersassociations">
+              <MappingFragment StoreEntitySet="siteloggersassociations">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="LoggerID" ColumnName="LoggerID" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
