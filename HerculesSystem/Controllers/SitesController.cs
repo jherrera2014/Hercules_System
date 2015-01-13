@@ -43,16 +43,13 @@ namespace HerculesSystem.Controllers
                          select new
                          {
                               a.ID,
-                              a.Address,
-                              a.CreateDate,
+                              Adress = a.Address,
+                              CreationDate = a.CreateDate,
                               ZoneID = b.ID,
                               ZoneName = b.ZoneName
-
-
-                              
                          };
             //result = result.Where(u => u. == true);
-            result = result.OrderBy(u => u.CreateDate);
+            result = result.OrderBy(u => u.CreationDate);
             return result;
         }
     }

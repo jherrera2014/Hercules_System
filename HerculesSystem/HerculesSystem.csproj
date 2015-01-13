@@ -237,6 +237,9 @@
     <Compile Include="Models\Model1.cs" />
     <Compile Include="Models\Model2.cs" />
     <Compile Include="Models\ModelCompany.cs" />
+    <Compile Include="Models\roles.cs">
+      <DependentUpon>DBZone.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\siteloggersassociations.cs">
       <DependentUpon>DBZone.tt</DependentUpon>
     </Compile>
@@ -1584,10 +1587,11 @@
     <Content Include="Views\Logger\Create.cshtml" />
     <Content Include="Views\Sites\Create.cshtml" />
     <Content Include="Views\Sites\List.cshtml" />
+    <Content Include="Views\Users\List.cshtml" />
+    <Content Include="Views\Users\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Users\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -17,6 +17,8 @@
         <EntityTypeShape EntityType="hercules_dbModel.users" Width="1.5" PointX="7.25" PointY="6.875" />
         <AssociationConnector Association="hercules_dbModel.FK_users_company" />
         <EntityTypeShape EntityType="hercules_dbModel.siteloggersassociations" Width="1.5" PointX="2.25" PointY="8.625" />
+        <EntityTypeShape EntityType="hercules_dbModel.roles" Width="1.5" PointX="9.375" PointY="0.875" />
+        <AssociationConnector Association="hercules_dbModel.FK_users_roles" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

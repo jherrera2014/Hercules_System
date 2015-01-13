@@ -62,6 +62,13 @@
           <Property Name="CreationDate" Type="datetime" />
           <Property Name="LoggerStatus" Type="bit" />
         </EntityType>
+        <EntityType Name="roles">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="int" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="siteloggersassociations">
           <Key>
             <PropertyRef Name="ID" />
@@ -172,11 +179,24 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_users_roles">
+          <End Role="roles" Type="Self.roles" Multiplicity="0..1" />
+          <End Role="users" Type="Self.users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roles">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="Role" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="hercules_dbModelStoreContainer">
           <EntitySet Name="alarms" EntityType="Self.alarms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="alarmTypes" EntityType="Self.alarmTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="company" EntityType="Self.company" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="loggers" EntityType="Self.loggers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="roles" EntityType="Self.roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="siteloggersassociations" EntityType="Self.siteloggersassociations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sites" EntityType="Self.sites" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
@@ -195,6 +215,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_users_company" Association="Self.FK_users_company">
             <End Role="company" EntitySet="company" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_users_roles" Association="Self.FK_users_roles">
+            <End Role="roles" EntitySet="roles" />
             <End Role="users" EntitySet="users" />
           </AssociationSet>
         </EntityContainer>
@@ -237,6 +261,11 @@
             <End Role="users" EntitySet="users" />
           </AssociationSet>
           <EntitySet Name="siteloggersassociations" EntityType="hercules_dbModel.siteloggersassociations" />
+          <EntitySet Name="roles" EntityType="hercules_dbModel.roles" />
+          <AssociationSet Name="FK_users_roles" Association="hercules_dbModel.FK_users_roles">
+            <End Role="roles" EntitySet="roles" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="sites">
           <Key>
@@ -380,6 +409,7 @@
           <Property Name="AlarmForwardingMethod" Type="Int32" />
           <Property Name="CompanyID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="company" Relationship="hercules_dbModel.FK_users_company" FromRole="users" ToRole="company" />
+          <NavigationProperty Name="roles" Relationship="hercules_dbModel.FK_users_roles" FromRole="users" ToRole="roles" />
         </EntityType>
         <Association Name="FK_users_company">
           <End Type="hercules_dbModel.company" Role="company" Multiplicity="1" />
@@ -403,6 +433,26 @@
           <Property Name="CreationDate" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Boolean" />
         </EntityType>
+        <EntityType Name="roles">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="users" Relationship="hercules_dbModel.FK_users_roles" FromRole="roles" ToRole="users" />
+        </EntityType>
+        <Association Name="FK_users_roles">
+          <End Type="hercules_dbModel.roles" Role="roles" Multiplicity="0..1" />
+          <End Type="hercules_dbModel.users" Role="users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roles">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="Role" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -533,6 +583,14 @@
                 <ScalarProperty Name="LoggerID" ColumnName="LoggerID" />
                 <ScalarProperty Name="SiteID" ColumnName="SiteID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="roles">
+            <EntityTypeMapping TypeName="hercules_dbModel.roles">
+              <MappingFragment StoreEntitySet="roles">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

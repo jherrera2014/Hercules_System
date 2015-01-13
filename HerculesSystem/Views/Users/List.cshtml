@@ -21,36 +21,44 @@
 
 <div id="grid" class="grid">
 
-    @(Html.Kendo().Grid(Model).Name("GridSites")
+    @(Html.Kendo().Grid(Model).Name("GridUser")
       .DataSource(ds => ds.Ajax()
             .Model(c =>
             {
                 c.Id("ID");
-                c.Field("Adress", typeof(string));
+                c.Field("Name", typeof(string));
+                c.Field("Username", typeof(string));
+                c.Field("Email", typeof(string));
+                c.Field("Mobile", typeof(int));
+                c.Field("UserLevel", typeof(string));
+                c.Field("LastLogin", typeof(DateTime));
                 c.Field("CreationDate", typeof(DateTime));
-                c.Field("ZoneName", typeof(string));
-                c.Field("WithLogger", typeof(bool));
-                c.Field("LoggerSMSNumber", typeof(int));
-                           
+                c.Field("Owner", typeof(string));
+
                 //c.Field(command => command.Custom("View").Click("ViewDetail")).Title("Detail").Width("100px");
             })
-                .Read(r => r.Action("Read", "Sites"))
-                .Create(u => u.Action("Create", "Sites"))
-            
+                .Read(r => r.Action("Read", "Users"))
+                .Create(u => u.Action("Create", "Users"))
+
             )
 
             .Columns(columns =>
                 {
-                    columns.Bound("Adress").Title("Adress");
+                    columns.Bound("Name").Title("Name");
+                    columns.Bound("Username").Title("User Name");
+                    columns.Bound("Email").Title("Email");
+                    columns.Bound("Mobile").Title("Mobile");
+                    columns.Bound("UserLevel").Title("User Level");
+                    
+                    columns.Bound("LastLogin").Title("Last Logon").Format("{0:dd/MM/yyyy HH:mm:ss}");
                     columns.Bound("CreationDate").Title("Creation Date").Format("{0:dd/MM/yyyy HH:mm:ss}");
-                    columns.Bound("ZoneName").Title("Signal Name");
-                    columns.Bound("WithLogger").Title("Amount Logger");
-                    columns.Bound("LoggerSMSNumber").Title("SMS");
+                    columns.Bound("Owner").Title("Owner");
 
-                    columns.Command(command =>
-                    {
-                        command.Custom("View").Click("ViewDetail");
-                    });
+
+                    //columns.Command(command =>
+                    //{
+                    //    command.Custom("View").Click("ViewDetail");
+                    //});
 
                 })
                         .Editable(editable => editable.TemplateName("ProductItem").Mode(GridEditMode.PopUp))
@@ -71,20 +79,19 @@
         var stockReceiptId = dataItem.ID;
         window.location.href = "@Url.Action("DetailButton", "Sites")?ID=" + stockReceiptId;
 
+
     }
 
-  
+    function ClickCreate(e) {
+          
+        window.location.href = "@Url.Action("Create", "Users")";   
+    }
+
+
+
     </script>
 
 </div>
-
-
-<script>
-    function ClickCreate(e) {
-
-            window.location.href = "@Url.Action("Create", "Sites")";
-            }
- </script>
 
 
 

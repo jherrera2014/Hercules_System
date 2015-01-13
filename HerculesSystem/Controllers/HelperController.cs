@@ -116,6 +116,21 @@ namespace Hercules.Controllers
             return Json(user_result.Select(o => new { o.ID, o.LoggerSMS }), JsonRequestBehavior.AllowGet);
 
         }
+
+        public JsonResult GetLevel()
+        {
+            var db = new hercules_dbEntities();
+
+            var rol_result = from a in db.roles
+
+                              select new
+                              {
+                                  a.RoleId,
+                                  a.Description
+                              };
+
+            return Json(rol_result.Select(o => new { o.RoleId, o.Description }), JsonRequestBehavior.AllowGet);
+        }
     }
 
 
