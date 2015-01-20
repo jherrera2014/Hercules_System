@@ -26,11 +26,9 @@
             .Model(c =>
             {
                 c.Id("ID");
-                c.Field("Adress", typeof(string));
+               
                 c.Field("CreationDate", typeof(DateTime));
                 c.Field("ZoneName", typeof(string));
-                c.Field("WithLogger", typeof(bool));
-                c.Field("LoggerSMSNumber", typeof(int));
                            
                 //c.Field(command => command.Custom("View").Click("ViewDetail")).Title("Detail").Width("100px");
             })
@@ -41,11 +39,11 @@
 
             .Columns(columns =>
                 {
-                    columns.Bound("Adress").Title("Adress");
+                    columns.Bound("Adress").Title("Name");
                     columns.Bound("CreationDate").Title("Creation Date").Format("{0:dd/MM/yyyy HH:mm:ss}");
-                    columns.Bound("ZoneName").Title("Signal Name");
+                    columns.Bound("ZoneName").Title("Zone Name");
                     columns.Bound("WithLogger").Title("Amount Logger");
-                    columns.Bound("LoggerSMSNumber").Title("SMS");
+                    
 
                     columns.Command(command =>
                     {

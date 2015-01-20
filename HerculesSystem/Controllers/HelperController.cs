@@ -92,7 +92,7 @@ namespace Hercules.Controllers
                               };
             
             //o.CompanyID.ToString() == company_id && 
-            
+            //user_result = user_result.Where(o => o.)
             return Json(user_result.Select(o => new { o.ID, o.Adress }), JsonRequestBehavior.AllowGet);
 
         }
@@ -109,9 +109,11 @@ namespace Hercules.Controllers
                               {
                                   ID = a.ID,
                                   LoggerSMS = a.LoggerSMSNumber,
+                                  a.SiteID,
                                   CompanyID = a.CompanyID
                               };
-            user_result = user_result.Where(o => o.CompanyID.ToString() == company_id);
+            user_result = user_result.Where(o => o.CompanyID.ToString() == company_id && o.SiteID == null);
+            
 
             return Json(user_result.Select(o => new { o.ID, o.LoggerSMS }), JsonRequestBehavior.AllowGet);
 

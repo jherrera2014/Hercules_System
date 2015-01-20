@@ -46,6 +46,13 @@ namespace HerculesSystem.Controllers
             return result;
         }
 
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Edit([DataSourceRequest] DataSourceRequest request, zone product)
         {

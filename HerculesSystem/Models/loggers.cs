@@ -11,13 +11,20 @@ namespace HerculesSystem.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
     
     public partial class loggers
     {
         public int ID { get; set; }
+       
         public string LoggerType { get; set; }
         public string LoggerSoftware { get; set; }
         public string LoggerSerialNumber { get; set; }
+        [Required]
+        [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Count must be a natural number")]
+        [Remote("LoggerValidation", "Validations", ErrorMessage = "Logger Already Exists", AdditionalFields = "InitialSMS")]  
+
         public string LoggerSMSNumber { get; set; }
         public string LoggerGSMNumber { get; set; }
         public Nullable<int> OwnerAccount { get; set; }
@@ -38,6 +45,13 @@ namespace HerculesSystem.Models
         public int CompanyID { get; set; }
         public Nullable<System.DateTime> CreationDate { get; set; }
         public Nullable<bool> LoggerStatus { get; set; }
+        public string Adress { get; set; }
+        public string LatEast { get; set; }
+        public string LongNorth { get; set; }
+        public string HeightAOD { get; set; }
+        public Nullable<int> SiteID { get; set; }
+        [Required]
+        public string LoggerTypeClass { get; set; }
     
         public virtual company company { get; set; }
     }

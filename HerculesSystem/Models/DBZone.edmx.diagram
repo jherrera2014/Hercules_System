@@ -4,19 +4,19 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="18f23578d3c942e7b15b6e01be39c2da" Name="Diagram1" ZoomLevel="98">
+      <Diagram DiagramId="18f23578d3c942e7b15b6e01be39c2da" Name="Diagram1" ZoomLevel="67">
         <EntityTypeShape EntityType="hercules_dbModel.zone" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hercules_dbModel.sites" Width="1.5" PointX="3.75" PointY="0.875" />
+        <EntityTypeShape EntityType="hercules_dbModel.sites" Width="1.5" PointX="3.875" PointY="1" />
         <AssociationConnector Association="hercules_dbModel.FK_sites_zone" />
         <EntityTypeShape EntityType="hercules_dbModel.company" Width="1.5" PointX="5.625" PointY="1.75" />
-        <EntityTypeShape EntityType="hercules_dbModel.loggers" Width="1.5" PointX="7.375" PointY="0.875" />
+        <EntityTypeShape EntityType="hercules_dbModel.loggers" Width="1.75" PointX="7.375" PointY="1.75" />
         <AssociationConnector Association="hercules_dbModel.FK_loggers_company" />
-        <EntityTypeShape EntityType="hercules_dbModel.alarms" Width="1.5" PointX="4.875" PointY="5.375" />
-        <EntityTypeShape EntityType="hercules_dbModel.alarmTypes" Width="1.5" PointX="2.625" PointY="5.625" />
+        <EntityTypeShape EntityType="hercules_dbModel.alarms" Width="1.5" PointX="2.375" PointY="5.625" />
+        <EntityTypeShape EntityType="hercules_dbModel.alarmTypes" Width="1.5" PointX="0.75" PointY="3.625" />
         <AssociationConnector Association="hercules_dbModel.FK_alarms_messages" />
-        <EntityTypeShape EntityType="hercules_dbModel.users" Width="1.5" PointX="7.25" PointY="6.875" />
+        <EntityTypeShape EntityType="hercules_dbModel.users" Width="1.5" PointX="5" PointY="5.75" />
         <AssociationConnector Association="hercules_dbModel.FK_users_company" />
-        <EntityTypeShape EntityType="hercules_dbModel.siteloggersassociations" Width="1.5" PointX="2.25" PointY="8.625" />
+        <EntityTypeShape EntityType="hercules_dbModel.siteloggersassociations" Width="1.5" PointX="0.5" PointY="6.375" />
         <EntityTypeShape EntityType="hercules_dbModel.roles" Width="1.5" PointX="9.375" PointY="0.875" />
         <AssociationConnector Association="hercules_dbModel.FK_users_roles" />
       </Diagram>

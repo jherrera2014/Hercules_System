@@ -17,12 +17,7 @@ namespace HerculesSystem.Controllers
             return View();
         }
 
-        public ActionResult Create()
-        {
-            
-            return View();
-        }
-
+        
         public ActionResult Read([DataSourceRequest] DataSourceRequest request)
         {
             return GetView(request);
@@ -52,5 +47,29 @@ namespace HerculesSystem.Controllers
             result = result.OrderBy(u => u.CreationDate);
             return result;
         }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(sites d)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var northwind = new hercules_dbEntities())
+                {
+
+                    return RedirectToAction("ListLogger");
+                } 
+            }
+            else
+            {
+                return View();
+            }
+        }
+
     }
 }

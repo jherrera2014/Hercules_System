@@ -68,16 +68,25 @@ namespace Hercules.Controllers
                 }
 
             }
-       
-        
-        
-            using (Model1 dc = new Model1())
+
+
+
+            using (hercules_dbEntities dc = new hercules_dbEntities())
             {
                 if (Session["CompanyID"] != null) { 
                     Int32 value_company_id = Convert.ToInt32(Session["CompanyID"].ToString());
                     var v = dc.users.Where(a => a.Username.Equals(u.Username) && a.Password.Equals(u.Password) && a.CompanyID.Equals(value_company_id)).FirstOrDefault();
                     if (v != null)
                     {
+                        //Update the last connection by user
+                        var update = from fu in dc.users where (fu.Id == v.Id) select fu;
+                        if (update.Count() != 0) { 
+                        var dbuser = update.First();
+                        dbuser.LastLogin = DateTime.Now;
+                         
+                         dc.SaveChanges();
+                         }
+                        
                         Session["LogedUserID"] = v.Id.ToString();
                         Session["LogedUserFullname"] = v.Username.ToString();
                         FormsAuthentication.SetAuthCookie(v.Username.ToString(), true);

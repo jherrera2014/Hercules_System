@@ -11,6 +11,8 @@ namespace HerculesSystem.Models
 {
     using System;
     using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
     
     public partial class users
     {
@@ -18,9 +20,16 @@ namespace HerculesSystem.Models
         public string Title { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+         [Required]
+         [Remote("UserValidation", "Validations", ErrorMessage = "User Already Exists")]
         public string Username { get; set; }
+        [Required]
         public string Password { get; set; }
+         [Required]
+         [Remote("EmailValidation", "Validations", ErrorMessage = "Email Already Exists", AdditionalFields = "InitialEmail")]
+         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
+        [Required]
         public string Mobile { get; set; }
         public int ParentAccount { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
@@ -31,6 +40,7 @@ namespace HerculesSystem.Models
         public bool RecieveNotifications { get; set; }
         public Nullable<int> AlarmForwardingMethod { get; set; }
         public int CompanyID { get; set; }
+        public bool Status { get; set; }
     
         public virtual company company { get; set; }
         public virtual roles roles { get; set; }

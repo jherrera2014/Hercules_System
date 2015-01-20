@@ -6,32 +6,14 @@
 
 <h2>Create</h2>
 
-@using (Html.BeginForm("CreateSite","Sites"))
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
     <p>
-        @Html.TextBoxFor(model => model.Address, new { @class = "form-control", placeholder = "Adress", style = "width:170px" })
+        @Html.TextBoxFor(model => model.Address, new { @class = "form-control", placeholder = "Name", style = "width:170px" })
         @Html.ValidationMessageFor(model => model.Address)
-    </p>
-
-    <p>
-
-        @(Html.Kendo().DropDownListFor(model => model.OwnerAccount)
-                    .DataTextField("UserName") //Specifies which property of the Product to be used by the dropdownlist as a text.
-                    .DataValueField("ID") //Specifies which property of the Product to be used by the dropdownlist as a value.
-                    .HtmlAttributes(new { style = "width:170px" })
-                    .OptionLabel("Owner")
-                    .DataSource(source =>
-                    {
-                        source.Read(read =>
-                        {
-                            read.Action("GetUser", "Helper"); //Set the Action and Controller name
-                        }); //If true the DataSource will not filter the data on the client.
-                    })
-        )
-
     </p>
 
     <p>
@@ -53,74 +35,36 @@
     </p>
     
     <p>
-        @(Html.CheckBoxFor(model => model.WithLogger)
+        @(Html.CheckBox("WithLogger")
 
         )
         @(Html.Label("Asociar a Logger"))
-    </p>
-    
-    <p>
-        @(Html.Kendo().DropDownListFor(m => m.LoggerID)
-              .Name("LoggerID")
-              .Enable(false)
-              .DataTextField("LoggerSMS")
-              .DataValueField("ID")
-               .HtmlAttributes(new { style = "width:170px" })
-              .DataSource(source =>
-                  {
-                      source.Read(read =>
-                      {
-                          read.Action("GetOnlyLoggers", "Helper"); //Set the Action and Controller name
-                      }); //If true the DataSource will not filter the data on the client.
-                  })
 
+        @(Html.Kendo().MultiSelectFor(mode => Model.Notes)
+           // .Name("Loggers")
+            .DataTextField("LoggerSMS")
+            .DataValueField("ID")
+            .Placeholder("Loggers List")
+            .MaxSelectedItems(4)
+            .HtmlAttributes(new { style = "width:170px" })
+            .DataSource(source => 
+            {
+                source.Read(read =>
+                    {
+                        read.Action("GetOnlyLoggers", "Helper");
+                    });
+                
+            })
+            .AutoBind(false)
         )
-
-    </p>
     
-    <p>
-        <style scoped>
-            .k-button .k-image {
-                height: 20px;
-                width: 20px;
-            }
-            /*#map {
-                display:none;*/
 
-            }
-            
-        </style>
-
-        @(Html.Kendo().Button()
-        .Name("imageButton")
-        .HtmlAttributes(new { type = "button" })
-        .ImageUrl(Url.Content("~/Content/images/Location.png"))
-        .Content("Map View")
-        .SpriteCssClass("k.image")
-        )
-
-        @Html.TextBoxFor(model => model.LatEast, new { @class = "form-control", placeholder = "Lat East", style = "width:170px" })
-        @Html.ValidationMessageFor(model => model.LatEast)
     </p>
-    
-    <p>
-
-        @Html.TextBoxFor(model => model.LongNorth, new { @class = "form-control", placeholder = "Long North", style = "width:170px" })
-        @Html.ValidationMessageFor(model => model.LongNorth)
-
-      
-    </p>
-    
-    <p>
-
-        @Html.TextBoxFor(model => model.HeightAOD, new { @class = "form-control", placeholder = "Height AOD", style = "width:170px" })
-        @Html.ValidationMessageFor(model => model.HeightAOD)
-    </p>
-
+   
 
     <p>
-        @Html.TextAreaFor(model => model.Notes, new { @class = "form-control", placeholder = "Notes", style = "width:170px" })
-        @Html.ValidationMessageFor(model => model.Notes)
+        @*@Html.TextAreaFor(model => model.Notes, new { @class = "form-control", placeholder = "Notes", style = "width:170px" })
+        @Html.ValidationMessageFor(model => model.Notes)*@
     </p>
 
     <input type="submit" value="Create" class="btn btn-default" width="170" id="btnCreate" />
