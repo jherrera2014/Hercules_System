@@ -554,7 +554,7 @@ namespace Hercules.Controllers
 
 
 
-            return RedirectToAction("DatosMostrar", new { id = ID });
+            return RedirectToAction("MostarMapa", new { id = ID });
 
 
 
