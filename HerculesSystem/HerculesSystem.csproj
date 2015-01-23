@@ -237,6 +237,7 @@
     <Compile Include="Models\Model1.cs" />
     <Compile Include="Models\Model2.cs" />
     <Compile Include="Models\ModelCompany.cs" />
+    <Compile Include="Models\roles.cs" />
     <Compile Include="Models\SelectRadio.cs" />
     <Compile Include="Models\siteloggersassociations.cs">
       <DependentUpon>DBZone.tt</DependentUpon>

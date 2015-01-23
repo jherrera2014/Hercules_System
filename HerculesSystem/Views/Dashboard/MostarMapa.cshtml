@@ -9,29 +9,28 @@
 
     $(document).ready(function () {
 
-        var zoom = 7;
+     
 
 
 
 
 
-        var ne = new google.maps.LatLng(-33.009901, -71.258046);
+        var ne = new google.maps.LatLng(-32.06, -70.6);
 
-        var sw = new google.maps.LatLng(-33.009901, -71.258046);
+        var sw = new google.maps.LatLng(-28.86, -68.4);
 
-        var limache = new google.maps.LatLng(-33.009901, -71.258046);
-
+        var limache = new google.maps.LatLng(-32.06, -70.6);
+        var limache1 = new google.maps.LatLng( -24.05,-69.6);
+      
         var bounds = new google.maps.LatLngBounds(ne, sw);
 
         var image = "@Url.Content("~/Content/images/Pegasus1.png")";
         var image1 = "@Url.Content("~/Content/images/Limache1.png")";
 
-
-
-
+      
         var options = {
 
-            zoom: 7,
+            zoom: 9,
 
 
 
@@ -43,13 +42,16 @@
 
         var googleMap = new google.maps.Map($("#map")[0], options);
 
+      
+
+
         var infoWindow = new google.maps.InfoWindow({ content: "Cargando..." });
 
         var myCity = new google.maps.Circle({
 
             center: limache,
 
-            radius: 60000,
+            radius: 160000,
 
             strokeColor: "#0000FF",
 
@@ -58,11 +60,55 @@
             strokeWeight: 2,
 
             fillColor: "#0000FF",
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.BOTTOM_CENTER
+            },
+
+            panControl: true,
+            panControlOptions: {
+                position: google.maps.ControlPosition.TOP_RIGHT
+            },
+            disableDefaultUI: true,
+            disableDoubleClickZoom: true,
+
+
+            zoomControl: true,
+            zoomControlOptions: {
+                style: google.maps.ZoomControlStyle.LARGE,
+
+                position: google.maps.ControlPosition.LEFT_CENTER
+            },
+
+
+
+            scaleControl: true,
+            scaleControlOptions: {
+                position: google.maps.ControlPosition.TOP_LEFT
+            },
+
+
 
             fillOpacity: 0.4
 
         });
 
+        searchCircle = new google.maps.Circle({
+            fillColor: '#c0e4dd',
+            strokeColor: '#f15f22',
+            fillOpacity: 0.5,
+            center: limache1,
+            radius: 180000,
+        
+            map: googleMap
+        });
+
+
+
+
+
+        searchCircle.setMap(googleMap);
         myCity.setMap(googleMap);
 
         $.ajax({
@@ -80,11 +126,33 @@
 
                    
                     var point = new google.maps.LatLng((data[i].LatEast1), (data[i].LongNorth1));
+                    if (data[i].LatEast1 == -33.056227194020607 && data[i].LongNorth1 == -71.605496406555176) {
+                        var marker;
+                      
+                        marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(data[i].LatEast1, data[i].LongNorth1),
+                            draggable: true,
+                            map: googleMap,
 
-              
+                            icon: image,
+                            animation: google.maps.Animation.BOUNCE,
+                           
+                        });
+                     
 
+                        var t = setTimeout("marker(" + (i + 1) + ")", 500);
+
+                        google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                            return function () {
+                               
+                                infowindow.open(googleMap, marker);
+                            }
+                        })(marker, i));
+
+                
+
+                    }
                     bounds.extend(point);
-
 
 
                     var marker = new google.maps.Marker({
@@ -94,6 +162,7 @@
                         map: googleMap,
 
                         icon: image,
+
 
 
 
@@ -158,7 +227,7 @@
 
 
     });
-
+   
 </script>
 
 
