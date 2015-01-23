@@ -14,7 +14,7 @@
 
 
 
-
+        var path = [];
         var ne = new google.maps.LatLng(-32.06, -70.6);
 
         var sw = new google.maps.LatLng(-28.86, -68.4);
@@ -24,10 +24,19 @@
       
         var bounds = new google.maps.LatLngBounds(ne, sw);
 
+
+        path.push(limache);
+        path.push(limache1);
+
+
+        bounds.extend(path[path.length - 1]);
+
+     
+
+
         var image = "@Url.Content("~/Content/images/Pegasus1.png")";
         var image1 = "@Url.Content("~/Content/images/Limache1.png")";
 
-      
         var options = {
 
             zoom: 9,
@@ -43,7 +52,12 @@
         var googleMap = new google.maps.Map($("#map")[0], options);
 
       
-
+        var polyline = new google.maps.Polyline({
+            path: path,
+            map: googleMap,
+            strokeWeight: 2,
+            strokeColor: "blue"
+        });
 
         var infoWindow = new google.maps.InfoWindow({ content: "Cargando..." });
 
@@ -215,8 +229,7 @@
             }
 
         });
-
-
+       
 
         googleMap.fitBounds(bounds);
 
@@ -227,7 +240,7 @@
 
 
     });
-   
+  
 </script>
 
 
@@ -241,7 +254,7 @@
     </div>
 
     </div>
-
+    <div id="length"></div>
 </body>
 
 </html>
