@@ -1,0 +1,179 @@
+﻿@model IEnumerable<dynamic>
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>List</h2>
+
+<div class="demo-section k-header">
+    <h4>Filter</h4>
+    <p>
+        @(Html.Kendo().DropDownList()
+            .Name("ZoneDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
+            .DataTextField("ZoneName") //Specifies which property of the Product to be used by the dropdownlist as a text.
+            .DataValueField("ID") //Specifies which property of the Product to be used by the dropdownlist as a value.
+            .HtmlAttributes(new { style = "width:170px" })
+            .OptionLabel("Zone")
+            .DataSource(source =>
+            {
+                source.Read(read =>
+                {
+                    read.Action("GetZone", "Helper"); //Set the Action and Controller name
+                }); //If true the DataSource will not filter the data on the client.
+            })
+            .Events(e =>
+            {
+                e.Change("onChangeZone");
+            })
+        )
+    </p>
+
+    <p>
+        @(Html.Kendo().DropDownList()
+                .Name("SiteDropDownList")
+                .DataTextField("Adress")
+                .DataValueField("ID")
+                .HtmlAttributes(new { style = "width:170px" })
+                .OptionLabel("Site")
+                         .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetSites", "Helper"); //Set the Action and Controller name
+                        }); //If true the DataSource will not filter the data on the client.
+                    })
+                .Events(e =>
+                    {
+                        e.Change("onChangeSite");
+                    })
+        )
+    </p>
+
+  
+</div>
+
+
+
+<div id="grid" class="grid">
+
+    @(Html.Kendo().Grid(Model).Name("GridAssociations")
+    .HtmlAttributes(new { style = "font-size:12px" })
+    .DataSource(ds => ds.Ajax()
+            .Model(c =>
+            {
+                c.Id("ID");
+                c.Field("SiteName", typeof(string));
+                c.Field("LoggerSMSNumber", typeof(int));
+                c.Field("ZoneName", typeof(string));
+                c.Field("LoggerType", typeof(string));
+                c.Field("BatteryLevel", typeof(int));
+                c.Field("SignalLevel", typeof(int));
+                c.Field("Adress", typeof(string));
+                c.Field("Owner", typeof(string));
+                c.Field("OwnerID", typeof(int));
+                c.Field("CreationDate", typeof(int));
+
+            })
+            .Read(r => r.Action("Read","Associations"))
+            .Create(u => u.Action("Create", "Home"))
+            )
+
+            .Columns(columns =>
+                {
+                    columns.Bound("Adress").Title("Adress");
+                    columns.Bound("LoggerSMSNumber").Title("SMS");
+                    columns.Bound("LoggerSerialNumber").Title("Serial Number");
+                    columns.Bound("Owner").Title("Owner");
+                    columns.Bound("BatteryLevel").Title("Battery Level");
+                    columns.Bound("CreationDate").Title("Creation Date").Format("{0:dd/MM/yyyy HH:mm:ss}");
+                    columns.Bound("LoggerType").Title("Type");
+                    columns.Bound("SignalLevel").Title("Signal Level");
+                    columns.Bound("SiteName").Title("Site Name");
+                    columns.Bound("ZoneName").Title("Zone Name");
+                    columns.Command(command =>
+                    {
+                        command.Custom("View").Click("ViewDetail");
+                      
+                    });
+                })
+                       .Editable(editable => editable.TemplateName("ProductItem").Mode(GridEditMode.PopUp))
+
+                        .Sortable()
+                        .Filterable()
+                        .Pageable()
+
+    )
+
+
+
+</div>
+
+
+
+<script type="text/javascript">
+
+    var detailsTemplate = kendo.template($("#template").html());
+
+    function ViewDetail(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var stockReceiptId = dataItem.ID;
+        window.location.href = "@Url.Action("DetailButton", "Logger")?ID=" + stockReceiptId;
+
+    }
+
+    function onChangeZone() {
+        applyFilter("ZoneID", $("#ZoneDropDownList").val());
+    }
+    function onChangeSite() {
+        applyFilter("SiteID", $("#SiteDropDownList").val());
+    }
+
+    function applyFilter(filterField, filterValue) {
+
+        // get the kendoGrid element.
+        var gridData = $("#GridAssociations").data("kendoGrid");
+
+        // get currently applied filters from the Grid.
+        var currFilterObj = gridData.dataSource.filter();
+
+        var currentFilters = currFilterObj ? currFilterObj.filters : [];
+
+
+        if (currentFilters && currentFilters.length > 0) {
+            for (var i = 0; i < currentFilters.length; i++) {
+                if (currentFilters[i].field == filterField) {
+                    currentFilters.splice(i, 1);
+                    break;
+                }
+            }
+        }
+
+        if (filterValue != "") {
+            currentFilters.push({
+                field: filterField,
+                operator: "eq",
+                value: filterValue
+            });
+        }
+
+        // finally, the currentFilters array is applied back to the Grid, using "and" logic.
+        gridData.dataSource.filter({
+            logic: "and",
+            filters: currentFilters
+        });
+
+    }
+
+
+    function FilterGrid() {
+        var Zone = $("#ZoneDropDownList").val(),
+        Site = $("#SiteDropDownList").val();
+
+        window.location.href = "@Url.Action("FilterButton", "Logger")?ZoneID=" + Zone + "?SiteID=" + Site;
+    }
+
+
+
+
+</script>

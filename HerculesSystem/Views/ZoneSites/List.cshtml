@@ -28,12 +28,12 @@
         <h2>List</h2>
         @(Html.Kendo().Grid<HerculesSystem.Models.zone>().Name("GridLoggers")
               .DataSource(d => d.Ajax()
-                  .Events(events => events.Error("error_handler"))
+                
                 .Model(c =>
                 {
                     c.Id("ID");
                     c.Field("ZoneName", typeof(string));
-                    c.Field("Status", typeof(bool)).Editable(false);
+                    c.Field("Status", typeof(bool));
                     c.Field("CreationDate", typeof(DateTime)).Editable(false);
                     c.Field("AmountSite", typeof(int)).Editable(false);
 
@@ -52,7 +52,7 @@
 
                 })
                        
-                        .Editable(editable => editable.Mode(GridEditMode.InCell))
+                        .Editable(editable => editable.Mode(GridEditMode.InLine))
                         .Sortable()
                         .Filterable()
                         .Pageable()
