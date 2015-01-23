@@ -202,6 +202,7 @@ namespace HerculesSystem.Controllers
                         dblogger.Notes = us.Notes;
                         dblogger.Adress = us.Adress;
                         dblogger.LatEast = us.LatEast;
+                        dblogger.LongNorth = us.LongNorth;
                         dblogger.HeightAOD = us.HeightAOD;
                         dblogger.LoggerTypeClass = us.LoggerTypeClass;
                         dblogger.SiteID = us.SiteID;

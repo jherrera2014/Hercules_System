@@ -1,38 +1,58 @@
-﻿@model IEnumerable<dynamic>
+﻿@model HerculesSystem.Models.zone
 
     @{
         ViewBag.Title = "Zone List";
     }
 
-    <h2>List</h2>
+    <h2>Create</h2>
+
+    @using (Html.BeginForm("CreateLogger", "ZoneSites"))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        
+     <p>
+         @Html.TextBoxFor(model => model.ZoneName, new { @class = "form-control", placeholder = "Zone Name", style = "width:170px" })
+         @Html.ValidationMessageFor(model => model.ZoneName)
+     </p>
+    <p>
+        <input type="submit" value="Create" class="btn btn-default" width="170" id="btnCreate" />
+
+    </p>
+        @section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+        }
+    }
 
     <div id="grid" class="grid">
-
-        @(Html.Kendo().Grid(Model).Name("GridLoggers")
+        <h2>List</h2>
+        @(Html.Kendo().Grid<HerculesSystem.Models.zone>().Name("GridLoggers")
               .DataSource(d => d.Ajax()
+                  .Events(events => events.Error("error_handler"))
                 .Model(c =>
                 {
                     c.Id("ID");
                     c.Field("ZoneName", typeof(string));
-                    c.Field("Status", typeof(bool));
-                    c.Field("CreationDate", typeof(DateTime));
+                    c.Field("Status", typeof(bool)).Editable(false);
+                    c.Field("CreationDate", typeof(DateTime)).Editable(false);
+                    c.Field("AmountSite", typeof(int)).Editable(false);
 
                 })
                 .Read(r => r.Action("Read", "ZoneSites"))
                 .Update(update => update.Action("Edit", "ZoneSites"))
-                .Create(create => create.Action("Create", "ZoneSites"))
 
                )
                 .Columns(columns =>
                 {
                     columns.Bound("ZoneName").Title("Zone Name");
                     columns.Bound("CreationDate").Title("Creation Date").Format("{0:dd/MM/yyyy HH:mm:ss}").EditorTemplateName("CreationDate");
+                    columns.Bound("AmountSite").Title("Amount Site");
                     columns.Bound("Status").Title("Status");
-                    columns.Command(command => { command.Custom("View").Click("showDetails"); command.Edit(); }).Title("Detail");
+                    columns.Command(command => { command.Edit(); }).Title("Detail");
 
                 })
-                        .ToolBar(toolbar => toolbar.Create())
-                        .Editable(editable => editable.Mode(GridEditMode.PopUp))
+                       
+                        .Editable(editable => editable.Mode(GridEditMode.InCell))
                         .Sortable()
                         .Filterable()
                         .Pageable()
@@ -52,6 +72,20 @@
                     return 'absert';
                 else
                     return Activo;
+            }
+
+            function error_handler(e) {
+                if (e.errors) {
+                    var message = "Errors:\n";
+                    $.each(e.errors, function (key, value) {
+                        if ('errors' in value) {
+                            $.each(value.errors, function () {
+                                message += this + "\n";
+                            });
+                        }
+                    });
+                    alert(message);
+                }
             }
         </script>
 

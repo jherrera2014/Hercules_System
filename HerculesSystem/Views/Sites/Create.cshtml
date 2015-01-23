@@ -18,10 +18,9 @@
 
     <p>
         @(Html.Kendo().DropDownListFor(m => m.ZoneID)
-              .Name("ZoneID")
               .DataTextField("ZoneName")
               .DataValueField("ID")
-               .HtmlAttributes(new { style = "width:170px" })
+              .HtmlAttributes(new { style = "width:170px" })
               .OptionLabel("Zone")
               .DataSource(source =>
                   {
@@ -31,6 +30,7 @@
                       }); //If true the DataSource will not filter the data on the client.
                   })
         )
+        @Html.ValidationMessageFor(x => x.ZoneID)
 
     </p>
     
@@ -38,11 +38,12 @@
         @(Html.CheckBox("WithLogger")
 
         )
-        @(Html.Label("Asociar a Logger"))
+        @(Html.Label("Asociar con Logger"))
 
-        @(Html.Kendo().MultiSelectFor(mode => Model.Notes)
-           // .Name("Loggers")
+        @(Html.Kendo().MultiSelect()
+           .Name("SelectedLogger")
             .DataTextField("LoggerSMS")
+            .Enable(false)
             .DataValueField("ID")
             .Placeholder("Loggers List")
             .MaxSelectedItems(4)
@@ -51,13 +52,15 @@
             {
                 source.Read(read =>
                     {
-                        read.Action("GetOnlyLoggers", "Helper");
+                        read.Action("GetOnlyLoggers", "Helper")
+                         ;
                     });
                 
             })
             .AutoBind(false)
         )
-    
+
+     
 
     </p>
    
@@ -70,58 +73,23 @@
     <input type="submit" value="Create" class="btn btn-default" width="170" id="btnCreate" />
 
     <div id="map" style="width: 700px; height: 500px; " />
-
+    @ViewBag.Javascript
 }
 
 
 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false" type="text/javascript"></script>
 <script type="text/javascript">
+    
+
 
     $(document).ready(function () {
-        var site = $("#LoggerID").data("kendoDropDownList");
+        var site = $("#SelectedLogger").data("kendoMultiSelect");
 
         $("#WithLogger").change(function () {
             var isChecked = $(this).is(':checked');
             site.enable(isChecked);
         });
-
-
-        var ne = new google.maps.LatLng(-20.009901, -71.258046);
-        var sw = new google.maps.LatLng(-20.009901, -71.258046);
-        var bounds = new google.maps.LatLngBounds(ne, sw);
-
-        var image2 = "@Url.Content("~/Content/images/Location.png")";
-
-        $("#imageButton").kendoButton({
-            imageUrl: image2
-        });
-
-
-        var options = {
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-
-        var googleMap = new google.maps.Map($("#map")[0], options);
-        var infoWindow = new google.maps.InfoWindow({ content: "Cargando..." });
-
-
-        $.ajax({
-
-            success: function () {
-
-                    google.maps.event.addListener(googleMap, 'click', function (e) {
-
-                        document.getElementById("LatEast").value = e.latLng.lat();
-                        document.getElementById("LongNorth").value = e.latLng.lng();
-                      
-                    });
-            }
-        });
-
-        googleMap.setCenter(bounds.getCenter());
-        googleMap.setZoom(3);
-       
 
     });
 
@@ -175,47 +143,13 @@
 
 </script>
 
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
 
 
 
 
-
-
-
-
-
-
-@*<p>
-    @(Html.Kendo().DateTimePicker()
-              .Name("DateCreated")
-              .Value(DateTime.Now)
-              .HtmlAttributes(new { style = "width:175px" })
-    )
-</p>
-
-<p>
-    @(Html.Kendo().DateTimePicker()
-              .Name("DateUpdated")
-              .Value(DateTime.Now)
-              .HtmlAttributes(new { style = "width:175px" })
-    )
-</p>
-
-<p>
-    @(Html.Kendo().DateTimePicker()
-              .Name("DateStart")
-              .Value(DateTime.Now)
-              .HtmlAttributes(new { style = "width:175px" })
-    )
-</p>
-
-<p>
-    @(Html.Kendo().DateTimePicker()
-              .Name("DateEnd")
-              .Value(DateTime.Now)
-              .HtmlAttributes(new { style = "width:175px" })
-    )
-</p>*@
 
 
 

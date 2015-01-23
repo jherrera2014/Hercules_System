@@ -7,6 +7,28 @@
 <h2>List</h2>
 
 <div>
+
+    <p>
+        @(Html.Kendo().DropDownList()
+            .Name("ZoneDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
+            .DataTextField("ZoneName") //Specifies which property of the Product to be used by the dropdownlist as a text.
+            .DataValueField("ID") //Specifies which property of the Product to be used by the dropdownlist as a value.
+            .HtmlAttributes(new { style = "width:170px" })
+            .OptionLabel("Zone")
+            .DataSource(source =>
+            {
+                source.Read(read =>
+                {
+                    read.Action("GetZone", "Helper"); //Set the Action and Controller name
+                }); //If true the DataSource will not filter the data on the client.
+            })
+            .Events(e =>
+            {
+                e.Change("onChangeZone");
+            })
+        )
+    </p>
+
     @(Html.Kendo().Button()
         .Name("linkButton")
         .Tag("a")
@@ -29,6 +51,7 @@
                
                 c.Field("CreationDate", typeof(DateTime));
                 c.Field("ZoneName", typeof(string));
+                c.Field("ZoneId", typeof(string));
                            
                 //c.Field(command => command.Custom("View").Click("ViewDetail")).Title("Detail").Width("100px");
             })
@@ -78,10 +101,57 @@
 
 
 <script>
+
+    $(document).ready(function () {
+        var Type = $("#ZoneDropDownList").data("kendoDropDownList");
+    });
+
     function ClickCreate(e) {
 
             window.location.href = "@Url.Action("Create", "Sites")";
+    }
+
+    function onChangeZone() {
+        applyFilter("ZoneID", $("#ZoneDropDownList").val());
+    }
+
+    function applyFilter(filterField, filterValue) {
+
+        // get the kendoGrid element.
+        var gridData = $("#GridSites").data("kendoGrid");
+
+        // get currently applied filters from the Grid.
+        var currFilterObj = gridData.dataSource.filter();
+
+        var currentFilters = currFilterObj ? currFilterObj.filters : [];
+
+
+        if (currentFilters && currentFilters.length > 0) {
+            for (var i = 0; i < currentFilters.length; i++) {
+                if (currentFilters[i].field == filterField) {
+                    currentFilters.splice(i, 1);
+                    break;
+                }
             }
+        }
+
+        if (filterValue != "") {
+            currentFilters.push({
+                field: filterField,
+                operator: "eq",
+                value: filterValue
+            });
+        }
+
+        // finally, the currentFilters array is applied back to the Grid, using "and" logic.
+        gridData.dataSource.filter({
+            logic: "and",
+            filters: currentFilters
+        });
+
+    }
+
+
  </script>
 
 

@@ -107,8 +107,8 @@ namespace Hercules.Controllers
                              
                               select new
                               {
-                                  ID = a.ID,
-                                  LoggerSMS = a.LoggerSMSNumber,
+                                  ID = a.LoggerTypeClass+" "+a.ID,
+                                  LoggerSMS = a.LoggerTypeClass+" - "+ a.LoggerSMSNumber,
                                   a.SiteID,
                                   CompanyID = a.CompanyID
                               };
