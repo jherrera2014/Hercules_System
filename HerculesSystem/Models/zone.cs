@@ -11,6 +11,8 @@ namespace HerculesSystem.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
     
     public partial class zone
     {
@@ -20,10 +22,15 @@ namespace HerculesSystem.Models
         }
     
         public int ID { get; set; }
+
+        [Required]
+        [Remote("ZoneValidation", "Validations", ErrorMessage = "Zone Already Exists", AdditionalFields = "InitialZone")]  
+
         public string ZoneName { get; set; }
         public Nullable<System.DateTime> CreationDate { get; set; }
         public Nullable<bool> Status { get; set; }
-    
+
+        public int AmountSite { get; set; }
         public virtual ICollection<sites> sites { get; set; }
     }
 }

@@ -71,6 +71,48 @@ namespace HerculesSystem.Controllers
                 }
             }
         }
+
+        //Adress Site
+        public ActionResult AdressValidation(string Address, string InitialAddess)
+        {
+            if (Address == InitialAddess)
+                return Json(true, JsonRequestBehavior.AllowGet);
+
+            using (hercules_dbEntities db = new hercules_dbEntities())
+            {
+                try
+                {
+                    var tag = db.sites.Single(m => m.Address == Address);
+                    return Json(false, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception)
+                {
+                    return Json(true, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
+        //Adress Site
+        public ActionResult ZoneValidation(string ZoneName, string InitialAddess)
+        {
+            if (ZoneName == InitialAddess)
+                return Json(true, JsonRequestBehavior.AllowGet);
+
+            using (hercules_dbEntities db = new hercules_dbEntities())
+            {
+                try
+                {
+                    var tag = db.zones2.Single(m => m.ZoneName == ZoneName);
+                    return Json(false, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception)
+                {
+                    return Json(true, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
+
     }
   
 }
