@@ -86,7 +86,7 @@
                 c.Field("LoggerSerialNumber", typeof(int));
                 c.Field("LoggerType", typeof(string));
                 c.Field("SignalLevel", typeof(int));
-               // c.Field("Adress", typeof(string));
+                c.Field("Adress", typeof(string));
                 c.Field("Owner", typeof(string));
                 c.Field("OwnerID", typeof(int));
               
@@ -100,6 +100,7 @@
             .Columns(columns =>
                 {
                     columns.Bound("LoggerSMSNumber").Title("SMS");
+                    columns.Bound("Adress").Title("Adress");
                     columns.Bound("LoggerSerialNumber").Title("Serial Number");
                     columns.Bound("Owner").Title("Owner");
                    // columns.Bound("BatteryLevel").Title("Battery Level");

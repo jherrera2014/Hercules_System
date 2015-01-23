@@ -74,7 +74,8 @@ namespace HerculesSystem.Controllers
                             Owner = c.FirstName +" "+ c.LastName,
                             OwnerID = c.Id,
                             a.LoggerStatus,
-                            a.CreationDate
+                            a.CreationDate,
+                            a.Adress
                             
                         };
         result = result.Where(u => u.LoggerStatus == true);

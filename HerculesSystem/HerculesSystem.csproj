@@ -184,6 +184,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Array.cs" />
+    <Compile Include="Controllers\AssociationsController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DataGraphController.cs" />
     <Compile Include="Controllers\GraficoController.cs" />
@@ -196,6 +197,7 @@
     <Compile Include="Controllers\MapsController.cs" />
     <Compile Include="Controllers\SitesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Controllers\ValidationsController.cs" />
     <Compile Include="Controllers\ZoneSitesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -237,6 +239,7 @@
     <Compile Include="Models\Model1.cs" />
     <Compile Include="Models\Model2.cs" />
     <Compile Include="Models\ModelCompany.cs" />
+    <Compile Include="Models\roles.cs" />
     <Compile Include="Models\SelectRadio.cs" />
     <Compile Include="Models\siteloggersassociations.cs">
       <DependentUpon>DBZone.tt</DependentUpon>
@@ -1604,6 +1607,8 @@
     <Content Include="Views\Logger\Create.cshtml" />
     <Content Include="Views\Sites\Create.cshtml" />
     <Content Include="Views\Sites\List.cshtml" />
+    <Content Include="Views\Associations\List.cshtml" />
+    <Content Include="Views\Logger\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
