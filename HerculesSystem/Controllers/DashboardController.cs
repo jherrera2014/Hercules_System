@@ -30,6 +30,27 @@ namespace Hercules.Controllers
 
         List<GoogleMarker> datamap1;
 
+
+        public class SelectRadio
+        {
+
+
+
+
+
+            public int RadioID { get; set; }
+            public string RadioName { get; set; }
+
+
+
+
+
+
+        }
+
+
+
+
         public class GoogleMarker
         {
 
@@ -117,7 +138,7 @@ namespace Hercules.Controllers
 
 
 
-                    cmd1.CommandText = @"   SELECT  LatEast,LongNorth ,lg.Notes , ZoneName,Address From alarms a Inner Join loggers lg on a.ID =@ID JOIN zone t  ON a.LoggerSMSNumber = lg.LoggerSMSNumber JOIN sites s ON lg.ID = s.LoggerID Where s.ZoneID = t.ID ";
+                    cmd1.CommandText = @" SELECT  lg.LatEast,lg.LongNorth   From loggers lg Inner Join sites st on st.ID =lg.SiteID JOIN zone t  ON st.ZoneID = t.ID   WHERE  lg.LatEast IS NOT NULL and lg.LongNorth IS NOT NULL ";
 
 
 
@@ -282,7 +303,7 @@ namespace Hercules.Controllers
 
 
 
-                    cmd1.CommandText = @" SELECT LatEast,LongNorth ,ZoneID From sites WHERE  LatEast IS NOT NULL and LongNorth IS NOT NULL ";
+                    cmd1.CommandText = @" SELECT LatEast,LongNorth  From loggers WHERE  LatEast IS NOT NULL and LongNorth IS NOT NULL ";
 
 
 
@@ -371,7 +392,7 @@ namespace Hercules.Controllers
 
 
 
-                                ZoneID = Convert.ToInt16(dr["ZoneID"], System.Globalization.CultureInfo.InvariantCulture),
+                               
 
 
 

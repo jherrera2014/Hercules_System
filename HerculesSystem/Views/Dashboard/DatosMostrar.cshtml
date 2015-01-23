@@ -19,11 +19,7 @@
 
 
 
-<div id="latlong">
-    <p>Latitude: <input size="20" type="text" id="latbox" name="lat"></p>
-    <p>Longitude: <input size="20" type="text" id="lngbox" name="lng"></p>
-</div>
-<button type="button" id="imageButton">Ver Mapa</button>
+
 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false" type="text/javascript"></script>
 
@@ -31,7 +27,7 @@
 
     $(document).ready(function () {
 
-        var zoom = 10;
+        var zoom = 5;
 
        
 
@@ -49,14 +45,12 @@
         var image1 = "@Url.Content("~/Content/images/Limache1.png")";
         var image2 = "@Url.Content("~/Content/images/Location.png")";
 
-        $("#imageButton").kendoButton({
-            imageUrl:image2
-        });
+     
 
 
         var options = {
 
-            zoom: 10,
+            zoom: 7,
 
 
 
@@ -106,7 +100,7 @@
                   
                     var point = new google.maps.LatLng((data[i].LatEast), (data[i].LongNorth));
 
-                 
+                    alert(data[i].LatEast);
 
                     bounds.extend(point);
 
@@ -125,11 +119,11 @@
 
 
 
-                        html: "<div><div style='float:left;'>" + "<h1>" + data[i].Address + "</h1>" +
+                        html: "<div><div style='float:left;'>" + " " + " " + "</h1>" +
 
                               "<span style='font-size:18px;font-weight:bold;'>Tipo de Equipo</span><hr>" +
 
-                            "<p><span style='font-weight:bold;'>Nombre Localidad: </span>" + data[i].ZoneName + "</p>" + +
+                            "<p><span style='font-weight:bold;'>Nombre Localidad: </span>" + " " + "</p>" + +
 
                               "Aqui se puede describir las partes importantes del equipo <br>" +
 
@@ -155,7 +149,7 @@
 
                         document.getElementById("latbox").value = e.latLng.lat();
                         document.getElementById("lngbox").value = e.latLng.lng();
-                        alert("Latitude: " + e.latLng.lat() + "\r\nLongitude: " + e.latLng.lng());
+                       
                     });
 
                    
@@ -192,17 +186,7 @@
 
     });
 
-    var button = document.getElementById('imageButton');
-
-    button.onclick = function () {
-        var div = document.getElementById('map');
-        if (div.style.display !== 'none') {
-            div.style.display = 'none';
-        }
-        else {
-            div.style.display = 'block';
-        }
-    };
+   
 
 
 
