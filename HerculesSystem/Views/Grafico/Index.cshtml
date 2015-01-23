@@ -124,20 +124,30 @@
 
 
             $(document).ready(function () {
-
+               
                 $.ajax({
 
                     type: "POST",
 
-                    contentType: "application/json; charset=utf-8",
+                   
 
-                    url: "http://localhost:17647/HighchartService/Index",
 
-                    data: "{}",
+                    contentType: "application/json",
+
+
+
+                    url: 'http://localhost:8080/SGZLS.json ',
+             
+                    cache: true,
+                    crossDomain: true,
 
                     dataType: "json",
 
-                    async: true,
+
+                    data: "{}",
+                    
+
+                    async: false,
 
                     processData: false,
 
@@ -145,6 +155,10 @@
 
                     success: function (Result) {
 
+
+
+
+                        
                         Result = Result;
 
                         var data = [];
@@ -162,8 +176,6 @@
                         var fech = [];
 
                         var seriesOneData = [];
-
-
 
 
 
@@ -201,7 +213,7 @@
 
                         var maximo3 = Math2.max(dat2);
 
-                       
+                    
                        
                   
 
@@ -248,9 +260,9 @@
 
                     },
 
-                    error: function (Result) {
+                    error: function (jqXHR, textStatus, errorThrown) {
 
-                        alert(Result.fail);
+                        alert(errorThrown);
 
                     }
 

@@ -196,7 +196,6 @@
     <Compile Include="Controllers\MapsController.cs" />
     <Compile Include="Controllers\SitesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Compile Include="Controllers\ValidationsController.cs" />
     <Compile Include="Controllers\ZoneSitesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -238,9 +237,7 @@
     <Compile Include="Models\Model1.cs" />
     <Compile Include="Models\Model2.cs" />
     <Compile Include="Models\ModelCompany.cs" />
-    <Compile Include="Models\roles.cs">
-      <DependentUpon>DBZone.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\SelectRadio.cs" />
     <Compile Include="Models\siteloggersassociations.cs">
       <DependentUpon>DBZone.tt</DependentUpon>
     </Compile>
@@ -354,6 +351,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Dashboard\list.css" />
+    <Content Include="Content\foundation.css" />
     <Content Include="Content\images\dnk_logo.jpg" />
     <Content Include="Content\images\hercules_logo.png" />
     <Content Include="Content\images\hercules_logo2.png" />
@@ -362,6 +360,8 @@
     <Content Include="Content\images\Location.png" />
     <Content Include="Content\images\Pegasus1.png" />
     <Content Include="Content\images\PistonFillerAnimationCVx200a.gif" />
+    <Content Include="Content\industrial.css" />
+    <Content Include="Content\introjs.min.css" />
     <Content Include="Content\kendo\2014.3.1119\Black\editor.png" />
     <Content Include="Content\kendo\2014.3.1119\Black\imagebrowser.png" />
     <Content Include="Content\kendo\2014.3.1119\Black\indeterminate.gif" />
@@ -634,6 +634,8 @@
     <Content Include="Content\kendo\2014.3.1119\Uniform\sprite_kpi.png" />
     <Content Include="Content\kendo\2014.3.1119\Uniform\sprite_kpi_2x.png" />
     <Content Include="Content\Logger\list.css" />
+    <Content Include="Content\progress.css" />
+    <Content Include="Content\style.css" />
     <Content Include="DotNet.Highcharts.dll" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -727,6 +729,9 @@
       <DependentUpon>DBZone.edmx</DependentUpon>
       <LastGenOutput>DBZone.cs</LastGenOutput>
     </Content>
+    <Content Include="ClassDiagram1.cd" />
+    <Content Include="Content\fileJson\SGZV" />
+    <Content Include="Content\fileJson\json1.json" />
     <None Include="packages\jQuery.2.0.0\Content\Scripts\jquery-2.0.0-vsdoc.js" />
     <Content Include="packages\jQuery.2.0.0\Content\Scripts\jquery-2.0.0.js" />
     <Content Include="packages\jQuery.2.0.0\Content\Scripts\jquery-2.0.0.min.js" />
@@ -803,6 +808,7 @@
     <Content Include="packages\Respond.1.2.0\content\Scripts\respond.min.js" />
     <Content Include="packages\WebGrease.1.5.2\lib\WebGrease.dll" />
     <Content Include="packages\WebGrease.1.5.2\tools\WG.exe" />
+    <Content Include="Scripts\app.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="bin\HerculesSystem.dll.config" />
@@ -863,6 +869,8 @@
     <Content Include="packages\Respond.1.2.0\Respond.1.2.0.nupkg" />
     <Content Include="packages\WebGrease.1.5.2\WebGrease.1.5.2.nupkg" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\gauge\jquery-1.11.2.min.js" />
+    <Content Include="Scripts\gauge\raphael-min.js" />
     <Content Include="Scripts\Highcharts-4.0.1\js\adapters\standalone-framework.js" />
     <Content Include="Scripts\Highcharts-4.0.1\js\adapters\standalone-framework.src.js" />
     <Content Include="Scripts\Highcharts-4.0.1\js\highcharts-3d.js" />
@@ -898,6 +906,8 @@
     <Content Include="Scripts\Highcharts-4.0.1\js\themes\grid.js" />
     <Content Include="Scripts\Highcharts-4.0.1\js\themes\sand-signika.js" />
     <Content Include="Scripts\Highcharts-4.0.1\js\themes\skies.js" />
+    <Content Include="Scripts\industrial.js" />
+    <Content Include="Scripts\intro.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery-2.0.0.min.map" />
@@ -905,10 +915,14 @@
     <None Include="Scripts\jquery-2.0.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.0.js" />
     <Content Include="Scripts\jquery-2.0.0.min.js" />
+    <Content Include="Scripts\jquery-asPieProgress.js" />
+    <Content Include="Scripts\jquery.diagram.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\justgage.1.0.1.js" />
+    <Content Include="Scripts\justgage.1.0.1.min.js" />
     <Content Include="Scripts\kendo.modernizr.custom.js" />
     <Content Include="Scripts\kendo\2014.3.1119\angular.min.js" />
     <Content Include="Scripts\kendo\2014.3.1119\cultures\kendo.culture.af-ZA.min.js" />
@@ -1409,7 +1423,10 @@
     <Content Include="Scripts\kendo\2014.3.1119\messages\kendo.messages.zh-CN.min.js" />
     <Content Include="Scripts\kendo\2014.3.1119\messages\kendo.messages.zh-HK.min.js" />
     <Content Include="Scripts\kendo\2014.3.1119\messages\kendo.messages.zh-TW.min.js" />
+    <Content Include="Scripts\kuma-gauge.jquery.js" />
+    <Content Include="Scripts\kuma-gauge.jquery.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\raphael.2.1.0.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
@@ -1587,15 +1604,10 @@
     <Content Include="Views\Logger\Create.cshtml" />
     <Content Include="Views\Sites\Create.cshtml" />
     <Content Include="Views\Sites\List.cshtml" />
-    <Content Include="Views\Users\List.cshtml" />
-    <Content Include="Views\Users\Create.cshtml" />
-    <Content Include="Views\Users\Edit.cshtml" />
-    <Content Include="Views\Logger\Edit.cshtml" />
-    <Content Include="Views\ZoneSites\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Validations\" />
+    <Folder Include="Views\Users\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

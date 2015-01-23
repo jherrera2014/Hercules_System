@@ -9,15 +9,15 @@
 
     $(document).ready(function () {
 
-        var zoom = 15;
+        var zoom = 7;
 
 
 
 
 
-        var ne = new google.maps.LatLng(-20.009901, -71.258046);
+        var ne = new google.maps.LatLng(-33.009901, -71.258046);
 
-        var sw = new google.maps.LatLng(-20.009901, -71.258046);
+        var sw = new google.maps.LatLng(-33.009901, -71.258046);
 
         var limache = new google.maps.LatLng(-33.009901, -71.258046);
 
@@ -31,7 +31,7 @@
 
         var options = {
 
-            zoom: 15,
+            zoom: 7,
 
 
 
@@ -81,7 +81,7 @@
                    
                     var point = new google.maps.LatLng((data[i].LatEast1), (data[i].LongNorth1));
 
-                    alert(data[i].LatEast1);
+              
 
                     bounds.extend(point);
 
@@ -93,7 +93,7 @@
 
                         map: googleMap,
 
-                       
+                        icon: image,
 
 
 
