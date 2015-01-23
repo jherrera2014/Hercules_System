@@ -26,74 +26,55 @@
             .Model(c =>
             {
                 c.Id("ID");
-                c.Field("Adress", typeof(string));
+               
                 c.Field("CreationDate", typeof(DateTime));
                 c.Field("ZoneName", typeof(string));
-                c.Field("WithLogger", typeof(bool));
-                c.Field("LoggerSMSNumber", typeof(int));
                            
                 //c.Field(command => command.Custom("View").Click("ViewDetail")).Title("Detail").Width("100px");
             })
-            .Read(r => r.Action("Read", "Sites"))
+                .Read(r => r.Action("Read", "Sites"))
+                .Create(u => u.Action("Create", "Sites"))
             
             )
 
             .Columns(columns =>
                 {
-                    columns.Bound("Adress").Title("Adress");
+                    columns.Bound("Adress").Title("Name");
                     columns.Bound("CreationDate").Title("Creation Date").Format("{0:dd/MM/yyyy HH:mm:ss}");
-                    columns.Bound("ZoneName").Title("Signal Name");
-                    columns.Bound("WithLogger").Title("With Logger");
-                    columns.Bound("LoggerSMSNumber").Title("SMS");
-                   
+                    columns.Bound("ZoneName").Title("Zone Name");
+                    columns.Bound("WithLogger").Title("Amount Logger");
+                    
+
                     columns.Command(command =>
                     {
                         command.Custom("View").Click("ViewDetail");
                     });
 
                 })
+                        .Editable(editable => editable.TemplateName("ProductItem").Mode(GridEditMode.PopUp))
                         .Sortable()
                         .Filterable()
                         .Pageable()
     )
 
 
+
+    <script type="text/javascript">
+
+    var detailsTemplate = kendo.template($("#template").html());
+
+    function ViewDetail(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var stockReceiptId = dataItem.ID;
+        window.location.href = "@Url.Action("DetailButton", "Sites")?ID=" + stockReceiptId;
+
+    }
+
+  
+    </script>
+
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <script>

@@ -1,0 +1,162 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>List</h2>
+
+<p>
+    @(Html.Kendo().DropDownList()
+                    .Name("UserTypeDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
+                    .DataTextField("Description") //Specifies which property of the Product to be used by the dropdownlist as a text.
+                    .DataValueField("RoleId") //Specifies which property of the Product to be used by the dropdownlist as a value.
+                    .HtmlAttributes(new { style = "width:170px" })
+                    .OptionLabel("User Type")
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetLevel", "Helper"); //Set the Action and Controller name
+                        }); //If true the DataSource will not filter the data on the client.
+                    })
+                    .Events(e =>
+                    {
+                        e.Change("onChangeTypeUser");
+                    })
+    )
+</p>
+
+<div>
+    @(Html.Kendo().Button()
+        .Name("linkButton")
+        .Tag("a")
+
+        .Content("Create")
+        .Events(e =>
+        {
+            e.Click("ClickCreate");
+        })
+    )
+</div>
+
+<div id="grid" class="grid">
+
+    @(Html.Kendo().Grid(Model).Name("GridUser")
+      .DataSource(ds => ds.Ajax()
+            .Model(c =>
+            {
+                c.Id("ID");
+                c.Field("Name", typeof(string));
+                c.Field("Username", typeof(string));
+                c.Field("Email", typeof(string));
+                c.Field("Mobile", typeof(int));
+                c.Field("UserLevel", typeof(string));
+                c.Field("UserLevelID", typeof(int));
+                c.Field("LastLogin", typeof(DateTime));
+                c.Field("CreationDate", typeof(DateTime));
+                c.Field("Status", typeof(Boolean));
+             
+
+                //c.Field(command => command.Custom("View").Click("ViewDetail")).Title("Detail").Width("100px");
+            })
+                .Read(r => r.Action("Read", "Users"))
+                .Create(u => u.Action("Create", "Users"))
+
+            )
+
+            .Columns(columns =>
+                {
+                    columns.Bound("Name").Title("Name");
+                    columns.Bound("Username").Title("User Name");
+                    columns.Bound("Email").Title("Email");
+                    columns.Bound("Mobile").Title("Mobile");
+                    columns.Bound("UserLevel").Title("User Level");
+                    
+                    columns.Bound("LastLogin").Title("Last Logon").Format("{0:dd/MM/yyyy HH:mm:ss}");
+                    columns.Bound("CreationDate").Title("Creation Date").Format("{0:dd/MM/yyyy HH:mm:ss}");
+                    columns.Bound("Status").Title("Status");
+
+                    columns.Command(command =>
+                    {
+                        command.Custom("Edit").Click("ViewDetail");
+                    });
+
+                })
+                .Editable(editable => editable.TemplateName("ProductItem").Mode(GridEditMode.PopUp))
+                .Sortable()
+                .Filterable()
+                .Pageable()
+    )
+
+
+
+    <script type="text/javascript">
+
+    var detailsTemplate = kendo.template($("#template").html());
+
+    function ViewDetail(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var stockReceiptId = dataItem.Id;
+        window.location.href = "@Url.Action("Edit", "Users")?Id=" + stockReceiptId;
+
+
+    }
+
+    function ClickCreate(e) {
+          
+        window.location.href = "@Url.Action("Create", "Users")";   
+    }
+
+        $(document).ready(function () {
+            var Type = $("#TypeUserDropDownList").data("kendoDropDownList");
+        });
+        function onChangeTypeUser() {
+            applyFilter("UserLevelID", $("#UserTypeDropDownList").val());
+        }
+
+        function applyFilter(filterField, filterValue) {
+
+            // get the kendoGrid element.
+            var gridData = $("#GridUser").data("kendoGrid");
+
+            // get currently applied filters from the Grid.
+            var currFilterObj = gridData.dataSource.filter();
+
+            var currentFilters = currFilterObj ? currFilterObj.filters : [];
+
+
+            if (currentFilters && currentFilters.length > 0) {
+                for (var i = 0; i < currentFilters.length; i++) {
+                    if (currentFilters[i].field == filterField) {
+                        currentFilters.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+
+            if (filterValue != "") {
+                currentFilters.push({
+                    field: filterField,
+                    operator: "eq",
+                    value: filterValue
+                });
+            }
+
+            // finally, the currentFilters array is applied back to the Grid, using "and" logic.
+            gridData.dataSource.filter({
+                logic: "and",
+                filters: currentFilters
+            });
+
+        }
+
+
+
+    </script>
+
+</div>
+
+
+

@@ -1,24 +1,28 @@
 ﻿@model HerculesSystem.Models.loggers
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Edit";
 }
 
-<h2>Create</h2>
+<h2>Edit</h2>
+
 
 @using (Html.BeginForm())
-{ 
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
-     
+
     <div>
         <p>
-            @Html.TextBoxFor(model => model.LoggerSMSNumber, new { @class = "form-control", placeholder = "SMS", style = "width:170px" })
+            @Html.Hidden("InitialSMS", Model.LoggerSMSNumber)
+            @Html.Label("SMS")
+            @Html.TextBoxFor(model => model.LoggerSMSNumber, new { @class = "form-control", style = "width:170px" })
             @Html.ValidationMessageFor(model => model.LoggerSMSNumber)
         </p>
 
         <p>
-            @Html.TextBoxFor(model => model.LoggerSerialNumber, new { @class = "form-control", placeholder = "Serial Number", style = "width:170px" })
+            @Html.Label("Serial Number")
+            @Html.TextBoxFor(model => model.LoggerSerialNumber, new { @class = "form-control", style = "width:170px" })
             @Html.ValidationMessageFor(model => model.LoggerSerialNumber)
         </p>
 
@@ -27,7 +31,7 @@
             )
             @(Html.Label("Con Sites"))
         </p>
-        
+
         <p>
             @(Html.Kendo().DropDownListFor(m => m.SiteID)
             .Name("SiteID")
@@ -38,8 +42,8 @@
                 {
                     source.Read(read =>
                     {
-                        read.Action("GetSites", "Helper"); 
-                    }); 
+                        read.Action("GetSites", "Helper");
+                    });
                 })
 
             )
@@ -49,22 +53,25 @@
 
 
         </p>
-         
+
         <p>
-            @Html.TextAreaFor(model => model.Notes, new { @class = "form-control", placeholder = "Notes", style = "width:175px" })
+            @Html.Label("Notes")
+            @Html.TextAreaFor(model => model.Notes, new { @class = "form-control", style = "width:175px" })
             @Html.ValidationMessageFor(model => model.Notes)
 
         </p>
-     
+
         <p>
-            @Html.TextBoxFor(model => model.Adress, new { @class = "form-control", placeholder = "Adress", style = "width:175px" })
+            @Html.Label("Adress")
+            @Html.TextBoxFor(model => model.Adress, new { @class = "form-control", style = "width:175px" })
             @Html.ValidationMessageFor(model => model.Adress)
         </p>
 
         <p>
+            @Html.Label("Logger Type")
             @(Html.Kendo().DropDownListFor(model => model.LoggerTypeClass)
+
           
-            .OptionLabel("Logger Type")
             .DataTextField("Text")
             .DataValueField("Value")
             .BindTo(new List<SelectListItem>() {
@@ -75,7 +82,7 @@
                 Text = "PCP", Value = "PCP"
                 }
             })
-                )
+            )
             @Html.ValidationMessageFor(model => model.LoggerType)
         </p>
 
@@ -84,7 +91,6 @@
                 .k-button .k-image {
                     height: 20px;
                     width: 20px;
-                
                 }
             </style>
 
@@ -95,29 +101,29 @@
                 .Content("Map View")
                 .SpriteCssClass("k.image")
             )
-
-            @Html.TextBoxFor(model => model.LatEast, new { @class = "form-control", placeholder = "Lat East", style = "width:170px" })
+            @Html.Label("Lat East")
+            @Html.TextBoxFor(model => model.LatEast, new { @class = "form-control", style = "width:170px" })
             @Html.ValidationMessageFor(model => model.LatEast)
         </p>
 
         <p>
-
-            @Html.TextBoxFor(model => model.LongNorth, new { @class = "form-control", placeholder = "Long North", style = "width:170px" })
+            @Html.Label("Long North")
+            @Html.TextBoxFor(model => model.LongNorth, new { @class = "form-control", style = "width:170px" })
             @Html.ValidationMessageFor(model => model.LongNorth)
 
 
         </p>
 
         <p>
-
-            @Html.TextBoxFor(model => model.HeightAOD, new { @class = "form-control", placeholder = "Height AOD", style = "width:170px" })
+            @Html.Label("Height AOD")
+            @Html.TextBoxFor(model => model.HeightAOD, new { @class = "form-control", style = "width:170px" })
             @Html.ValidationMessageFor(model => model.HeightAOD)
         </p>
 
-        </div>
-    
-    <input type="submit" value="Create" class="btn btn-default" width="170" id="btnCreate" />
-    
+    </div>
+
+    <input type="submit" value="Edit" class="btn btn-default" width="170" id="btnCreate" />
+
     <div id="map" style="width: 700px; height: 500px; " />
 
 }
@@ -222,12 +228,3 @@
     }
 
 </script>
-
-
-
-
-
-
-
-
-

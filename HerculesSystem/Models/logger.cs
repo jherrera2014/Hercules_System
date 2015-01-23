@@ -18,7 +18,7 @@ namespace HerculesSystem.Models
         [StringLength(50)]
         public string LoggerType { get; set; }
 
-        [Required(ErrorMessage= "Campo obligatorio.")]
+      
         public string LoggerSerialNumber { get; set; }
 
         [Required(ErrorMessage = "Campo obligatorio.")]

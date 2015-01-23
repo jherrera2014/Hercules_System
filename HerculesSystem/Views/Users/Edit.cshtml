@@ -1,0 +1,152 @@
+﻿@model HerculesSystem.Models.users
+@{
+    ViewBag.Title = "Edit";
+}
+
+
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <p>
+        @Html.HiddenFor(model => model.Id)
+        @Html.Label("Forename")
+        @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", style = "width:170px" })
+        @Html.ValidationMessageFor(model => model.FirstName)
+    </p>
+
+    <p>
+        @Html.Label("Surname")
+        @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", style = "width:170px" })
+        @Html.ValidationMessageFor(model => model.LastName)
+    </p>
+
+    <p>
+        @Html.Label("User Name")
+        @Html.TextBoxFor(model => model.Username, new { @class = "form-control", style = "width:170px" })
+        @Html.ValidationMessageFor(model => model.Username)
+    </p>
+
+    <p>
+        @Html.Label("Password")
+        @Html.PasswordFor(model => model.Password, new { @class = "form-control", style = "width:170px" })
+        @Html.ValidationMessageFor(model => model.Password)
+    </p>
+
+    <p>
+        @Html.Hidden("InitialEmail", Model.Email)
+        @Html.Label("Email")
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", style = "width:170px" })
+        @Html.ValidationMessageFor(model => model.Email)
+    </p>
+
+    <p>
+        @Html.Label("Mobile")
+        @Html.TextBoxFor(model => model.Mobile, new { @class = "form-control", style = "width:170px" })
+        @Html.ValidationMessageFor(model => model.Mobile)
+    </p>
+
+    <p>
+        @Html.Label("User Level")
+        @(Html.Kendo().DropDownListFor(model => model.Role)
+                .DataTextField("Description")
+                .DataValueField("RoleId")
+                .HtmlAttributes(new { style = "width:170px" })
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("GetLevel", "Helper");
+                    });
+                })
+        )
+        @Html.ValidationMessageFor(x => x.Role)
+
+    </p>
+
+    <p>
+        @(Html.CheckBoxFor(model => model.RecieveNotifications)
+
+        )
+        @(Html.Label("Enable Alarm Forwarding"))
+
+        @(Html.Kendo().DropDownList()
+                .Name("EmailFormat")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .Enable(false)
+                .HtmlAttributes(new { style = "width:170px" })
+                .OptionLabel("Email Format")
+                .BindTo(new List<SelectListItem>() {
+                  new SelectListItem() {
+                      Text = "DateGate",
+                      Value = "1"
+                  },
+                  new SelectListItem() {
+                      Text = "Format1",
+                      Value = "2"
+                  },
+                  new SelectListItem() {
+                      Text = "Format2",
+                      Value = "3"
+                  }
+              })
+        )
+
+        @Html.Label("SMS Format");
+        @(Html.Kendo().DropDownList()
+               .Name("SMSFormat")
+               .DataTextField("Text")
+                .DataValueField("Value")
+                .Enable(false)
+                .HtmlAttributes(new { style = "width:170px" })
+                .BindTo(new List<SelectListItem>() {
+                  new SelectListItem() {
+                      Text = "DateGate",
+                      Value = "1"
+                  },
+                  new SelectListItem() {
+                      Text = "Format1",
+                      Value = "2"
+                  }
+
+              })
+        )
+    </p>
+
+    <p>
+        @(Html.Label("Status"))
+        @(Html.CheckBoxFor(model => model.Status)
+
+        )
+        
+    </p>
+    <input type="submit" value="Create" class="btn btn-default" width="170" id="btnCreate" />
+
+    @(Html.Kendo().Button()
+        .Name("linkButton")
+        .Tag("a")
+
+        .Content("Back")
+        .Events(e =>
+        {
+            e.Click("ClickBack");
+        })
+    )
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+
+    <script type="text/javascript">
+
+    function ClickBack(e) {
+        window.location.href = "@Url.Action("List", "Users")";
+    }
+    </script>
+}
+

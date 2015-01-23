@@ -11,51 +11,52 @@
     <h4>Filter</h4>
     <p>
         @(Html.Kendo().DropDownList()
-                    .Name("ZoneDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
-                    .DataTextField("ZoneName") //Specifies which property of the Product to be used by the dropdownlist as a text.
+                    .Name("OwnerDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
+                    .DataTextField("UserName") //Specifies which property of the Product to be used by the dropdownlist as a text.
                     .DataValueField("ID") //Specifies which property of the Product to be used by the dropdownlist as a value.
                     .HtmlAttributes(new { style = "width:170px" })
-                    .OptionLabel("Zone")
+                    .OptionLabel("Owner")
                     .DataSource(source =>
                     {
                         source.Read(read =>
                         {
-                            read.Action("GetZone", "Helper"); //Set the Action and Controller name
+                            read.Action("GetUser", "Helper"); //Set the Action and Controller name
                         }); //If true the DataSource will not filter the data on the client.
                     })
                     .Events(e =>
                     {
-                        e.Change("onChangeZone");
+                        e.Change("onChangeOwner");
                     })
-
         )
     </p>
-   
+
     <p>
         @(Html.Kendo().DropDownList()
-                    .Name("LoggerDropDownList") //The name of the dropdownlist is mandatory. It specifies the "id" attribute of the widget.
-                    .DataTextField("LoggerName") //Specifies which property of the Product to be used by the dropdownlist as a text.
-                    .DataValueField("LoggerID") //Specifies which property of the Product to be used by the dropdownlist as a value.
-                    .HtmlAttributes(new { style = "width:170px" })
-                    .OptionLabel("Logger")
-                    .DataSource(source =>
-                    {
-                        source.Read(read =>
-                        {
-                            read.Action("GetLogger", "Helper")//Set the Action and Controller name
-                           .Data("filterLogger");
-                        })
-                        .ServerFiltering(true); //If true the DataSource will not filter the data on the client.
-                    })
-                    .Enable(false)
-                    .AutoBind(false)
-                    .CascadeFrom("ZoneDropDownList")
-                    .Events(e =>
-                    {
-                        e.Change("onChange");
-                    })
+                .Name("TypeDropDownList")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .HtmlAttributes(new { style = "width:170px" })
+                .OptionLabel("Logger Type")
+                .BindTo(new List<SelectListItem>() {
+                  new SelectListItem() {
+                      Text = "FW-102-002U",
+                      Value = "FW-102-002U"
+                  },
+                  new SelectListItem() {
+                      Text = "Permalog",
+                      Value = "Permalog"
+                  },
+                  new SelectListItem() {
+                      Text = "DW-102-0023",
+                      Value = "DW-102-0023"
+                  }
+              })
+                       .Events(e =>
+                            {
+                                e.Change("onChangeType");
+                            })
         )
-    </p>
+</p>
 
     @(Html.Kendo().Button()
         .Name("linkButton")
@@ -68,9 +69,6 @@
         })
     )
 
-   
-   
-  
 </div>
 
 
@@ -89,16 +87,14 @@
                 c.Field("LoggerType", typeof(string));
                 c.Field("SignalLevel", typeof(int));
                // c.Field("Adress", typeof(string));
-                c.Field("ZoneID", typeof(int));
-                c.Field("ZoneName", typeof(string));
-
                 c.Field("Owner", typeof(string));
-                //c.Field(command => command.Custom("View").Click("ViewDetail")).Title("Detail").Width("100px");
+                c.Field("OwnerID", typeof(int));
+              
             })
             .Read(r => r.Action("Read", "Logger"))
             .Create(u => u.Action("Create", "Home"))
             .Destroy(u => u.Action("Delete", "Logger"))
-            
+           
             )
             
             .Columns(columns =>
@@ -106,21 +102,21 @@
                     columns.Bound("LoggerSMSNumber").Title("SMS");
                     columns.Bound("LoggerSerialNumber").Title("Serial Number");
                     columns.Bound("Owner").Title("Owner");
-                    //columns.Bound("Adress").Title("Adress");
                    // columns.Bound("BatteryLevel").Title("Battery Level");
                     columns.Bound("CreationDate").Title("Creation Date").Format("{0:dd/MM/yyyy HH:mm:ss}");
-                   // columns.Bound("LoggerType").Title("Type");
+                    columns.Bound("LoggerType").Title("Type");
                     //columns.Bound("SignalLevel").Title("Signal Level");
-                    columns.Bound("ZoneName").Title("Signal Name");
+                   
                     
                     columns.Command(command =>
                     {
                         command.Custom("View").Click("ViewDetail");
                         command.Destroy().Text("Delete");
+                        command.Custom("Edit").Click("EditDetail");
                     });
                     
                 })
-                        .Editable(editable => editable.TemplateName("ProductItem").Mode(GridEditMode.PopUp))
+                       .Editable(editable => editable.TemplateName("ProductItem").Mode(GridEditMode.PopUp))
                         
                         .Sortable()
                         .Filterable()
@@ -140,78 +136,86 @@
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         var stockReceiptId = dataItem.ID;
         window.location.href = "@Url.Action("DetailButton", "Logger")?ID=" + stockReceiptId;
-     
+
+    }
+
+    function EditDetail(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var stockReceiptId = dataItem.ID;
+        window.location.href = "@Url.Action("Edit", "Logger")?ID=" + stockReceiptId;
+
     }
 
     function FilterGrid() {
-        var Zone = $("#ZoneDropDownList").val();
-      
-        var Logger = $("#LoggerDropDownList").val();
-         window.location.href = "@Url.Action("FilterButton", "Logger")?zone=" + Zone +"&logger="+Logger;
+        var Owner = $("#OwnerDropDownList").val(),
+        Type = $("#TypeDropDownList").val();
+
+        window.location.href = "@Url.Action("FilterButton", "Logger")?OwnerID=" + Owner + "?LoggerType=" + Type;
     }
 
-    
-        function filterLogger() {
-            return {
-                ZoneDropDownList: $("#ZoneDropDownList").val()
-            };
-        }
 
-        $(document).ready(function () {
-            var zones = $("#ZoneDropDownList").data("kendoDropDownList"),
-                
-                logger = $("#LoggerDropDownList").data("kendoDropDownList");
-        });
+    function filterLogger() {
+        return {
+            OwnerDropDownList: $("#OwnerDropDownList").val()
+        };
+    }
 
-        function onChangeZone() {
-            applyFilter("ZoneID", $("#ZoneDropDownList").val());
-        }
+    $(document).ready(function () {
+        var owner = $("#OwnerDropDownList").data("kendoDropDownList");
+    });
 
-        function onChange() {
-            applyFilter("LoggerID", $("#LoggerDropDownList").val());
-        }
-        function applyFilter(filterField, filterValue) {
+    function onChangeOwner() {
+        applyFilter("OwnerID", $("#OwnerDropDownList").val());
+    }
 
-            // get the kendoGrid element.
-            var gridData = $("#GridLoggers").data("kendoGrid");
+    function onChangeType() {
+        applyFilter("LoggerType", $("#TypeDropDownList").val());
+    }
 
-            // get currently applied filters from the Grid.
-            var currFilterObj = gridData.dataSource.filter();
 
-            var currentFilters = currFilterObj ? currFilterObj.filters : [];
+    function applyFilter(filterField, filterValue) {
 
-         
-            if (currentFilters && currentFilters.length > 0) {
-                for (var i = 0; i < currentFilters.length; i++) {
-                    if (currentFilters[i].field == filterField) {
-                        currentFilters.splice(i, 1);
-                        break;
-                    }
+        // get the kendoGrid element.
+        var gridData = $("#GridLoggers").data("kendoGrid");
+
+        // get currently applied filters from the Grid.
+        var currFilterObj = gridData.dataSource.filter();
+
+        var currentFilters = currFilterObj ? currFilterObj.filters : [];
+
+
+        if (currentFilters && currentFilters.length > 0) {
+            for (var i = 0; i < currentFilters.length; i++) {
+                if (currentFilters[i].field == filterField) {
+                    currentFilters.splice(i, 1);
+                    break;
                 }
             }
+        }
 
-            if (filterValue != "") {
-                currentFilters.push({
-                    field: filterField,
-                    operator: "eq",
-                    value: filterValue
-                });
-            }
-
-            // finally, the currentFilters array is applied back to the Grid, using "and" logic.
-            gridData.dataSource.filter({
-                logic: "and",
-                filters: currentFilters
+        if (filterValue != "") {
+            currentFilters.push({
+                field: filterField,
+                operator: "eq",
+                value: filterValue
             });
-
         }
 
-        function ClickCreate(e) {
-          
-            window.location.href = "@Url.Action("Create", "Logger")";   
-        }
+        // finally, the currentFilters array is applied back to the Grid, using "and" logic.
+        gridData.dataSource.filter({
+            logic: "and",
+            filters: currentFilters
+        });
 
-      
+    }
+
+    function ClickCreate(e) {
+
+        window.location.href = "@Url.Action("Create", "Logger")";
+    }
+
+
 </script>
 
 

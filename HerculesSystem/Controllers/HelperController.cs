@@ -92,7 +92,7 @@ namespace Hercules.Controllers
                               };
             
             //o.CompanyID.ToString() == company_id && 
-            
+            //user_result = user_result.Where(o => o.)
             return Json(user_result.Select(o => new { o.ID, o.Adress }), JsonRequestBehavior.AllowGet);
 
         }
@@ -109,12 +109,29 @@ namespace Hercules.Controllers
                               {
                                   ID = a.ID,
                                   LoggerSMS = a.LoggerSMSNumber,
+                                  a.SiteID,
                                   CompanyID = a.CompanyID
                               };
-            user_result = user_result.Where(o => o.CompanyID.ToString() == company_id);
+            user_result = user_result.Where(o => o.CompanyID.ToString() == company_id && o.SiteID == null);
+            
 
             return Json(user_result.Select(o => new { o.ID, o.LoggerSMS }), JsonRequestBehavior.AllowGet);
 
+        }
+
+        public JsonResult GetLevel()
+        {
+            var db = new hercules_dbEntities();
+
+            var rol_result = from a in db.roles
+
+                              select new
+                              {
+                                  a.RoleId,
+                                  a.Description
+                              };
+
+            return Json(rol_result.Select(o => new { o.RoleId, o.Description }), JsonRequestBehavior.AllowGet);
         }
     }
 
